@@ -19,7 +19,7 @@ function App() {
         <Routes>
           {/* === Public Routes === */}
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/survey/:survey_token" element={<SurveyPage />} />
+          <Route path="/surveys/:survey_token" element={<SurveyPage />} />
 
           {/* === Protected Routes === */}
           <Route path="/dashboard" element={<DashboardPage />} />
