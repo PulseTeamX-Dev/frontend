@@ -1,31 +1,53 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import type { AuthState, User } from "./types";
+import { createSlice } from "@reduxjs/toolkit";
+import { loginUser } from "./operation";
+import type { User } from "./types";
+
+interface AuthState {
+  user: User | null;
+  role: "admin" | "hr" | "team_lead" | string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  error: string | null;
+}
 
 const initialState: AuthState = {
   user: null,
-  token: null,
-  isAuthenticated: false,
+  role: null,
+  isAuthenticated: !!localStorage.getItem("access_token"),
+  isLoading: false,
+  error: null,
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setCredentials: (
-      state,
-      action: PayloadAction<{ user: User; token: string }>,
-    ) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      state.isAuthenticated = true;
-    },
     logout: (state) => {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
       state.user = null;
-      state.token = null;
+      state.role = null;
       state.isAuthenticated = false;
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(loginUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.role = action.payload.role;
+      })
+      .addCase(loginUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      });
+  },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { logout } = authSlice.actions;
 export const authReducer = authSlice.reducer;

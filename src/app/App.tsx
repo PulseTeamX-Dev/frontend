@@ -24,8 +24,16 @@ function App() {
           {/* === Protected Routes === */}
           <Route path="/dashboard" element={<DashboardPage />} />
 
-          {/* === Fallback === */}
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route
+            path="*"
+            element={
+              // isAuthenticated ? (
+              //   <Navigate to="/dashboard" />
+              // ) : (
+              <Navigate to="/login" />
+              // )
+            }
+          />
         </Routes>
       </Suspense>
     </BrowserRouter>
