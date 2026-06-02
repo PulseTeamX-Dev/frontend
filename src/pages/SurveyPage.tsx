@@ -91,11 +91,11 @@ export const SurveyPage = () => {
     loadSurvey();
   }, [survey_token]);
 
-  const getAnswerValue = (questionId: string) => {
+  const getAnswerValue = (questionId: number) => {
     return answers.find((answer) => answer.questionId === questionId)?.value;
   };
 
-  const handleAnswerChange = (questionId: string, value: number | string) => {
+  const handleAnswerChange = (questionId: number, value: number | string) => {
     dispatch(
       setAnswer({
         questionId,
@@ -112,7 +112,7 @@ export const SurveyPage = () => {
       surveyToken: survey_token,
       fingerprint: "browser-fingerprint-default",
       answers: answers.map((answer) => ({
-        questionId: String(answer.questionId),
+        questionId: answer.questionId,
         value: answer.value,
       })),
     };
@@ -187,7 +187,7 @@ export const SurveyPage = () => {
 
       <div className="space-y-6">
         {survey.questions.map((question) => {
-          const currentValue = getAnswerValue(String(question.question_id));
+          const currentValue = getAnswerValue(question.question_id);
 
           return (
             <div
@@ -200,9 +200,7 @@ export const SurveyPage = () => {
                 <div className="flex gap-4">
                   <button
                     type="button"
-                    onClick={() =>
-                      handleAnswerChange(String(question.question_id), 1)
-                    }
+                    onClick={() => handleAnswerChange(question.question_id, 1)}
                     className={`px-6 py-2.5 rounded-xl font-semibold border transition ${
                       currentValue === 1
                         ? "bg-green-600 border-green-600 text-white"
@@ -213,9 +211,7 @@ export const SurveyPage = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() =>
-                      handleAnswerChange(String(question.question_id), 0)
-                    }
+                    onClick={() => handleAnswerChange(question.question_id, 0)}
                     className={`px-6 py-2.5 rounded-xl font-semibold border transition ${
                       currentValue === 0
                         ? "bg-red-600 border-red-600 text-white"
@@ -237,10 +233,7 @@ export const SurveyPage = () => {
                         key={value}
                         type="button"
                         onClick={() =>
-                          handleAnswerChange(
-                            String(question.question_id),
-                            value,
-                          )
+                          handleAnswerChange(question.question_id, value)
                         }
                         className={`w-10 h-10 rounded-lg font-semibold transition ${
                           currentValue === value
@@ -260,10 +253,7 @@ export const SurveyPage = () => {
                   placeholder="Ваша відповідь..."
                   value={typeof currentValue === "string" ? currentValue : ""}
                   onChange={(event) =>
-                    handleAnswerChange(
-                      String(question.question_id),
-                      event.target.value,
-                    )
+                    handleAnswerChange(question.question_id, event.target.value)
                   }
                   className="w-full min-h-[120px] border rounded-xl p-3 outline-none focus:ring-2 focus:ring-blue-400"
                 />
