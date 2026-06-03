@@ -1,6 +1,8 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { PageLoader } from "../shared/Loader";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const LoginPage = lazy(() =>
   import("../pages/LoginPage").then((m) => ({ default: m.LoginPage })),
@@ -14,29 +16,32 @@ const SurveyPage = lazy(() =>
 
 function App() {
   return (
-    <BrowserRouter>
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          {/* === Public Routes === */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/surveys/:survey_token" element={<SurveyPage />} />
+    <>
+      <BrowserRouter>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            {/* === Public Routes === */}
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/surveys/:survey_token" element={<SurveyPage />} />
 
-          {/* === Protected Routes === */}
-          <Route path="/dashboard" element={<DashboardPage />} />
+            {/* === Protected Routes === */}
+            <Route path="/dashboard" element={<DashboardPage />} />
 
-          <Route
-            path="*"
-            element={
-              // isAuthenticated ? (
-              //   <Navigate to="/dashboard" />
-              // ) : (
-              <Navigate to="/login" />
-              // )
-            }
-          />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+            <Route
+              path="*"
+              element={
+                // isAuthenticated ? (
+                //   <Navigate to="/dashboard" />
+                // ) : (
+                <Navigate to="/login" />
+                // )
+              }
+            />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+      <ToastContainer position="bottom-right" theme="dark" />
+    </>
   );
 }
 
