@@ -19,6 +19,7 @@
     "react-hook-form": "^7.77.0",
     "react-redux": "^9.3.0",
     "react-router-dom": "^7.15.1",
+    "react-toastify": "^11.1.0",
     "recharts": "^3.8.1"
   },
   "devDependencies": {
