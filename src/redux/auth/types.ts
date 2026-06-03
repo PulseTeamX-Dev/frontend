@@ -57,3 +57,21 @@ export interface AuthResponse {
   user: User;
   weak_password?: boolean | null;
 }
+
+export interface InviteContext {
+  
+  invite_id: number;
+  email: string;
+  dashboard_role: "hr" | "team_lead";
+  team_id: number;
+  team?: {
+    name: string;
+  };
+}
+
+export interface ActivatePayload {
+  token: string;
+  password: string;
+}
+
+

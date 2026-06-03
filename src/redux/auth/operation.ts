@@ -1,12 +1,33 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios"; // Використовуємо чистий axios для Supabase
 import type { LoginCredentials, User } from "./types";
+import { apiClient } from "../../api/apiClient";
+import type { ActivatePayload, InviteContext } from "./types";
 
 export interface LoginPayload {
   user: User;
   role: string;
   access_token: string;
 }
+
+// 1. GET invite context
+export const fetchInviteContext = createAsyncThunk<
+  InviteContext,
+  string
+>("auth/fetchInviteContext", async (token) => {
+  const res = await apiClient.get(`/auth/activate?token=${token}`);
+  return res.data;
+});
+  
+
+// 2. POST activate account
+export const activateAccount = createAsyncThunk<
+  string,
+  ActivatePayload
+>("auth/activateAccount", async (data) => {
+  const res = await apiClient.post(`/auth/activate`, data);
+  return res.data;
+});
 
 // Константи для Supabase (потім винесеш в .env)
 const SUPABASE_URL = "https://rfzpkrjirdcxkplgkovt.supabase.co";
