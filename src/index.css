@@ -1,8 +1,80 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: "DM Sans";
+  src: url("./assets/fonts/DMSans-Light.woff2") format("woff2");
+  font-weight: 300; /* Light */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DM Sans";
+  src: url("./assets/fonts/DMSans-Bold.woff2") format("woff2");
+  font-weight: 700; /* Bold */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter_28pt-Light.woff2") format("woff2");
+  font-weight: 300; /* Light */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter_28pt-Regular.woff2") format("woff2");
+  font-weight: 400; /* Regular */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter_28pt-SemiBold.woff2") format("woff2");
+  font-weight: 600; /* Semi-Bold */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter_28pt-Bold.woff2") format("woff2");
+  font-weight: 700; /* Bold */
+  font-style: normal;
+  font-display: swap;
+}
+
 @theme {
   --color-primary: #fb8500;
   --color-primary-hover: #fa8a56;
   --color-primary-active: #f9793e;
-  --color-disabled: #666666;
+  --color-white: #ffffff;
+
+  --color-yellow-500: #fbe16e;
+  --color-yellow-700: #f9d73e;
+
+  --color-grayscale-700: #666666;
+
+  --color-error: #ed2b26;
+  --color-success: #06a93b;
+
+  --color-title: #222222;
+
+  --color-light-txt: #bbbbbb;
+
+  --font-sans: "Inter", sans-serif;
+  --font-heading: "DM Sans", sans-serif;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #666666;
+
+  /* Если нужно, чтобы и ФОН оставался кастомным (например, темно-серым) */
+  -webkit-box-shadow: 0 0 0px 1000px #fff inset;
 }

@@ -1,7 +1,8 @@
 import axios from "axios";
+import { SUPABASE_URL, SUPABASE_ANON_KEY, BASE_URL } from "../constants";
 
 export const apiClient = axios.create({
-  baseURL: "https://pulseteamx-api.onrender.com/api",
+  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -29,10 +30,6 @@ apiClient.interceptors.response.use(
       try {
         const refreshToken = localStorage.getItem("refresh_token");
         if (!refreshToken) throw new Error("No refresh token");
-
-        const SUPABASE_URL = "https://rfzpkrjirdcxkplgkovt.supabase.co";
-        const SUPABASE_ANON_KEY =
-          "sb_publishable_vtcm2IM6H0prXC6kbss0Rg_c1E4oQQS";
 
         // Робимо рефреш через Supabase
         const response = await axios.post(
