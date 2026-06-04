@@ -1,8 +1,8 @@
 import axios from "axios";
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from "../constants";
+import { SUPABASE_URL, SUPABASE_ANON_KEY, BASE_URL } from "../constants";
 
 export const apiClient = axios.create({
-  baseURL: "https://pulseteamx-api.onrender.com/api",
+  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },

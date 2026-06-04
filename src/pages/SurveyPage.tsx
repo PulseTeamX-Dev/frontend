@@ -1,26 +1,30 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import { setAnswer, clearSurveyForm } from "../redux/surveys/slice";
-import type { RootState } from "../redux/store";
+import type { AppDispatch, RootState } from "../redux/store";
 import { getScaleButtonColors } from "../utils/surveyButtonColors";
 
-import type { SurveyDetails } from "../redux/surveys/types";
+import { fetchSurveyByToken, submitSurvey } from "../redux/surveys/operation";
+import {
+  selectCurrentSurvey,
+  selectSurveyError,
+  selectSurveyLoading,
+} from "../redux/surveys/selectors";
 
 const SCALE_VALUES = Array.from({ length: 10 }, (_, i) => i + 1);
 
 export const SurveyPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
-   // Очікуємо UUID токен з URL
+  // Очікуємо UUID токен з URL
   const { survey_token } = useParams<{ survey_token: string }>();
 
   const answers = useSelector((state: RootState) => state.surveys.answers);
-
-  const [survey, setSurvey] = useState<SurveyDetails | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const survey = useSelector(selectCurrentSurvey);
+  const loading = useSelector(selectSurveyLoading);
+  const errorMessage = useSelector(selectSurveyError);
 
   const answersMap = useMemo(() => {
     return answers.reduce<Record<number, number | string>>((acc, answer) => {
@@ -30,58 +34,17 @@ export const SurveyPage = () => {
   }, [answers]);
 
   useEffect(() => {
-    const loadSurvey = async () => {
-      if (!survey_token) {
-        setErrorMessage("Токен опитування відсутній у посиланні.");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const response = await fetch(
-          `https://pulseteamx-api.onrender.com/api/surveys/${survey_token}`,
-          {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          },
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            data.error || data.message || "Не вдалося завантажити опитування",
-          );
-        }
-
-        const surveyData = data as SurveyDetails;
-
-         // Сортуємо питання за sort_order
-        if (surveyData.questions && Array.isArray(surveyData.questions)) {
-          surveyData.questions.sort((a, b) => a.sort_order - b.sort_order);
-        }
-
-        setSurvey(surveyData);
-      } catch (error) {
-        console.error("Помилка завантаження опитування:", error);
-        setErrorMessage(
-          error instanceof Error ? error.message : "Щось пішло не так під час завантаження.",
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadSurvey();
-  }, [survey_token]);
+    if (!survey_token) return;
+    dispatch(fetchSurveyByToken(survey_token));
+  }, [dispatch, survey_token]);
 
   // Мемоізуємо хендлер, щоб кнопки шкал без потреби не перемальовувалися
-  const handleAnswerChange = useCallback((questionId: number, value: number | string) => {
-    dispatch(setAnswer({ questionId, value }));
-  }, [dispatch]);
+  const handleAnswerChange = useCallback(
+    (questionId: number, value: number | string) => {
+      dispatch(setAnswer({ questionId, value }));
+    },
+    [dispatch],
+  );
 
   // (SUBMIT)
   const handleSubmit = async () => {
@@ -89,44 +52,32 @@ export const SurveyPage = () => {
 
     const payload = {
       surveyToken: survey_token,
-      fingerprint: "browser-fingerprint-default",
       answers: answers.map((answer) => ({
         questionId: answer.questionId,
         value: answer.value,
       })),
     };
 
-    try {
-      const response = await fetch(
-        "https://pulseteamx-api.onrender.com/api/surveys/submit",
-        {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(payload),
-        },
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || data.message || "Не вдалося надіслати відповіді");
-      }
-
-      dispatch(clearSurveyForm());
-      alert("Дякуємо! Ваші відповіді успішно збережено.");
-    } catch (error) {
-      console.error("Помилка відправки:", error);
-      alert(error instanceof Error ? error.message : "Помилка під час відправки форми.");
-    }
+    // Диспатчим санку отправки
+    dispatch(submitSurvey(payload))
+      .unwrap()
+      .then(() => {
+        dispatch(clearSurveyForm());
+        alert("Дякуємо! Ваші відповіді успішно збережено.");
+      })
+      .catch((err) => {
+        alert(err || "Помилка під час відправки форми.");
+      });
   };
 
-   //  (UI)
+  //  (UI)
 
   if (loading) {
-    return <div className="p-10 text-center text-gray-500 font-sans">Завантаження опитування...</div>;
+    return (
+      <div className="p-10 text-center text-gray-500 font-sans">
+        Завантаження опитування...
+      </div>
+    );
   }
 
   if (errorMessage) {
@@ -139,17 +90,23 @@ export const SurveyPage = () => {
   }
 
   if (!survey || !survey.questions || survey.questions.length === 0) {
-    return <div className="p-10 text-center text-gray-500 font-sans">Опитування не містить активних запитань.</div>;
+    return (
+      <div className="p-10 text-center text-gray-500 font-sans">
+        Опитування не містить активних запитань.
+      </div>
+    );
   }
 
   return (
     <div className="max-w-3xl mx-auto mt-10 p-6 font-sans text-[#333333]">
-      <h1 className="text-3xl font-bold mb-8 text-center md:text-left">Опитування команди</h1>
+      <h1 className="text-3xl font-bold mb-8 text-center md:text-left">
+        Опитування команди
+      </h1>
 
       <div className="space-y-16">
         {survey.questions.map((question, index) => {
           const currentValue = answersMap[question.question_id];
-          
+
           const hasValue = currentValue !== undefined && currentValue !== "";
 
           return (
@@ -179,7 +136,9 @@ export const SurveyPage = () => {
                         <button
                           key={value}
                           type="button"
-                          onClick={() => handleAnswerChange(question.question_id, value)}
+                          onClick={() =>
+                            handleAnswerChange(question.question_id, value)
+                          }
                           className={`w-11 h-11 md:w-12 md:h-12 rounded-full font-bold text-base md:text-lg border-2 transition-all flex items-center justify-center shrink-0 ${getScaleButtonColors(value, isSelected)}`}
                         >
                           {value}
@@ -201,7 +160,9 @@ export const SurveyPage = () => {
                 <textarea
                   placeholder="Ваша відповідь..."
                   value={typeof currentValue === "string" ? currentValue : ""}
-                  onChange={(event) => handleAnswerChange(question.question_id, event.target.value)}
+                  onChange={(event) =>
+                    handleAnswerChange(question.question_id, event.target.value)
+                  }
                   className="w-full max-w-xl min-h-[120px] border-2 border-gray-200 rounded-xl p-3 outline-none focus:border-gray-400 text-base transition mb-6"
                 />
               )}
