@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { PageLoader } from "../shared/Loader";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { useAppSelector } from "../hooks/useReduxTypes";
+import { selectIsAuthenticated } from "../redux/auth/selectors";
 
 const LoginPage = lazy(() =>
   import("../pages/LoginPage").then((m) => ({ default: m.LoginPage })),
@@ -15,6 +17,8 @@ const SurveyPage = lazy(() =>
 );
 
 function App() {
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+
   return (
     <>
       <BrowserRouter>
@@ -30,11 +34,11 @@ function App() {
             <Route
               path="*"
               element={
-                // isAuthenticated ? (
-                //   <Navigate to="/dashboard" />
-                // ) : (
-                <Navigate to="/login" />
-                // )
+                isAuthenticated ? (
+                  <Navigate to="/dashboard" />
+                ) : (
+                  <Navigate to="/login" />
+                )
               }
             />
           </Routes>

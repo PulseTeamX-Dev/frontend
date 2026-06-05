@@ -71,7 +71,7 @@ const LoginForm = () => {
               className="text-grayscale-700 hover:text-yellow-500 transition-colors"
             >
               <Icon
-                id={isVisible ? "eye" : "eye-off"}
+                id={isVisible ? "show" : "hide"}
                 className="fill-current w-5 h-5"
               />
             </button>
