@@ -15,6 +15,9 @@ const DashboardPage = lazy(() =>
 const SurveyPage = lazy(() =>
   import("../pages/SurveyPage").then((m) => ({ default: m.SurveyPage })),
 );
+const InvitePage = lazy(() =>
+  import("../pages/InvitePage").then((m) => ({ default: m.InvitePage })),
+);
 
 function App() {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
@@ -27,7 +30,7 @@ function App() {
             {/* === Public Routes === */}
             <Route path="/login" element={<LoginPage />} />
             <Route path="/surveys/:survey_token" element={<SurveyPage />} />
-
+            <Route path="/invite/:token" element={<InvitePage />} />
             {/* === Protected Routes === */}
             <Route path="/dashboard" element={<DashboardPage />} />
 

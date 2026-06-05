@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
 import { useState } from "react";
-import { selectAuthLoading } from "../redux/auth/selectors";
+import { selectAuthLoading } from "../../redux/auth/selectors";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import type { LoginCredentials } from "../redux/auth/types";
-import { loginUser } from "../redux/auth/operation";
+import type { LoginCredentials } from "../../redux/auth/types";
+import { loginUser } from "../../redux/auth/operation";
 import { toast } from "react-toastify";
-import Icon from "../shared/Icon";
-import { Input } from "../shared/Input";
+import Icon from "../../shared/Icon";
+import { Input } from "../../shared/Input";
 
 const LoginForm = () => {
   const dispatch = useAppDispatch();
