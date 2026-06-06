@@ -78,11 +78,13 @@ export const deleteQuestion = createAsyncThunk<
 
 export const fetchSurveyByToken = createAsyncThunk<
   SurveyDetails,
-  string,
+  { surveyToken: string; page: number },
   { rejectValue: string }
->("surveys/fetchSurveyByToken", async (surveyToken, thunkAPI) => {
+>("surveys/fetchSurveyByToken", async ({ surveyToken, page }, thunkAPI) => {
   try {
-    const { data } = await apiClient.get(`/surveys/${surveyToken}`);
+    const { data } = await apiClient.get(
+      `/surveys/${surveyToken}?page=${page}&limit=1`,
+    );
     return data;
   } catch {
     return thunkAPI.rejectWithValue("Invalid survey token");
