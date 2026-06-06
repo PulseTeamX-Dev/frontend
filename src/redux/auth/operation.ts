@@ -1,16 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios"; // Використовуємо чистий axios для Supabase
+import axios from "axios";
 import type { LoginCredentials, User } from "./types";
+import { SUPABASE_ANON_KEY, SUPABASE_URL } from "../../constants";
+import { apiClient } from "../../api/apiClient";
 
 export interface LoginPayload {
   user: User;
   role: string;
   access_token: string;
 }
-
-// Константи для Supabase (потім винесеш в .env)
-const SUPABASE_URL = "https://rfzpkrjirdcxkplgkovt.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_vtcm2IM6H0prXC6kbss0Rg_c1E4oQQS";
 
 export const loginUser = createAsyncThunk<LoginPayload, LoginCredentials>(
   "auth/login",
@@ -22,7 +20,7 @@ export const loginUser = createAsyncThunk<LoginPayload, LoginCredentials>(
         credentials,
         {
           headers: {
-            apikey: SUPABASE_ANON_KEY, // Supabase вимагає цей ключ у заголовку
+            apikey: SUPABASE_ANON_KEY,
           },
         },
       );
@@ -38,6 +36,51 @@ export const loginUser = createAsyncThunk<LoginPayload, LoginCredentials>(
       return rejectWithValue(
         (error as { response?: { data?: { error_description?: string } } })
           .response?.data?.error_description || "Помилка авторизації",
+      );
+    }
+  },
+);
+
+export const validateInvite = createAsyncThunk(
+  "auth/validateInvite",
+  async (token: string, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.get(
+        `/auth/invites/validate?token=${token}`,
+      );
+      return response.data;
+    } catch (error: unknown) {
+      const err = error as {
+        response?: { status: number; data?: { error?: string } };
+      };
+
+      if (err.response) {
+        return rejectWithValue({
+          status: err.response.status,
+          message: err.response.data?.error || "Помилка валідації",
+        });
+      }
+      return rejectWithValue({ status: 500, message: "Network error" });
+    }
+  },
+);
+
+export const acceptInvite = createAsyncThunk(
+  "auth/acceptInvite",
+  async (
+    { token, password }: { token: string; password: string },
+    { rejectWithValue },
+  ) => {
+    try {
+      const response = await apiClient.post(`/auth/invites/accept`, {
+        token,
+        password,
+      });
+      return response.data;
+    } catch (error: unknown) {
+      return rejectWithValue(
+        (error as { response?: { data?: { error?: string } } }).response?.data
+          ?.error || "Failed to accept invite",
       );
     }
   },

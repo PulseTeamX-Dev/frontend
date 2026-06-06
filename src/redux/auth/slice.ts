@@ -1,6 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loginUser } from "./operation";
+import { loginUser, validateInvite, acceptInvite } from "./operation";
 import type { User } from "./types";
+
+export type InviteStatus =
+  | "idle"
+  | "loading"
+  | "form"
+  | "expired"
+  | "used"
+  | "success"
+  | "invalid";
 
 interface AuthState {
   user: User | null;
@@ -8,6 +17,7 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
+  inviteStatus: InviteStatus;
 }
 
 const initialState: AuthState = {
@@ -16,6 +26,7 @@ const initialState: AuthState = {
   isAuthenticated: !!localStorage.getItem("access_token"),
   isLoading: false,
   error: null,
+  inviteStatus: "idle",
 };
 
 const authSlice = createSlice({
@@ -28,6 +39,10 @@ const authSlice = createSlice({
       state.user = null;
       state.role = null;
       state.isAuthenticated = false;
+      state.inviteStatus = "idle";
+    },
+    resetInviteStatus: (state) => {
+      state.inviteStatus = "idle";
     },
   },
   extraReducers: (builder) => {
@@ -45,9 +60,35 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+
+      .addCase(validateInvite.pending, (state) => {
+        state.inviteStatus = "loading";
+      })
+      .addCase(validateInvite.fulfilled, (state) => {
+        state.inviteStatus = "form";
+      })
+      .addCase(validateInvite.rejected, (state, action) => {
+        const payload = action.payload as { status: number; message: string };
+        if (payload?.status === 409) state.inviteStatus = "used";
+        else if (payload?.status === 410) state.inviteStatus = "expired";
+        else state.inviteStatus = "invalid";
+      })
+
+      .addCase(acceptInvite.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(acceptInvite.fulfilled, (state) => {
+        state.isLoading = false;
+        state.inviteStatus = "success";
+      })
+      .addCase(acceptInvite.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
       });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, resetInviteStatus } = authSlice.actions;
 export const authReducer = authSlice.reducer;
