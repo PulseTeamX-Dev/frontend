@@ -18,6 +18,11 @@ const SurveyPage = lazy(() =>
 const InvitePage = lazy(() =>
   import("../pages/InvitePage").then((m) => ({ default: m.InvitePage })),
 );
+const UpdatePasswordPage = lazy(() =>
+  import("../pages/UpdatePasswordPage").then((m) => ({
+    default: m.UpdatePasswordPage,
+  })),
+);
 
 function App() {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
@@ -27,21 +32,40 @@ function App() {
       <BrowserRouter>
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            {/* === Public Routes === */}
-            <Route path="/login" element={<LoginPage />} />
             <Route path="/surveys/:survey_token" element={<SurveyPage />} />
             <Route path="/invite/:token" element={<InvitePage />} />
-            {/* === Protected Routes === */}
-            <Route path="/dashboard" element={<DashboardPage />} />
+
+            <Route path="/update-password" element={<UpdatePasswordPage />} />
+
+            <Route
+              path="/login"
+              element={
+                !isAuthenticated ? (
+                  <LoginPage />
+                ) : (
+                  <Navigate to="/dashboard" replace />
+                )
+              }
+            />
+
+            <Route
+              path="/dashboard"
+              element={
+                isAuthenticated ? (
+                  <DashboardPage />
+                ) : (
+                  <Navigate to="/login" replace />
+                )
+              }
+            />
 
             <Route
               path="*"
               element={
-                isAuthenticated ? (
-                  <Navigate to="/dashboard" />
-                ) : (
-                  <Navigate to="/login" />
-                )
+                <Navigate
+                  to={isAuthenticated ? "/dashboard" : "/login"}
+                  replace
+                />
               }
             />
           </Routes>
