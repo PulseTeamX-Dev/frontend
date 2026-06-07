@@ -32,7 +32,7 @@ export const InvitePage = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F26E3B]"></div>
         );
       case "form":
-        return <InviteForm token={token!} />; // Передаємо токен у форму
+        return <InviteForm token={token!} />;
       case "expired":
         return <InviteExpired />;
       case "used":
