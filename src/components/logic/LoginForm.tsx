@@ -9,7 +9,11 @@ import { toast } from "react-toastify";
 import Icon from "../../shared/Icon";
 import { Input } from "../../shared/Input";
 
-const LoginForm = () => {
+const LoginForm = ({
+  onForgotPasswordClick,
+}: {
+  onForgotPasswordClick: () => void;
+}) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -41,6 +45,7 @@ const LoginForm = () => {
       <Input
         id="email"
         type="email"
+        autoComplete="email"
         label="Електронна пошта"
         placeholder="name@company.com"
         leftIcon="mail"
@@ -60,6 +65,7 @@ const LoginForm = () => {
         <Input
           id="password"
           type={isVisible ? "text" : "password"}
+          autoComplete="current-password"
           label="Пароль"
           placeholder="••••••••"
           leftIcon="lock"
@@ -86,6 +92,7 @@ const LoginForm = () => {
         <div className="flex justify-end mt-2">
           <button
             type="button"
+            onClick={onForgotPasswordClick}
             className="text-sm font-medium text-grayscale-700 hover:text-yellow-500 transition-colors"
           >
             Забули пароль?
@@ -119,7 +126,7 @@ const LoginForm = () => {
         className={`w-full py-3.5 mt-2 rounded-2xl font-semibold text-white transition-all shadow-sm ${
           isLoading
             ? "bg-slate-300 cursor-not-allowed"
-            : "bg-primary hover:bg-primary-hover active:scale-[0.98]"
+            : "bg-primary-active hover:bg-primary-hover active:scale-[0.98]"
         }`}
       >
         {isLoading ? "Завантаження..." : "Увійти"}

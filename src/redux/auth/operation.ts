@@ -10,19 +10,15 @@ export interface LoginPayload {
   access_token: string;
 }
 
+// --- LOGIN ---
 export const loginUser = createAsyncThunk<LoginPayload, LoginCredentials>(
   "auth/login",
   async (credentials, { rejectWithValue }) => {
     try {
-      // Стукаємо прямо в Supabase
       const response = await axios.post(
         `${SUPABASE_URL}/auth/v1/token?grant_type=password`,
         credentials,
-        {
-          headers: {
-            apikey: SUPABASE_ANON_KEY,
-          },
-        },
+        { headers: { apikey: SUPABASE_ANON_KEY } },
       );
 
       const { access_token, refresh_token, user } = response.data;
@@ -41,6 +37,98 @@ export const loginUser = createAsyncThunk<LoginPayload, LoginCredentials>(
   },
 );
 
+// --- LOGOUT ---
+export const logoutUser = createAsyncThunk(
+  "auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("access_token");
+
+      // Якщо токена і так немає в сховищі, просто чистимося
+      if (!token) {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
+        return;
+      }
+
+      await axios.post(
+        `${SUPABASE_URL}/auth/v1/logout`,
+        {},
+        {
+          headers: {
+            apikey: SUPABASE_ANON_KEY, // Обов'язково для Supabase!
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      // Видаляємо токени після успішного запиту
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+    } catch (error: unknown) {
+      // КРИТИЧНО: Якщо сервер повернув 403 (токен прострочений),
+      // ми все одно видаляємо локальні токени, щоб юзер розлогінився!
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+
+      const err = error as {
+        response?: { data?: { error_description?: string } };
+      };
+      return rejectWithValue(
+        err.response?.data?.error_description || "Помилка виходу з системи",
+      );
+    }
+  },
+);
+
+// --- ЗАПИТ НА СКИДАННЯ ПАРОЛЯ (FORGOT PASSWORD) ---
+export const recoverPassword = createAsyncThunk(
+  "auth/recoverPassword",
+  async (email: string, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${SUPABASE_URL}/auth/v1/recover`,
+        { email },
+        { headers: { apikey: SUPABASE_ANON_KEY } },
+      );
+      return response.data;
+    } catch (error: unknown) {
+      return rejectWithValue(
+        (error as { response?: { data?: { error_description?: string } } })
+          .response?.data?.error_description || "Помилка відправки листа",
+      );
+    }
+  },
+);
+
+// --- ОНОВЛЕННЯ ПАРОЛЯ (ПІСЛЯ ПЕРЕХОДУ З ЛИСТА) ---
+export const updatePassword = createAsyncThunk(
+  "auth/updatePassword",
+  async (password: string, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${SUPABASE_URL}/auth/v1/user`,
+        { password },
+        {
+          headers: {
+            apikey: SUPABASE_ANON_KEY,
+            // Supabase автоматично ставить токен в URL при кліку з листа,
+            // переконайся, що твій apiClient або роут правильно його підхоплює
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        },
+      );
+      return response.data;
+    } catch (error: unknown) {
+      return rejectWithValue(
+        (error as { response?: { data?: { error_description?: string } } })
+          .response?.data?.error_description || "Помилка оновлення пароля",
+      );
+    }
+  },
+);
+
+// --- INVITE ROUTES ---
 export const validateInvite = createAsyncThunk(
   "auth/validateInvite",
   async (token: string, { rejectWithValue }) => {
