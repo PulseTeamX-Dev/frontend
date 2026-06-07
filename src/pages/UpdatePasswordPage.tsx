@@ -6,6 +6,7 @@ import { selectAuthLoading } from "../redux/auth/selectors";
 import { Title } from "../shared/Title";
 import { Input } from "../shared/Input";
 import Icon from "../shared/Icon";
+import lockImg from "../assets/img/lock.png";
 import { toast } from "react-toastify";
 
 export const UpdatePasswordPage = () => {
@@ -48,10 +49,7 @@ export const UpdatePasswordPage = () => {
     <div className="flex justify-center items-center h-screen bg-gray-50 p-4">
       <div className="p-8 md:p-10 bg-white shadow-sm rounded-3xl w-full max-w-[420px] flex flex-col animate-fade-in">
         <div className="flex justify-center mb-6">
-          <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center shadow-sm">
-            {/* Можеш замінити на свою іконку замка з ключем */}
-            <Icon id="lock" className="w-8 h-8 text-blue-500" />
-          </div>
+          <img src={lockImg} alt="Забули пароль" className="w-20 h-20" />
         </div>
 
         <Title tag="h2" variant="bold" className="text-xl text-center mb-2">
