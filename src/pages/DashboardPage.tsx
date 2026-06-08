@@ -1,13 +1,15 @@
-import { useAppDispatch } from "../hooks/useReduxTypes";
-import { logoutUser } from "../redux/auth/operation";
+import { HRDashboard } from "../components/dashboard/HRDashboard";
+import { TLDashboard } from "../components/dashboard/TLDashboard";
+import { useAppSelector } from "../hooks/useReduxTypes";
 
 export const DashboardPage = () => {
-  const dispatch = useAppDispatch();
+  const role = useAppSelector((state) => state.auth.role);
 
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">HR Dashboard</h1>
-      <button onClick={() => dispatch(logoutUser())}>Logout</button>
-    </div>
-  );
+  if (role === "hr") {
+    return <HRDashboard />;
+  }
+
+  if (role === "team_lead") {
+    return <TLDashboard />;
+  }
 };

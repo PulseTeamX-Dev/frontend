@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAppDispatch } from "../hooks/useReduxTypes";
 import { fetchProfile } from "../redux/profile/operation";
 
-import ProfileForm from "../components/logic/ProfileForm";
+import ProfileForm from "../components/auth/ProfileForm";
 import AvatarUploader from "../components/ui/AvatarUploader";
 
 import { Title } from "../shared/Title";

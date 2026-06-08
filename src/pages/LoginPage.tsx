@@ -5,11 +5,11 @@ import { resetRecoverStatus } from "../redux/auth/slice";
 
 // Твої компоненти
 import AuthSuccess from "../components/ui/AuthSuccess";
-import LoginForm from "../components/logic/LoginForm";
-import { ForgotPasswordForm } from "../components/logic/ForgotPasswordForm";
 import { CheckEmailView } from "../components/ui/CheckEmailView";
 import Icon from "../shared/Icon";
 import { Title } from "../shared/Title";
+import { ForgotPasswordForm } from "../components/auth/ForgotPasswordForm";
+import LoginForm from "../components/auth/LoginForm";
 
 export const LoginPage = () => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);

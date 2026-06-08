@@ -197,7 +197,7 @@ export const SurveyPage = () => {
           {/* Текстове поле */}
           {question.question_type === "text" && (
             <textarea
-              placeholder="Поділіться деталями 상황 ситуації..."
+              placeholder="Поділіться деталями ситуації..."
               value={typeof currentValue === "string" ? currentValue : ""}
               onChange={(event) =>
                 handleAnswerChange(question.question_id, event.target.value)
