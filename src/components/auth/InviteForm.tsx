@@ -3,7 +3,7 @@ import Icon from "../../shared/Icon";
 import { Input } from "../../shared/Input";
 import { Title } from "../../shared/Title";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
-import { acceptInvite } from "../../redux/auth/operation";
+import { acceptInvite, loginUser } from "../../redux/auth/operation";
 import { selectAuthLoading } from "../../redux/auth/selectors";
 export const InviteForm = ({ token }: { token: string }) => {
   const dispatch = useAppDispatch();
@@ -31,7 +31,17 @@ export const InviteForm = ({ token }: { token: string }) => {
       return setLocalError("Необхідно погодитися з умовами користування.");
     }
 
-    dispatch(acceptInvite({ token, password }));
+    try {
+      const response = await dispatch(
+        acceptInvite({ token, password }),
+      ).unwrap();
+
+      const email = response.user.email;
+
+      await dispatch(loginUser({ email, password })).unwrap();
+    } catch (error: unknown) {
+      setLocalError((error as string) || "Сталася помилка. Спробуйте пізніше.");
+    }
   };
 
   return (
