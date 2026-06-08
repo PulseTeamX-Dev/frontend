@@ -19,10 +19,18 @@ export interface SurveyQuestion {
   is_active: boolean;
   created_at: string;
 }
-
+export interface PaginationInfo {
+  current_page: number;
+  limit: number;
+  total_questions: number;
+  total_pages: number;
+  has_next_page: boolean;
+  has_prev_page: boolean;
+}
 export interface SurveyDetails {
   survey_id: number;
   questions: SurveyQuestion[];
+  pagination: PaginationInfo;
 }
 
 export interface SubmitSurveyResponse {
