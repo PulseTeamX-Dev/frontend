@@ -14,15 +14,17 @@ import {
   selectSurveyLoading,
 } from "../redux/surveys/selectors";
 
+import { SurveyStart } from "../components/survey/SurveyStart";
+import { SurveyFinished } from "../components/survey/SurveyFinished";
+
 const SCALE_VALUES = Array.from({ length: 10 }, (_, i) => i + 1);
 
 export const SurveyPage = () => {
+  const [isStarted, setIsStarted] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
 
-  // Очікуємо UUID токен з URL
   const { survey_token } = useParams<{ survey_token: string }>();
-
-  // Стан для поточної сторінки пагінації
   const [currentPage, setCurrentPage] = useState<number>(1);
 
   const answers = useSelector((state: RootState) => state.surveys.answers);
@@ -37,16 +39,13 @@ export const SurveyPage = () => {
     }, {});
   }, [answers]);
 
-  // Завантаження даних при зміні токена або поточної сторінки
   useEffect(() => {
     if (!survey_token) return;
-
     dispatch(
       fetchSurveyByToken({ surveyToken: survey_token, page: currentPage }),
     );
   }, [dispatch, survey_token, currentPage]);
 
-  // Мемоізуємо хендлер, щоб кнопки шкал без потреби не перемальовувалися
   const handleAnswerChange = useCallback(
     (questionId: number, value: number | string) => {
       dispatch(setAnswer({ questionId, value }));
@@ -54,14 +53,12 @@ export const SurveyPage = () => {
     [dispatch],
   );
 
-  // Перехід на наступне питання
   const handleNextPage = () => {
     if (survey?.pagination?.has_next_page) {
       setCurrentPage((prev) => prev + 1);
     }
   };
 
-  // Повернення на попереднє питання
   const handlePrevPage = () => {
     if (survey?.pagination?.has_prev_page) {
       setCurrentPage((prev) => prev - 1);
@@ -84,16 +81,33 @@ export const SurveyPage = () => {
       .unwrap()
       .then(() => {
         dispatch(clearSurveyForm());
-        setCurrentPage(1); // Скидаємо на першу сторінку після успіху
-        alert("Дякуємо! Ваші відповіді успішно збережено.");
+        setCurrentPage(1);
+        setIsSubmitted(true);
       })
       .catch((err) => {
         alert(err || "Помилка під час відправки форми.");
       });
   };
 
-  // (UI логіка завантаження та помилок)
+  if (isSubmitted) {
+    return (
+      <div className="min-h-screen bg-[#f7f8fa] py-12 px-4 flex items-center justify-center font-sans">
+        {/* Кнопка закриття може вести, наприклад, на головну сторінку */}
+        <SurveyFinished onClose={() => (window.location.href = "/")} />
+      </div>
+    );
+  }
 
+  // Екран старту опитування (поки не натиснули "Почати опитування")
+  if (!isStarted) {
+    return (
+      <div className="min-h-screen bg-[#f7f8fa] py-12 px-4 flex items-center justify-center font-sans">
+        <SurveyStart onStart={() => setIsStarted(true)} />
+      </div>
+    );
+  }
+
+  // Логіка завантаження та помилок (спрацює вже всередині процесу)
   if (loading) {
     return (
       <div className="p-10 text-center text-gray-500 font-sans">
@@ -130,9 +144,7 @@ export const SurveyPage = () => {
 
   return (
     <div className="min-h-screen bg-[#f7f8fa] py-12 px-4 font-sans text-grayscale-900 flex items-center justify-center">
-      {/* Додано relative для абсолютного позиціонування кнопки Назад всередині картки */}
       <div className="w-full max-w-4xl bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-gray-100/50 p-6 pt-16 md:p-16 md:pt-20 relative transition-all">
-        {/* Кнопка "← Назад" у лівому верхньому кутку картки, як на макеті */}
         {pagination?.has_prev_page && (
           <button
             type="button"
@@ -144,25 +156,22 @@ export const SurveyPage = () => {
         )}
 
         <div className="flex flex-col items-center text-center">
-          {/* Номер питання за даними пагінації */}
           <span className="text-2xl font-bold font-heading text-grayscale-900 mb-5 block">
             {question.question_type === "scale"
               ? `Питання ${pagination?.current_page || 1}/${pagination?.total_pages || 1}`
               : "Анонімний Коментар"}
           </span>
 
-          {/* Текст питання */}
           <h3 className="text-base md:text-lg font-light text-gray-500 leading-6 mb-8 max-w-2xl font-sans">
             {question.text_ua}
           </h3>
 
-          {/* 1. ШКАЛА (SCALE) */}
+          {/* Шкала */}
           {question.question_type === "scale" && (
             <div className="w-full max-w-2xl mb-8">
               <div className="flex justify-between items-center gap-2 md:gap-3 mb-5 overflow-x-auto py-2 px-1">
                 {SCALE_VALUES.map((value) => {
                   const isSelected = currentValue === value;
-
                   return (
                     <button
                       key={value}
@@ -177,8 +186,6 @@ export const SurveyPage = () => {
                   );
                 })}
               </div>
-
-              {/* Підписи під шкалою з макета */}
               <div className="flex justify-between text-gray-300 text-xs md:text-sm px-1 font-normal">
                 <span>Зневіра</span>
                 <span>Нормальний клімат</span>
@@ -187,10 +194,10 @@ export const SurveyPage = () => {
             </div>
           )}
 
-          {/* 2. ТЕКСТОВЕ ПОЛЕ (TEXT) */}
+          {/* Текстове поле */}
           {question.question_type === "text" && (
             <textarea
-              placeholder="Поділіться деталями ситуації..."
+              placeholder="Поділіться деталями 상황 ситуації..."
               value={typeof currentValue === "string" ? currentValue : ""}
               onChange={(event) =>
                 handleAnswerChange(question.question_id, event.target.value)
@@ -199,7 +206,7 @@ export const SurveyPage = () => {
             />
           )}
 
-          {/* Центральна помаранчева кнопка дії */}
+          {/* Кнопка дії */}
           <div className="mt-2">
             {!isLastPage ? (
               <Button
