@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { PageLoader } from "../shared/Loader";
 import "react-toastify/dist/ReactToastify.css";
@@ -44,15 +44,18 @@ const SettingsPage = lazy(() =>
 function App() {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const isAuthLoading = useAppSelector((state) => state.auth.isLoading);
+
+  const [isAppReady, setIsAppReady] = useState(
+    !localStorage.getItem("access_token"),
+  );
 
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
-      dispatch(fetchCurrentUser());
+      dispatch(fetchCurrentUser()).finally(() => setIsAppReady(true));
     }
   }, [dispatch]);
 
-  if (isAuthLoading) {
+  if (!isAppReady) {
     return <PageLoader />;
   }
 
