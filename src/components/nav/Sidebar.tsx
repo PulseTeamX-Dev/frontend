@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../../hooks/useReduxTypes";
 import Icon from "../../shared/Icon";
 import { selectAuthRole } from "../../redux/auth/selectors";
-import AppLink from "../../shared/AppLink";
+import { UserProfileMin } from "./UserProfileMin";
 
 const NAV_CONFIG = [
   {
@@ -10,19 +10,28 @@ const NAV_CONFIG = [
     label: "Огляд",
     icon: "grid",
     roles: ["hr", "team_lead"],
+    mobileOrder: "order-1",
+  },
+  {
+    path: "/comments",
+    label: "Коментарі",
+    icon: "chat-blank",
+    roles: ["hr"],
+    mobileOrder: "order-2",
   },
   {
     path: "/signals",
     label: "Сигнали",
     icon: "bell",
     roles: ["hr", "team_lead"],
+    mobileOrder: "order-4",
   },
-  { path: "/comments", label: "Коментарі", icon: "chat-blank", roles: ["hr"] },
   {
     path: "/settings",
     label: "Налаштування",
     icon: "settings",
     roles: ["hr", "team_lead"],
+    mobileOrder: "order-5",
   },
 ];
 
@@ -34,32 +43,90 @@ export const Sidebar = () => {
   );
 
   return (
-    <aside className="w-[250px] bg-white border-r border-gray-200 h-screen p-4 flex flex-col shrink-0">
-      <div className="mb-8">
-        <p className="font-bold text-gray-700">Тут буде інфа</p>
-      </div>
+    <aside
+      className="
+      z-50 bg-white shrink-0 border-gray-200
+      /* Мобілка: знизу, висота 70px */
+      fixed bottom-0 left-0 w-full h-[70px] border-t shadow-[0_-4px_10px_rgba(0,0,0,0.05)]
+      /* Планшет: зліва, ширина 80px */
+      md:relative md:h-screen md:w-[80px] md:flex md:flex-col md:border-t-0 md:border-r md:p-4 md:shadow-none
+      /* Десктоп: розширюємо до 250px */
+      lg:w-[250px]
+    "
+    >
+      <UserProfileMin />
 
-      <nav className="flex flex-col gap-2">
+      <nav className="flex-1 flex w-full flex-row md:flex-col justify-between md:justify-start items-center md:items-stretch h-full md:gap-2 px-2 md:px-0">
         {allowedLinks.map((link) => (
-          <Link
+          <NavLink
             key={link.path}
             to={link.path}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-orange-50 text-gray-700 transition-colors"
+            className={({ isActive }) => `
+              relative flex items-center justify-center lg:justify-start gap-3 transition-all duration-200
+              h-full md:h-auto 
+              /* Ось тут головний фікс: flex-1 замість w-full */
+              flex-1 md:flex-none
+              md:p-3 md:rounded-xl lg:px-4 lg:py-3
+              ${link.mobileOrder} md:order-none
+              ${
+                isActive
+                  ? "text-grayscale-900 md:bg-[#F26E3B] md:text-white md:shadow-md"
+                  : "text-grayscale-500 hover:bg-orange-50 md:hover:text-grayscale-900"
+              }
+            `}
           >
-            <Icon id={link.icon} className="w-5 h-5" />
-            <span>{link.label}</span>
-          </Link>
+            {({ isActive }) => (
+              <>
+                {isActive && (
+                  <span className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#F26E3B] rounded-full md:hidden"></span>
+                )}
+                <Icon
+                  id={link.icon}
+                  className="w-6 h-6 md:w-5 md:h-5 shrink-0"
+                />
+                <span className="hidden lg:block font-medium">
+                  {link.label}
+                </span>
+              </>
+            )}
+          </NavLink>
         ))}
-      </nav>
 
-      {role?.toLowerCase() === "hr" && (
-        <AppLink path="/create-pulse" className="mt-auto">
-          <div className="flex items-center justify-center gap-2">
-            <Icon id="plus" className="w-6 h-6" />
-            <p>Додати пульс</p>
+        {role?.toLowerCase() === "hr" && (
+          // Обгортка теж отримала flex-1 для мобілки
+          <div className="relative order-3 md:order-none md:mt-auto flex items-center justify-center lg:justify-start flex-1 md:flex-none h-full md:h-auto">
+            <NavLink
+              to="/create-pulse"
+              className={({ isActive }) => `
+                flex items-center justify-center transition-all duration-200 h-full w-full
+                /* Мобільні стилі (як звичайна іконка меню) */
+                ${
+                  isActive
+                    ? "text-grayscale-900 md:text-white"
+                    : "text-grayscale-500 hover:bg-orange-50 md:hover:text-white"
+                }
+                bg-transparent
+                /* Планшетні/Десктопні стилі (як яскрава кнопка) */
+                md:bg-[#F26E3B] md:text-white md:rounded-xl md:shadow-md md:hover:bg-[#e05d2c] 
+                md:!p-3 lg:!px-4 lg:!py-3 md:w-12 md:h-12 lg:w-full lg:h-auto
+              `}
+            >
+              {({ isActive }) => (
+                <>
+                  {/* Індикатор для сторінки створення пульсу на мобілці */}
+                  {isActive && (
+                    <span className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#F26E3B] rounded-full md:hidden"></span>
+                  )}
+                  <Icon id="plus" className="w-6 h-6 md:w-5 md:h-5 shrink-0" />
+                  <span className="hidden lg:block font-medium ml-2 whitespace-nowrap">
+                    Додати пульс
+                  </span>
+                </>
+              )}
+            </NavLink>
           </div>
-        </AppLink>
-      )}
+        )}
+      </nav>
     </aside>
   );
 };
