@@ -85,29 +85,42 @@ export const fetchCurrentUser = createAsyncThunk(
   "auth/fetchCurrentUser",
   async (_, { rejectWithValue }) => {
     try {
-      const token = localStorage.getItem("access_token");
-      if (!token) throw new Error("No token found");
+      // 1. Беремо саме refresh_token, бо він живе довго
+      const refreshToken = localStorage.getItem("refresh_token");
+      if (!refreshToken) throw new Error("No refresh token found");
 
-      const response = await axios.get(`${SUPABASE_URL}/auth/v1/user`, {
-        headers: {
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${token}`,
+      // 2. Стукаємо на спеціальний ендпоінт Supabase для оновлення сесії
+      const response = await axios.post(
+        `${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`,
+        { refresh_token: refreshToken },
+        {
+          headers: {
+            apikey: SUPABASE_ANON_KEY,
+          },
         },
-      });
+      );
 
-      const user = response.data;
+      // 3. Supabase повертає нам нові токени та актуального юзера!
+      const { access_token, refresh_token, user } = response.data;
       const role = user?.user_metadata?.role || null;
-      
+
+      // 4. Одразу ж оновлюємо токени в localStorage на свіжі
+      localStorage.setItem("access_token", access_token);
+      localStorage.setItem("refresh_token", refresh_token);
+
       return { user, role };
     } catch (error: unknown) {
-       const err = error as {
-         response?: { data?: { error_description?: string } };
-       };
-       return rejectWithValue(
-         err.response?.data?.error_description || "Не вдалося відновити сесію",
-       );
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+
+      const err = error as {
+        response?: { data?: { error_description?: string } };
+      };
+      return rejectWithValue(
+        err.response?.data?.error_description || "Не вдалося відновити сесію",
+      );
     }
-  }
+  },
 );
 
 // --- ЗАПИТ НА СКИДАННЯ ПАРОЛЯ (FORGOT PASSWORD) ---
