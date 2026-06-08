@@ -6,6 +6,7 @@ import {
   acceptInvite,
   recoverPassword,
   updatePassword,
+  fetchCurrentUser,
 } from "./operation";
 import type { User } from "./types";
 
@@ -67,6 +68,25 @@ const authSlice = createSlice({
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
+      })
+
+      .addCase(fetchCurrentUser.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload.user;
+        state.role = action.payload.role;
+      })
+      .addCase(fetchCurrentUser.rejected, (state) => {
+        state.isLoading = false;
+        // Якщо токен недійсний - очищаємо все і викидаємо на логін
+        state.isAuthenticated = false;
+        state.user = null;
+        state.role = null;
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("refresh_token");
       })
 
       // --- LOGOUT ---

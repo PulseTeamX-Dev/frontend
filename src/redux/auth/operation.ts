@@ -81,6 +81,35 @@ export const logoutUser = createAsyncThunk(
   },
 );
 
+export const fetchCurrentUser = createAsyncThunk(
+  "auth/fetchCurrentUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem("access_token");
+      if (!token) throw new Error("No token found");
+
+      const response = await axios.get(`${SUPABASE_URL}/auth/v1/user`, {
+        headers: {
+          apikey: SUPABASE_ANON_KEY,
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const user = response.data;
+      const role = user?.user_metadata?.role || null;
+      
+      return { user, role };
+    } catch (error: unknown) {
+       const err = error as {
+         response?: { data?: { error_description?: string } };
+       };
+       return rejectWithValue(
+         err.response?.data?.error_description || "Не вдалося відновити сесію",
+       );
+    }
+  }
+);
+
 // --- ЗАПИТ НА СКИДАННЯ ПАРОЛЯ (FORGOT PASSWORD) ---
 export const recoverPassword = createAsyncThunk(
   "auth/recoverPassword",
