@@ -17,7 +17,7 @@ export const SettingsPage = () => {
   return (
     <div className="max-w-[900px] mx-auto p-8">
       <div className="bg-white rounded-3xl shadow-sm p-8">
-        <Title tag="h1" variant="bold" className="mb-8">
+        <Title tag="h1" variant="bold" className="mb-2">
           Особистий кабінет
         </Title>
 

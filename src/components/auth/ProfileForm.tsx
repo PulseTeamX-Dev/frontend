@@ -9,6 +9,9 @@ import { selectProfile } from "../../redux/profile/selectors";
 import { updateProfile } from "../../redux/profile/operation";
 import { logoutUser } from "../../redux/auth/operation";
 
+import { Input } from "../../shared/Input";
+import { Button } from "../../shared/Button";
+
 type FormValues = {
   full_name: string;
 };
@@ -49,59 +52,49 @@ const ProfileForm = () => {
   };
 
   return (
-    // <div className="bg-white rounded-3xl p-6 shadow-sm">
-    //   <h2 className="font-semibold mb-6">Особисті дані</h2>
-
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div>
-        <label className="block text-sm text-gray-500 mb-2">Посада</label>
+      <Input
+        id="job_title"
+        type="text"
+        label="Посада"
+        leftIcon="portfolio"
+        value={profile?.dashboard_role ?? ""}
+        disabled
+      />
 
-        <input
-          disabled
-          value={profile?.dashboard_role ?? ""}
-          className="w-full h-12 px-4 rounded-xl bg-gray-100"
-        />
-      </div>
+      <Input
+        id="full_name"
+        type="text"
+        label="Ім'я та прізвище"
+        leftIcon="user"
+        placeholder="Введіть ім'я та прізвище"
+        {...register("full_name")}
+      />
 
-      <div>
-        <label className="block text-sm text-gray-500 mb-2">
-          Ім'я та прізвище
-        </label>
-
-        <input
-          {...register("full_name")}
-          className="w-full h-12 px-4 rounded-xl border"
-        />
-      </div>
-
-      <div>
-        <label className="block text-sm text-gray-500 mb-2">Email</label>
-
-        <input
-          disabled
-          value={profile?.email ?? ""}
-          className="w-full h-12 px-4 rounded-xl bg-gray-100"
-        />
-      </div>
+      <Input
+        id="email"
+        type="email"
+        label="Email"
+        leftIcon="mail"
+        value={profile?.email ?? ""}
+        disabled
+      />
 
       <div className="flex justify-center gap-4 pt-4">
-        <button
+        <Button
           type="button"
+          variant="secondary"
           onClick={handleLogout}
-          className="px-6 py-3 border rounded-2xl"
+          className="min-w-[120px] rounded-2xl border border-light-txt bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
         >
           Вийти з акаунту
-        </button>
+        </Button>
 
-        <button
-          type="submit"
-          className="px-6 py-3 bg-primary-active text-white rounded-2xl"
-        >
+        <Button type="submit" variant="save" className="min-w-[117px]">
           Зберегти зміни
-        </button>
+        </Button>
       </div>
     </form>
-    // </div>
   );
 };
 
