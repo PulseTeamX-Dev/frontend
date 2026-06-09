@@ -1,9 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { apiClient } from "../../api/apiClient";
-import type { DashboardMetrics, AlertsResponse } from "./types";
+import type { DashboardMetricsUnion, AlertsResponse } from "./types";
+import { isAxiosError } from "axios";
+
+const extractErrorMessage = (error: unknown, fallback: string): string => {
+  if (isAxiosError(error)) {
+    return error.response?.data?.message ?? fallback;
+  }
+  if (error instanceof Error) {
+    return error.message;
+  }
+  return fallback;
+};
 
 export const fetchMetrics = createAsyncThunk<
-  DashboardMetrics,
+  DashboardMetricsUnion,
   string | undefined,
   { rejectValue: string }
 >("dashboard/fetchMetrics", async (teamId, thunkAPI) => {
@@ -14,15 +25,7 @@ export const fetchMetrics = createAsyncThunk<
     return data;
   } catch (error: unknown) {
     return thunkAPI.rejectWithValue(
-      (
-        error as {
-          response?: {
-            data?: {
-              message?: string;
-            };
-          };
-        }
-      ).response?.data?.message ?? "Failed to fetch metrics",
+      extractErrorMessage(error, "Failed to fetch metrics"),
     );
   }
 });
@@ -37,15 +40,7 @@ export const fetchAlerts = createAsyncThunk<
     return data;
   } catch (error: unknown) {
     return thunkAPI.rejectWithValue(
-      (
-        error as {
-          response?: {
-            data?: {
-              message?: string;
-            };
-          };
-        }
-      ).response?.data?.message ?? "Failed to fetch alerts",
+      extractErrorMessage(error, "Failed to fetch alerts"),
     );
   }
 });

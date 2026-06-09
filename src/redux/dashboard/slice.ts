@@ -32,7 +32,7 @@ const dashboardSlice = createSlice({
       .addCase(fetchMetrics.pending, handlePending)
       .addCase(fetchMetrics.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.metrics = action.payload;
+        state.metrics = action.payload; // Тут TS тепер знає, що це HRMetrics або TeamLeadMetrics
       })
       .addCase(fetchMetrics.rejected, handleRejected)
 
