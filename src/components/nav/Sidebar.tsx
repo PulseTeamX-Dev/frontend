@@ -70,7 +70,7 @@ export const Sidebar = () => {
               ${link.mobileOrder} md:order-none
               ${
                 isActive
-                  ? "text-grayscale-900 md:bg-[#F26E3B] md:text-white md:shadow-md"
+                  ? "text-grayscale-900 md:bg-primary-active md:text-white md:shadow-md"
                   : "text-grayscale-500 hover:bg-orange-50 md:hover:text-grayscale-900"
               }
             `}
@@ -78,7 +78,7 @@ export const Sidebar = () => {
             {({ isActive }) => (
               <>
                 {isActive && (
-                  <span className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#F26E3B] rounded-full md:hidden"></span>
+                  <span className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary-active rounded-full md:hidden"></span>
                 )}
                 <Icon
                   id={link.icon}
@@ -107,7 +107,7 @@ export const Sidebar = () => {
                 }
                 bg-transparent
                 /* Планшетні/Десктопні стилі (як яскрава кнопка) */
-                md:bg-[#F26E3B] md:text-white md:rounded-xl md:shadow-md md:hover:bg-[#e05d2c] 
+                md:bg-[#F26E3B] md:text-white md:rounded-xl md:shadow-md md:hover:bg--primary-hover 
                 md:!p-3 lg:!px-4 lg:!py-3 md:w-12 md:h-12 lg:w-full lg:h-auto
               `}
             >
@@ -115,7 +115,7 @@ export const Sidebar = () => {
                 <>
                   {/* Індикатор для сторінки створення пульсу на мобілці */}
                   {isActive && (
-                    <span className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-[#F26E3B] rounded-full md:hidden"></span>
+                    <span className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary-active rounded-full md:hidden"></span>
                   )}
                   <Icon id="plus" className="w-6 h-6 md:w-5 md:h-5 shrink-0" />
                   <span className="hidden lg:block font-medium ml-2 whitespace-nowrap">
