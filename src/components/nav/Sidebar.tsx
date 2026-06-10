@@ -113,7 +113,6 @@ export const Sidebar = () => {
             >
               {({ isActive }) => (
                 <>
-                  {/* Індикатор для сторінки створення пульсу на мобілці */}
                   {isActive && (
                     <span className="absolute top-1.5 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary-active rounded-full md:hidden"></span>
                   )}

@@ -4,6 +4,7 @@ import { fetchMetrics } from "../../redux/dashboard/operation";
 import { Title } from "../../shared/Title";
 import Icon from "../../shared/Icon";
 import { MetricSummaryList } from "./MetricSummaryList";
+import MetricsHistoryList from "./MetricsHistoryList";
 
 export const HRDashboard = () => {
   const dispatch = useAppDispatch();
@@ -19,7 +20,7 @@ export const HRDashboard = () => {
   if (error) return <div>Помилка: {error}</div>;
   if (!metrics) return null;
 
-  console.log("Дані дашборду:", metrics);
+  // console.log("Дані дашборду:", metrics);
 
   const isHRMetrics = metrics && "metrics_summary" in metrics;
 
@@ -29,11 +30,17 @@ export const HRDashboard = () => {
 
   return (
     <div>
-      <div className="flex gap-1 items-center">
+      <div className="flex gap-1 items-center mb-6">
         <Icon id="logo" className="w-8 h-8" />
-        <Title tag="h1">Огляд</Title>
+        <Title
+          tag="h1"
+          className="text-[16px] md:text-[18px] text-grayscale-900 font-second-family font-light"
+        >
+          Огляд
+        </Title>
       </div>
       <MetricSummaryList metricsSummary={metrics.metrics_summary} />
+      <MetricsHistoryList metricsHistory={metrics.metrics_history} />
       {/* <pre>{JSON.stringify(metrics, null, 2)}</pre> */}
     </div>
   );

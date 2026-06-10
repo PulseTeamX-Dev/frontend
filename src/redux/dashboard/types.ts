@@ -1,28 +1,9 @@
 // --- ЗАГАЛЬНІ ТИПИ ---
 
-import type { HRMetricsSummaryContainer } from "../../types/dashboard/types";
-
-export interface HeatmapItem {
-  team_id?: number;
-  team_name: string;
-  week_start: string;
-  response_count: number;
-  stress_index: number;
-  trust_index: number;
-  clarity_index: number;
-  workload_strain_index: number;
-  workload_min: number;
-  workload_max: number;
-  workload_status: string;
-  // Додаткові індекси, які можуть бути
-  overload_count?: number;
-  underload_count?: number;
-  workload_dispersion?: number;
-  psychological_safety_index?: number;
-  burnout_risk_index?: number;
-  conflict_risk?: number;
-  anonymity_trust_index?: number;
-}
+import type {
+  HeatmapItem,
+  HRMetricsSummaryContainer,
+} from "../../types/dashboard/types";
 
 export interface DashboardAlert {
   alert_id: number;

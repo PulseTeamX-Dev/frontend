@@ -43,7 +43,7 @@ export const MetricSummaryList = ({ metricsSummary }: MetricSummaryProps) => {
   ][];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-5 gap-4 w-full p-4">
+    <div className="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-5 gap-4 w-full">
       {metricsArray.map(([key, data], index) => {
         const config = metricConfig[key];
 

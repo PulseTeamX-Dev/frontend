@@ -54,14 +54,17 @@
   --color-primary-active: #f9793e;
   --color-white: #ffffff;
 
+  --color-yellow-200: #fdf0b7;
   --color-yellow-500: #fbe16e;
   --color-yellow-700: #f9d73e;
 
+  --color-grayscale-200: #dddddd;
   --color-grayscale-600: #888888;
   --color-grayscale-700: #666666;
   --color-grayscale-900: #222222;
 
   --color-error: #ed2b26;
+  --color-red-500: #f4807d;
   --color-red-100: #fbd5d4;
   --color-red-50: #fdeae9;
 
