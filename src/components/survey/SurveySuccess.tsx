@@ -1,7 +1,4 @@
-import { useMemo, useState } from "react";
 import { Title } from "../../shared/Title";
-
-import anim1 from "../../assets/animation/animation6test.gif";
 
 interface SurveySuccessProps {
   onClose?: () => void;
@@ -12,14 +9,8 @@ export const SurveySuccess = ({
   onClose,
   isAlreadySubmitted = false,
 }: SurveySuccessProps) => {
-  // Збираємо анімації в стабільний масив. Індекс 0 залишаємо для звичайної галочки.
-  const animations = useMemo(() => [null, anim1], []);
-
-  const [variant] = useState<number>(() => Math.floor(Math.random() * 2));
-
   return (
-    <div className="w-full max-w-4xl bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-gray-100/50 p-6 py-12 md:p-16 md:py-20 flex flex-col items-center text-center animate-fade-in relative transition-all">
-      {/* Кнопка-хрестик */}
+    <div className="w-full max-w-5xl bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-gray-100/50 p-6 py-12 md:p-16 md:py-20 flex flex-col items-center text-center animate-fade-in relative transition-all">
       <button
         onClick={onClose}
         type="button"
@@ -41,38 +32,24 @@ export const SurveySuccess = ({
         </svg>
       </button>
 
-      {/* Візуальна частина (Іконка або випадковий GIF) */}
       <div className="mb-6 flex items-center justify-center min-h-[120px] md:min-h-[160px]">
-        {isAlreadySubmitted || variant === 0 ? (
-          /* Сценарій "Вже завершено" АБО коли рандом обрав 0: показуємо помаранчеву галочку */
-          <div className="w-24 h-24 md:w-28 md:h-28 bg-[#f17837] rounded-full flex items-center justify-center text-white shadow-sm shadow-orange-100 animate-scale-up">
-            <svg
-              className="w-12 h-12 md:w-14 md:h-14"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="3.5"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
-          </div>
-        ) : (
-          /* Сценарій успішного сабміту (варіанти 1-5): рендеримо випадковий GIF */
-          <div className="w-32 h-32 md:w-40 md:h-40 flex items-center justify-center">
-            <img
-              src={animations[variant] || undefined}
-              alt="Успішно завершено"
-              className="w-full h-full object-contain"
+        <div className="w-24 h-24 md:w-28 md:h-28 bg-[#f17837] rounded-full flex items-center justify-center text-white shadow-sm shadow-orange-100 animate-scale-up">
+          <svg
+            className="w-12 h-12 md:w-14 md:h-14"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3.5"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M5 13l4 4L19 7"
             />
-          </div>
-        )}
+          </svg>
+        </div>
       </div>
 
-      {/* Динамічний текст залежно від ситуації */}
       {isAlreadySubmitted ? (
         <>
           <Title tag="h2" variant="bold" className="text-grayscale-900 mb-4">
@@ -92,7 +69,8 @@ export const SurveySuccess = ({
               Ваш зворотній зв’язок успішно збережено.
             </p>
             <p className="px-4">
-              Дякуємо, що поділилися своїми думками. <br />
+              Дякуємо, що поділилися своїми думками.
+              <br />
               Ви допомагаєте нам створювати комфортне та безпечне робоче
               середовище для всієї команди.
             </p>
