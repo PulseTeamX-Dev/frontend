@@ -9,6 +9,18 @@ export interface SurveyCondition {
   operator: string;
 }
 
+export interface SurveyScale {
+  scale_id: number;
+  name: string;
+  min_value: number;
+  max_value: number;
+  scale_type: "linear" | string;
+  min_label_ua: string;
+  mid_label_ua: string | null;
+  max_label_ua: string;
+  color_direction: "red_to_green" | "green_to_red" | "centered";
+}
+
 export interface SurveyQuestion {
   question_id: number;
   field_key: string | null;
@@ -18,6 +30,8 @@ export interface SurveyQuestion {
   conditional: SurveyCondition | null;
   is_active: boolean;
   created_at: string;
+  scale_id: number | null;
+  scale: SurveyScale | null;
 }
 export interface PaginationInfo {
   current_page: number;
