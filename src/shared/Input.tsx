@@ -29,7 +29,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const getBorderClasses = () => {
       if (error) return "border-error focus:border-error";
       if (success) return "border-success focus:border-success";
-      // Додали group-hover, щоб бордер реагував, навіть якщо навели на іконку
       return "border-light-txt focus:border-yellow-500 caret-yellow-700 group-hover:border-yellow-500";
     };
 
@@ -49,7 +48,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           </label>
         )}
 
-        {/* ДОДАНО: клас group, щоб відслідковувати фокус інпуту для іконки */}
         <div className="relative flex items-center group">
           {leftIcon && (
             <span
@@ -58,11 +56,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                   ? "text-error"
                   : success
                     ? "text-success"
-                    : // ДОДАНО: іконка стає жовтою при фокусі або ховері на всій групі
-                      "text-light-txt group-focus-within:text-yellow-500 group-hover:text-yellow-500"
+                    : // ВИПРАВЛЕНО: Прибрали жовтий ховер та фокус, залишили grayscale-700
+                      "text-grayscale-700"
               }`}
             >
-              <Icon id={leftIcon} className="fill-current w-5 h-5" />
+              {/* fill-current можна прибрати звідси, бо ми додали його в сам Icon */}
+              <Icon id={leftIcon} className="w-5 h-5" />
             </span>
           )}
 
@@ -95,10 +94,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             <Icon
               id={
                 error
-                  ? "alert-circle"
+                  ? "circle-warning-filled"
                   : success
-                    ? "check-circle"
-                    : "alert-circle"
+                    ? "circle-check-filled"
+                    : "circle-warning-filled"
               }
               className="w-4 h-4 shrink-0"
             />

@@ -3,6 +3,7 @@ import { authReducer } from "./auth/slice";
 import { surveysReducer } from "./surveys/slice";
 import { dashboardReducer } from "./dashboard/slice";
 import { teamReducer } from "./teams/slice";
+import { profileReducer } from "./profile/slice";
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ export const store = configureStore({
     surveys: surveysReducer,
     dashboard: dashboardReducer,
     team: teamReducer,
+    profile: profileReducer,
   },
 });
 

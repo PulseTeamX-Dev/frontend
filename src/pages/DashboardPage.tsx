@@ -1,8 +1,24 @@
+import { HRDashboard } from "../components/dashboard/HRDashboard";
+import { TLDashboard } from "../components/dashboard/TLDashboard";
+import PageLayout from "../components/layout/PageLayout";
+import { useAppSelector } from "../hooks/useReduxTypes";
+
 export const DashboardPage = () => {
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">HR Dashboard</h1>
-      {/* Тут будуть компоненти метрик, теплова карта та алерти (згідно EPIC 10) */}
-    </div>
-  );
+  const role = useAppSelector((state) => state.auth.role);
+
+  if (role === "hr") {
+    return (
+      <PageLayout>
+        <HRDashboard />
+      </PageLayout>
+    );
+  }
+
+  if (role === "team_lead") {
+    return (
+      <PageLayout>
+        <TLDashboard />
+      </PageLayout>
+    );
+  }
 };
