@@ -1,13 +1,12 @@
 import React, { useState, useMemo } from "react";
-import type { HeatmapItem } from "../../types/dashboard/types";
+import type { HeatmapItem } from "../../../types/dashboard/types";
 import MetricsHistoryItem from "./MetricsHistoryItem";
-import Icon from "../../shared/Icon";
+import Icon from "../../../shared/Icon";
 
 interface MetricsHistoryListProps {
   metricsHistory: HeatmapItem[];
 }
 
-// Доступні ключі для випадайки
 type MetricKey = "stress_index" | "trust_index" | "clarity_index";
 
 const metricOptions: { key: MetricKey; label: string; title: string }[] = [
@@ -32,7 +31,6 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
   const [selectedMetric, setSelectedMetric] =
     useState<MetricKey>("stress_index");
 
-  // 1. Отримуємо унікальні дати та команди (відсортовані)
   const dates = useMemo(() => {
     return Array.from(new Set(metricsHistory.map((m) => m.week_start))).sort();
   }, [metricsHistory]);
@@ -41,7 +39,6 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
     return Array.from(new Set(metricsHistory.map((m) => m.team_name))).sort();
   }, [metricsHistory]);
 
-  // 2. Створюємо словник для швидкого рендеру: ключ "TeamName_Date"
   const historyMap = useMemo(() => {
     const map = new Map<string, HeatmapItem>();
     metricsHistory.forEach((item) => {
@@ -53,14 +50,12 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
   const currentConfig = metricOptions.find((m) => m.key === selectedMetric)!;
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mt-6 w-full">
-      {/* Хедер блоку */}
+    <div className="bg-white rounded-2xl p-6 shadow-sm border font-heading border-gray-100 mt-6 w-full mb-3">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl text-gray-900 font-light leading-tight">
           {currentConfig.title}
         </h2>
 
-        {/* Випадайка (Селект) */}
         <div className="flex items-center gap-2 relative">
           <select
             value={selectedMetric}
@@ -80,11 +75,9 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
         </div>
       </div>
 
-      {/* Сама теплова карта */}
       <div
         className="grid gap-3 w-full"
         style={{
-          // Перша колонка (команди) - auto, інші (клітинки) - однакові фракції
           gridTemplateColumns: `auto repeat(${dates.length}, minmax(60px, 1fr))`,
         }}
       >

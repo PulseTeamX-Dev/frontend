@@ -1,9 +1,4 @@
-// --- ЗАГАЛЬНІ ТИПИ ---
-
-import type {
-  HeatmapItem,
-  HRMetricsSummaryContainer,
-} from "../../types/dashboard/types";
+import type { HeatmapItem, HRMetrics } from "../../types/dashboard/types";
 
 export interface DashboardAlert {
   alert_id: number;
@@ -72,48 +67,6 @@ export interface TeamLeadMetrics {
   message?: string;
   current_count?: number;
 }
-
-// --- ТИПИ ДЛЯ HR ---
-export interface HRRetentionItem {
-  week_start: string;
-  dashboard_role: string;
-  active_users: number;
-  total_users: number;
-  retention_rate_pct: number;
-  avg_session_minutes: number;
-}
-
-export interface HREngagementItem {
-  survey_id: number;
-  team_id: number;
-  team_name: string;
-  total_sent: number;
-  responses: number;
-  response_rate_pct: number;
-  low_engagement_signal: boolean;
-}
-
-export interface HROperationsItem {
-  week_start: string;
-  alert_level: string;
-  alert_type: string;
-  total_alerts: number;
-  resolved_count: number;
-  resolution_rate_pct: number;
-  avg_resolution_hours: number | null;
-  median_resolution_hours: number | null;
-  unresolved_count: number;
-}
-
-export interface HRMetrics {
-  metrics_summary: HRMetricsSummaryContainer;
-  metrics_history: HeatmapItem[]; // Теплова карта має ту саму структуру
-  retention: HRRetentionItem[];
-  engagement: HREngagementItem[];
-  operations: HROperationsItem[];
-}
-
-// --- ФІНАЛЬНИЙ СТЕЙТ REDUX ---
 
 // Оскільки бекенд віддає різне для HR і TL, метрики можуть бути будь-яким з цих двох типів.
 // На фронтенді доведеться перевіряти тип (наприклад, перевіряючи наявність поля `top_cards` або `metrics_summary`)

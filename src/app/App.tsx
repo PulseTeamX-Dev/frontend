@@ -8,6 +8,7 @@ import { selectIsAuthenticated } from "../redux/auth/selectors";
 import { ProtectedRoute } from "../utils/ProtectedRoute";
 import { MainLayout } from "../components/layout/MainLayout";
 import { fetchCurrentUser } from "../redux/auth/operation";
+import { fetchProfile } from "../redux/profile/operation";
 
 const LoginPage = lazy(() =>
   import("../pages/LoginPage").then((m) => ({ default: m.LoginPage })),
@@ -54,6 +55,12 @@ function App() {
       dispatch(fetchCurrentUser()).finally(() => setIsAppReady(true));
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(fetchProfile());
+    }
+  }, [isAuthenticated, dispatch]);
 
   if (!isAppReady) {
     return <PageLoader />;

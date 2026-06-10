@@ -1,4 +1,4 @@
-import type { HRMetricsSummaryContainer } from "../../types/dashboard/types";
+import type { HRMetricsSummaryContainer } from "../../../types/dashboard/types";
 import { MetricsSummaryItems } from "./MetricsSummaryItems";
 
 interface MetricSummaryProps {

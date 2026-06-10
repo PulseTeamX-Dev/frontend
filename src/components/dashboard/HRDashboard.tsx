@@ -3,8 +3,10 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
 import { fetchMetrics } from "../../redux/dashboard/operation";
 import { Title } from "../../shared/Title";
 import Icon from "../../shared/Icon";
-import { MetricSummaryList } from "./MetricSummaryList";
-import MetricsHistoryList from "./MetricsHistoryList";
+import { MetricSummaryList } from "./hr/MetricSummaryList";
+import MetricsHistoryList from "./hr/MetricsHistoryList";
+import { SurveyCompletionTable } from "./hr/SurveyCompletionTable";
+import { EngagementLevelList } from "./hr/EngagementLevelList";
 
 export const HRDashboard = () => {
   const dispatch = useAppDispatch();
@@ -29,7 +31,7 @@ export const HRDashboard = () => {
   }
 
   return (
-    <div>
+    <>
       <div className="flex gap-1 items-center mb-6">
         <Icon id="logo" className="w-8 h-8" />
         <Title
@@ -41,7 +43,10 @@ export const HRDashboard = () => {
       </div>
       <MetricSummaryList metricsSummary={metrics.metrics_summary} />
       <MetricsHistoryList metricsHistory={metrics.metrics_history} />
+      <SurveyCompletionTable data={metrics.engagement} />
+      <EngagementLevelList data={metrics.engagement} />
+
       {/* <pre>{JSON.stringify(metrics, null, 2)}</pre> */}
-    </div>
+    </>
   );
 };

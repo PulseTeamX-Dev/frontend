@@ -1,4 +1,4 @@
-import Icon from "../../shared/Icon";
+import Icon from "../../../shared/Icon";
 
 interface MetricsHistoryItemProps {
   value: number | null | undefined;
