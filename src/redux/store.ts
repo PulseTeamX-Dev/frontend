@@ -4,6 +4,8 @@ import { surveysReducer } from "./surveys/slice";
 import { dashboardReducer } from "./dashboard/slice";
 import { teamReducer } from "./teams/slice";
 import { profileReducer } from "./profile/slice";
+import { commentsReducer } from "./comments/slice";
+import { alertsReducer } from "./alerts/slice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +14,8 @@ export const store = configureStore({
     dashboard: dashboardReducer,
     team: teamReducer,
     profile: profileReducer,
+    comments: commentsReducer,
+    alerts: alertsReducer,
   },
 });
 
