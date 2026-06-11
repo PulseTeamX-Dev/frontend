@@ -126,7 +126,6 @@ export const SurveyPage = () => {
       </div>
     );
   }
-
   // Звичайна критична помилка (невалідний токен, 404, впав сервер тощо)
   if (errorMessage && !isAlreadyDoneByError) {
     return (
@@ -136,7 +135,6 @@ export const SurveyPage = () => {
       </div>
     );
   }
-
   if (!isStarted) {
     return (
       <div className="min-h-screen bg-[#f7f8fa] py-12 px-4 flex items-center justify-center font-sans">
@@ -144,7 +142,6 @@ export const SurveyPage = () => {
       </div>
     );
   }
-
   if (!survey || !survey.questions || survey.questions.length === 0) {
     return (
       <div className="p-10 text-center text-gray-500 font-sans">
@@ -155,7 +152,6 @@ export const SurveyPage = () => {
 
   const question = survey.questions[0];
   const pagination = survey.pagination;
-
   const currentValue = answersMap[question.question_id];
 
   const isButtonDisabled =
@@ -167,8 +163,8 @@ export const SurveyPage = () => {
     : true;
 
   return (
-    <div className="min-h-screen bg-[#f7f8fa] py-12 px-4 font-sans text-grayscale-900 flex items-center justify-center">
-      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-gray-100/50 p-6 pt-16 md:p-16 md:pt-20 relative transition-all">
+    <div className="min-h-screen bg-[#f7f8fa] py-12 px-2 sm:px-4 font-sans text-grayscale-900 flex items-center justify-center">
+      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-gray-100/50 p-3 px-4 pt-14 xs:p-6 md:p-16 md:pt-20 relative transition-all">
         {pagination?.has_prev_page && (
           <button
             type="button"
@@ -193,7 +189,7 @@ export const SurveyPage = () => {
           {/* Шкала */}
           {question.question_type === "scale" && (
             <div className="w-full max-w-2xl mb-8">
-              <div className="flex justify-between items-center gap-2 md:gap-3 mb-5 overflow-x-auto py-2 px-1">
+              <div className="grid grid-cols-10 justify-items-center gap-1 sm:gap-2 md:gap-3 mb-5 py-2">
                 {SCALE_VALUES.map((value) => {
                   const isSelected = currentValue === value;
                   return (
@@ -203,14 +199,14 @@ export const SurveyPage = () => {
                       onClick={() =>
                         handleAnswerChange(question.question_id, value)
                       }
-                      className={`w-11 h-11 md:w-12 md:h-12 rounded-full font-bold text-base md:text-lg border-2 transition-all flex items-center justify-center shrink-0 ${getScaleButtonColors(value, isSelected, question.scale?.color_direction)}`}
+                      className={`w-full max-w-[44px] md:max-w-[48px] aspect-square rounded-full font-bold text-[11px] xs:text-[13px] sm:text-base md:text-lg border-2 transition-all flex items-center justify-center ${getScaleButtonColors(value, isSelected, question.scale?.color_direction)}`}
                     >
                       {value}
                     </button>
                   );
                 })}
               </div>
-              <div className="flex justify-between text-gray-300 text-xs md:text-sm px-1 font-normal gap-2">
+              <div className="flex justify-between text-gray-300 text-[11px] sm:text-xs md:text-sm px-1 font-normal gap-2">
                 <span className="text-left w-1/3">
                   {question.scale?.min_label_ua || ""}
                 </span>
