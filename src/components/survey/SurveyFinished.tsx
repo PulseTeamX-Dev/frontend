@@ -21,7 +21,7 @@ export const SurveyFinished = ({ onClose }: SurveyFinishedProps) => {
   const [variant] = useState<number>(() => Math.floor(Math.random() * 6));
 
   return (
-    <div className="w-full max-w-4xl bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-gray-100/50 p-6 py-12 md:p-16 md:py-20 flex flex-col items-center text-center animate-fade-in relative transition-all">
+    <div className="w-full max-w-5xl bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-gray-100/50 p-6 py-12 md:p-16 md:py-20 flex flex-col items-center text-center animate-fade-in relative transition-all">
       {/* Кнопка-хрестик */}
       <button
         onClick={onClose}
@@ -81,10 +81,8 @@ export const SurveyFinished = ({ onClose }: SurveyFinishedProps) => {
       </Title>
 
       {/* Опис точно за макетом */}
-      <div className="text-gray-400 text-sm md:text-base font-light font-sans max-w-2xl leading-relaxed space-y-1">
-        <p className="font-medium text-gray-700">
-          Ваш зворотній зв’язок успішно збережено.
-        </p>
+      <div className="text-gray-400 text-sm md:text-base font-light font-sans max-w-[950px] leading-relaxed space-y-1">
+        <p className="font-medium">Ваш зворотній зв’язок успішно збережено.</p>
         <p className="px-4">
           Дякуємо, що поділилися своїми думками. <br />
           Ви допомагаєте нам створювати комфортне та безпечне робоче середовище

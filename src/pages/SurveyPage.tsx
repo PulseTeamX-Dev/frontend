@@ -16,6 +16,7 @@ import {
 
 import { SurveyStart } from "../components/survey/SurveyStart";
 import { SurveyFinished } from "../components/survey/SurveyFinished";
+import { SurveySuccess } from "../components/survey/SurveySuccess";
 
 const SCALE_VALUES = Array.from({ length: 10 }, (_, i) => i + 1);
 
@@ -89,25 +90,35 @@ export const SurveyPage = () => {
       });
   };
 
+  // Перевірка помилки від бекенду: чи проходив користувач тест раніше
+  const isAlreadyDoneByError =
+    errorMessage === "Опитування вже пройдено" ||
+    errorMessage?.toLowerCase().includes("submitted") ||
+    errorMessage?.toLowerCase().includes("already");
+
+  const isAlreadyDoneByData =
+    !loading && (!survey || !survey.questions || survey.questions.length === 0);
+
+  // СЦЕНАРІЙ 1: Користувач щойно самостійно натиснув "Надіслати" -> Подяка
   if (isSubmitted) {
     return (
       <div className="min-h-screen bg-[#f7f8fa] py-12 px-4 flex items-center justify-center font-sans">
-        {/* Кнопка закриття може вести, наприклад, на головну сторінку */}
         <SurveyFinished onClose={() => (window.location.href = "/")} />
       </div>
     );
   }
 
-  // Екран старту опитування (поки не натиснули "Почати опитування")
-  if (!isStarted) {
+  // СЦЕНАРІЙ 2: Повторний клік по лінку -> Заглушка "Тест пройдено"
+  if (isAlreadyDoneByError || isAlreadyDoneByData) {
     return (
       <div className="min-h-screen bg-[#f7f8fa] py-12 px-4 flex items-center justify-center font-sans">
-        <SurveyStart onStart={() => setIsStarted(true)} />
+        <SurveySuccess
+          isAlreadySubmitted={true}
+          onClose={() => (window.location.href = "/")}
+        />
       </div>
     );
   }
-
-  // Логіка завантаження та помилок (спрацює вже всередині процесу)
   if (loading) {
     return (
       <div className="p-10 text-center text-gray-500 font-sans">
@@ -116,11 +127,20 @@ export const SurveyPage = () => {
     );
   }
 
-  if (errorMessage) {
+  // Звичайна критична помилка (невалідний токен, 404, впав сервер тощо)
+  if (errorMessage && !isAlreadyDoneByError) {
     return (
       <div className="max-w-md mx-auto mt-20 p-6 border border-red-200 bg-red-50 text-red-700 rounded-2xl text-center shadow-sm font-sans">
         <h2 className="text-xl font-bold mb-2">Увага</h2>
         <p>{errorMessage}</p>
+      </div>
+    );
+  }
+
+  if (!isStarted) {
+    return (
+      <div className="min-h-screen bg-[#f7f8fa] py-12 px-4 flex items-center justify-center font-sans">
+        <SurveyStart onStart={() => setIsStarted(true)} />
       </div>
     );
   }
@@ -137,14 +157,18 @@ export const SurveyPage = () => {
   const pagination = survey.pagination;
 
   const currentValue = answersMap[question.question_id];
-  const hasValue = currentValue !== undefined && currentValue !== "";
+
+  const isButtonDisabled =
+    question.question_type === "scale" &&
+    (currentValue === undefined || currentValue === "");
+
   const isLastPage = pagination
     ? pagination.current_page === pagination.total_pages
     : true;
 
   return (
     <div className="min-h-screen bg-[#f7f8fa] py-12 px-4 font-sans text-grayscale-900 flex items-center justify-center">
-      <div className="w-full max-w-4xl bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-gray-100/50 p-6 pt-16 md:p-16 md:pt-20 relative transition-all">
+      <div className="w-full max-w-5xl bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-gray-100/50 p-6 pt-16 md:p-16 md:pt-20 relative transition-all">
         {pagination?.has_prev_page && (
           <button
             type="button"
@@ -179,17 +203,23 @@ export const SurveyPage = () => {
                       onClick={() =>
                         handleAnswerChange(question.question_id, value)
                       }
-                      className={`w-11 h-11 md:w-12 md:h-12 rounded-full font-bold text-base md:text-lg border-2 transition-all flex items-center justify-center shrink-0 ${getScaleButtonColors(value, isSelected)}`}
+                      className={`w-11 h-11 md:w-12 md:h-12 rounded-full font-bold text-base md:text-lg border-2 transition-all flex items-center justify-center shrink-0 ${getScaleButtonColors(value, isSelected, question.scale?.color_direction)}`}
                     >
                       {value}
                     </button>
                   );
                 })}
               </div>
-              <div className="flex justify-between text-gray-300 text-xs md:text-sm px-1 font-normal">
-                <span>Зневіра</span>
-                <span>Нормальний клімат</span>
-                <span>Повна довіра</span>
+              <div className="flex justify-between text-gray-300 text-xs md:text-sm px-1 font-normal gap-2">
+                <span className="text-left w-1/3">
+                  {question.scale?.min_label_ua || ""}
+                </span>
+                <span className="text-center w-1/3">
+                  {question.scale?.mid_label_ua || ""}
+                </span>
+                <span className="text-right w-1/3">
+                  {question.scale?.max_label_ua || ""}
+                </span>
               </div>
             </div>
           )}
@@ -212,7 +242,7 @@ export const SurveyPage = () => {
               <Button
                 type="button"
                 variant="survey"
-                disabled={!hasValue}
+                disabled={isButtonDisabled}
                 onClick={handleNextPage}
                 className="!bg-[#f17837] hover:!opacity-90 active:scale-[0.98] min-w-[180px] !text-white rounded-xl"
               >
@@ -222,7 +252,7 @@ export const SurveyPage = () => {
               <Button
                 type="button"
                 variant="survey"
-                disabled={!hasValue}
+                disabled={isButtonDisabled}
                 onClick={handleSubmit}
                 className="!bg-[#f17837] hover:!opacity-90 active:scale-[0.98] min-w-[180px] !text-white rounded-xl"
               >
