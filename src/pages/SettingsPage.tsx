@@ -1,5 +1,5 @@
-import ProfileForm from "../components/auth/ProfileForm";
-import AvatarUploader from "../components/ui/AvatarUploader";
+import ProfileForm from "../components/profile/ProfileForm";
+import AvatarUploader from "../components/profile/AvatarUploader";
 
 import { Title } from "../shared/Title";
 
