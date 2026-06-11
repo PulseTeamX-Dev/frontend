@@ -71,7 +71,7 @@ function App() {
       <BrowserRouter>
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            {/* === 1. ПУБЛІЧНІ РОУТИ (Тут Сайдбара НЕ БУДЕ) === */}
+            {/* === 1. ПУБЛІЧНІ РОУТИ === */}
             <Route path="/surveys/:survey_token" element={<SurveyPage />} />
             <Route path="/invite/:token" element={<InvitePage />} />
             <Route path="/update-password" element={<UpdatePasswordPage />} />
@@ -87,7 +87,7 @@ function App() {
               }
             />
 
-            {/* === 2. ПРИВАТНИЙ ПРОСТІР (Тут Сайдбар БУДЕ) === */}
+            {/* === 2. ПРИВАТНИЙ ПРОСТІР === */}
             {/* Якщо авторизований - показуємо Layout із Сайдбаром, інакше на Логін */}
             <Route
               element={

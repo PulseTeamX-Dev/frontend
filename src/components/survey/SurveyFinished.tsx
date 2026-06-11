@@ -7,11 +7,7 @@ import anim3 from "../../assets/animation/animation3.gif";
 import anim4 from "../../assets/animation/animation4.gif";
 import anim5 from "../../assets/animation/animation5.gif";
 
-interface SurveyFinishedProps {
-  onClose?: () => void;
-}
-
-export const SurveyFinished = ({ onClose }: SurveyFinishedProps) => {
+export const SurveyFinished = () => {
   // Збираємо анімації в стабільний масив. Індекс 0 залишаємо для кастомної галочки.
   const animations = useMemo(
     () => [null, anim1, anim2, anim3, anim4, anim5],
@@ -22,28 +18,6 @@ export const SurveyFinished = ({ onClose }: SurveyFinishedProps) => {
 
   return (
     <div className="w-full max-w-5xl bg-white rounded-3xl shadow-[0_10px_40px_rgba(0,0,0,0.03)] border border-gray-100/50 p-6 py-12 md:p-16 md:py-20 flex flex-col items-center text-center animate-fade-in relative transition-all">
-      {/* Кнопка-хрестик */}
-      <button
-        onClick={onClose}
-        type="button"
-        className="absolute top-6 right-6 md:top-8 md:right-12 text-gray-300 hover:text-gray-500 transition-colors"
-        aria-label="Закрити"
-      >
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-
       {/* Візуальна частина (Рандом від 0 до 5) */}
       <div className="mb-6 flex items-center justify-center min-h-[120px] md:min-h-[160px]">
         {variant === 0 ? (

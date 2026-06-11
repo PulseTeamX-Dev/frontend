@@ -17,8 +17,8 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
         {/* Заголовки таблиці (грідимо на 4 колонки з різною шириною) */}
         <div className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-2 mb-3 text-grayscale-700 text-[14px] text-center">
           <div className="text-left"></div>
-          <div>Відповіли</div>
           <div>Надіслано</div>
+          <div>Відповіли</div>
           <div>Відсоток відповідей</div>
         </div>
 
@@ -44,10 +44,10 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
 
               {/* Цифри */}
               <div className="text-center text-[16px] text-grayscale-900">
-                {item.responses}
+                {item.total_sent}
               </div>
               <div className="text-center text-[16px] text-grayscale-900">
-                {item.total_sent}
+                {item.responses}
               </div>
 
               {/* Бейдж з відсотком */}

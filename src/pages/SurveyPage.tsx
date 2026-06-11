@@ -103,7 +103,7 @@ export const SurveyPage = () => {
   if (isSubmitted) {
     return (
       <div className="min-h-screen bg-[#f7f8fa] py-12 px-4 flex items-center justify-center font-sans">
-        <SurveyFinished onClose={() => (window.location.href = "/")} />
+        <SurveyFinished />
       </div>
     );
   }
@@ -112,10 +112,7 @@ export const SurveyPage = () => {
   if (isAlreadyDoneByError || isAlreadyDoneByData) {
     return (
       <div className="min-h-screen bg-[#f7f8fa] py-12 px-4 flex items-center justify-center font-sans">
-        <SurveySuccess
-          isAlreadySubmitted={true}
-          onClose={() => (window.location.href = "/")}
-        />
+        <SurveySuccess isAlreadySubmitted={true} />
       </div>
     );
   }
