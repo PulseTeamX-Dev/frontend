@@ -45,7 +45,6 @@ export const MetricsSummaryItems = ({
     scoreClass = score > 5 ? "text-success" : "text-error";
   }
 
-  // 1. Локалізація: міняємо крапки на коми
   const formattedTrend = Math.abs(trend).toFixed(1).replace(".", ",");
   const trendDisplayValue =
     trend > 0 ? `+${formattedTrend}` : trend < 0 ? `-${formattedTrend}` : "0,0";
@@ -53,16 +52,15 @@ export const MetricsSummaryItems = ({
   const formattedScore = score.toFixed(1).replace(".", ",");
 
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col justify-between h-45 w-full transition-all hover:shadow-md">
-      {/* Контейнер заголовка залишаємо у стовпчик (h-12 flex-col) */}
+    // Виправлена висота
+    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col justify-between min-h-[160px] h-full w-full transition-all hover:shadow-md">
       <div className="flex flex-col justify-between h-12 items-start gap-2 w-full">
-        <span className="text-base md:text-[16px] text-grayscale-900 font-second-family font-light leading-tight">
+        <span className="text-[14px] md:text-[15px] lg:text-[16px] text-grayscale-900 font-second-family font-light leading-tight">
           {title}
         </span>
 
         {title !== "Довіра анонімності" && title !== "Перевантаженість" && (
           <span
-            // Додали self-end, щоб посунути бейдж ліворуч-праворуч за твоїми стрілочками
             className={`flex items-center justify-center gap-0.5 px-1.5 py-0.5 rounded-lg shrink-0 w-16 self-end ${trendClass}`}
           >
             <Icon id={iconId} className="w-3 h-3" />
@@ -71,8 +69,7 @@ export const MetricsSummaryItems = ({
         )}
       </div>
 
-      {/* Основна цифра по центру */}
-      <div className="flex items-center justify-center my-3">
+      <div className="flex items-center justify-center my-3 flex-grow">
         <span className={`text-3xl md:text-4xl font-bold ${scoreClass}`}>
           {formattedScore}
           {isPercentage ? (
@@ -83,9 +80,12 @@ export const MetricsSummaryItems = ({
         </span>
       </div>
 
-      {/* Нижня плашка */}
-      <div className="text-xs text-grayscale-700 text-center font-normal truncate w-full">
-        {prefix}:{" "}
+      {/* Title додано для тултипу при обрізці */}
+      <div
+        className="text-xs text-grayscale-700 text-center font-normal truncate w-full"
+        title={`${prefix} ${worstTeam}`}
+      >
+        {prefix}{" "}
         <span className="text-grayscale-900 font-medium">{worstTeam}</span>
       </div>
     </div>

@@ -22,8 +22,6 @@ export const HRDashboard = () => {
   if (error) return <div>Помилка: {error}</div>;
   if (!metrics) return null;
 
-  // console.log("Дані дашборду:", metrics);
-
   const isHRMetrics = metrics && "metrics_summary" in metrics;
 
   if (!isHRMetrics) {
@@ -41,12 +39,19 @@ export const HRDashboard = () => {
           Огляд
         </Title>
       </div>
-      <MetricSummaryList metricsSummary={metrics.metrics_summary} />
-      <MetricsHistoryList metricsHistory={metrics.metrics_history} />
-      <SurveyCompletionTable data={metrics.engagement} />
-      <WorkloadChart data={metrics.workload_current} />
 
-      {/* <pre>{JSON.stringify(metrics, null, 2)}</pre> */}
+      <MetricSummaryList metricsSummary={metrics.metrics_summary} />
+
+      {/* ПРАВИЛЬНИЙ АДАПТИВНИЙ КОНТЕЙНЕР */}
+      <div className="flex flex-col lg:flex-row gap-4 mt-6 w-full items-stretch">
+        <div className="w-full lg:w-7/12 flex flex-col">
+          <MetricsHistoryList metricsHistory={metrics.metrics_history} />
+        </div>
+        <div className="w-full lg:w-5/12 flex flex-col gap-4">
+          <SurveyCompletionTable data={metrics.engagement} />
+          <WorkloadChart data={metrics.workload_current} />
+        </div>
+      </div>
     </>
   );
 };

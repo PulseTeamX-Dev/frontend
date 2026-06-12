@@ -36,7 +36,7 @@ const metricConfig: Record<
   },
   critical_overload: {
     title: "Перевантаженість",
-    prefix: "🔥 команди:",
+    prefix: "",
     isPercentage: true,
   },
 };

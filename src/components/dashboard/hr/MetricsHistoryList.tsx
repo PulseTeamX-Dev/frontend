@@ -7,7 +7,6 @@ interface MetricsHistoryListProps {
   metricsHistory: HeatmapItem[];
 }
 
-// 1. Додали нову метрику
 type MetricKey =
   | "stress_index"
   | "trust_index"
@@ -40,37 +39,35 @@ const metricOptions: { key: MetricKey; label: string; title: string }[] = [
 const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
   const [selectedMetric, setSelectedMetric] =
     useState<MetricKey>("stress_index");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Стан для кастомного дропдауну
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const dates = useMemo(() => {
-    return Array.from(new Set(metricsHistory.map((m) => m.week_start))).sort();
-  }, [metricsHistory]);
-
-  const teams = useMemo(() => {
-    return Array.from(new Set(metricsHistory.map((m) => m.team_name))).sort();
-  }, [metricsHistory]);
-
+  const dates = useMemo(
+    () => Array.from(new Set(metricsHistory.map((m) => m.week_start))).sort(),
+    [metricsHistory],
+  );
+  const teams = useMemo(
+    () => Array.from(new Set(metricsHistory.map((m) => m.team_name))).sort(),
+    [metricsHistory],
+  );
   const historyMap = useMemo(() => {
     const map = new Map<string, HeatmapItem>();
-    metricsHistory.forEach((item) => {
-      map.set(`${item.team_name}_${item.week_start}`, item);
-    });
+    metricsHistory.forEach((item) =>
+      map.set(`${item.team_name}_${item.week_start}`, item),
+    );
     return map;
   }, [metricsHistory]);
 
   const currentConfig = metricOptions.find((m) => m.key === selectedMetric)!;
-
-  // Визначаємо поточний (найновіший) тиждень для передачі в Item
   const latestWeek = dates[dates.length - 1];
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border font-heading border-gray-100 mt-6 w-full mb-3">
-      <div className="flex justify-between items-center mb-6">
+    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border font-heading border-gray-100 w-full flex flex-col">
+      {/* Адаптивна шапка */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h2 className="text-xl text-gray-900 font-light leading-tight">
           {currentConfig.title}
         </h2>
 
-        {/* 3. Кастомний Dropdown (як на макеті) */}
         <div className="relative">
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -79,13 +76,10 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
             {currentConfig.label}
             <Icon
               id="caret-down-filled"
-              className={`w-3 h-3 text-white transition-transform duration-200 ${
-                isDropdownOpen ? "rotate-180" : ""
-              }`}
+              className={`w-3 h-3 text-white transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
             />
           </button>
 
-          {/* Випадаючий список */}
           {isDropdownOpen && (
             <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 shadow-lg rounded-md py-1 z-20 flex flex-col">
               {metricOptions.map((opt) => (
@@ -98,7 +92,7 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
                   }`}
                   onClick={() => {
                     setSelectedMetric(opt.key);
-                    setIsDropdownOpen(false); // Закриваємо при виборі
+                    setIsDropdownOpen(false);
                   }}
                 >
                   {opt.label}
@@ -109,48 +103,49 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
         </div>
       </div>
 
-      <div
-        className="grid gap-3 w-full"
-        style={{
-          gridTemplateColumns: `auto repeat(${dates.length}, minmax(60px, 1fr))`,
-        }}
-      >
-        {teams.map((team) => (
-          <React.Fragment key={team}>
-            <div className="flex items-center justify-end pr-4 text-sm text-gray-500 font-medium">
-              {team}
-            </div>
+      <div className="w-full overflow-x-auto pb-2 flex-grow">
+        <div
+          className="grid gap-3 min-w-[420px]"
+          style={{
+            gridTemplateColumns: `auto repeat(${dates.length}, minmax(64px, 1fr))`,
+          }}
+        >
+          {teams.map((team) => (
+            <React.Fragment key={team}>
+              <div className="flex items-center justify-end pr-4 text-sm text-gray-500 font-medium">
+                {team}
+              </div>
+              {dates.map((date) => {
+                const dataPoint = historyMap.get(`${team}_${date}`);
+                const value = dataPoint ? dataPoint[selectedMetric] : null;
 
+                return (
+                  <MetricsHistoryItem
+                    key={`${team}_${date}`}
+                    value={value as number | null}
+                    metricKey={selectedMetric}
+                    isCurrentWeek={date === latestWeek}
+                  />
+                );
+              })}
+            </React.Fragment>
+          ))}
+
+          <React.Fragment>
+            <div></div>
             {dates.map((date) => {
-              const dataPoint = historyMap.get(`${team}_${date}`);
-              const value = dataPoint ? dataPoint[selectedMetric] : null;
-
+              const [, month, day] = date.split("-");
               return (
-                <MetricsHistoryItem
-                  key={`${team}_${date}`}
-                  value={value as number | null}
-                  metricKey={selectedMetric}
-                  isCurrentWeek={date === latestWeek} // <--- Передаємо флаг поточного тижня
-                />
+                <div
+                  key={`date_${date}`}
+                  className="text-center text-xs text-gray-500 font-medium pt-2"
+                >
+                  {day}.{month}
+                </div>
               );
             })}
           </React.Fragment>
-        ))}
-
-        <React.Fragment>
-          <div></div>
-          {dates.map((date) => {
-            const [, month, day] = date.split("-");
-            return (
-              <div
-                key={`date_${date}`}
-                className="text-center text-xs text-gray-500 font-medium pt-2"
-              >
-                {day}.{month}
-              </div>
-            );
-          })}
-        </React.Fragment>
+        </div>
       </div>
     </div>
   );
