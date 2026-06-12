@@ -1,20 +1,14 @@
-// Типізація на основі твого бекенду
-interface WorkloadData {
-  team_name: string;
-  workload_strain_index: number; // крапка
-  workload_min: number; // початок пігулки
-  workload_max: number; // кінець пігулки
-}
+import { useState } from "react";
+import type { HRWorkloadCurrent } from "../../../types/dashboard/types";
 
 interface WorkloadChartProps {
-  data: WorkloadData[];
+  data: HRWorkloadCurrent[];
 }
 
 export const WorkloadChart = ({ data }: WorkloadChartProps) => {
-  // Загальна шкала від 0 до 10
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const MAX_SCORE = 10;
 
-  // Вираховуємо середній бал по всіх командах (велика цифра зверху)
   const averageScore = data.length
     ? (
         data.reduce((sum, item) => sum + item.workload_strain_index, 0) /
@@ -22,20 +16,24 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
       ).toFixed(1)
     : "0.0";
 
-  // Функція для визначення кольору крапки
   const getDotColor = (score: number) => {
     if (score < 4) return "bg-blue-500";
     if (score < 7) return "bg-green-500";
     return "bg-red-500";
   };
 
+  const getTextColor = (score: number) => {
+    if (score < 4) return "text-blue-500";
+    if (score < 7) return "text-green-500";
+    return "text-red-500";
+  };
+
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 w-full mb-6">
+    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 w-full mb-6 relative">
       <h2 className="text-[20px] text-gray-900 font-light leading-tight mb-2">
         Навантаженість
       </h2>
 
-      {/* Головна цифра */}
       <div className="text-center mb-6">
         <span className="text-2xl font-bold text-green-600">
           {averageScore}
@@ -43,55 +41,75 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
         <span className="text-gray-500 text-sm font-medium">/10</span>
       </div>
 
-      {/* Контейнер графіка */}
       <div className="relative w-full">
         {/* 1. ТРИКОЛІРНИЙ ФОН */}
         <div className="flex w-full h-28 rounded-xl overflow-hidden opacity-60">
-          {/* < 4 (40% ширини) */}
           <div className="w-[40%] bg-[#d0eefc]"></div>
-          {/* 4 - 7 (30% ширини) */}
           <div className="w-[30%] bg-[#d1f4da]"></div>
-          {/* > 7 (30% ширини) */}
           <div className="w-[30%] bg-[#fbe0e0]"></div>
         </div>
 
         {/* 2. ПОВЗУНКИ (ПІГУЛКИ КОМАНД) */}
-        {/* Накладаємо їх абсолютом поверх фону, рівномірно розподіляючи по вертикалі */}
         <div className="absolute inset-0 flex flex-col justify-evenly py-2">
           {data.map((team, index) => {
-            // Математика для Tailwind (перетворюємо 0-10 на 0-100%)
             const leftPosition = (team.workload_min / MAX_SCORE) * 100;
             const pillWidth =
               ((team.workload_max - team.workload_min) / MAX_SCORE) * 100;
 
-            // Позиція крапки всередині пігулки
             const dotPositionRelativeToPill =
               ((team.workload_strain_index - team.workload_min) /
                 (team.workload_max - team.workload_min)) *
               100;
 
             return (
-              <div key={`workload_${index}`} className="relative w-full h-3">
-                {/* Сама біла пігулка */}
+              <div
+                key={`workload_${index}`}
+                className="relative w-full h-3 cursor-pointer"
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+              >
+                {/* Біла пігулка */}
                 <div
-                  className="absolute h-full bg-white/90 rounded-full shadow-sm"
+                  className="absolute h-full bg-white/90 rounded-full shadow-sm transition-all duration-200 hover:shadow-md hover:bg-white"
                   style={{
                     left: `${leftPosition}%`,
                     width: `${pillWidth}%`,
                   }}
                 >
-                  {/* Крапка поточного значення */}
+                  {/* Крапка (ВІДЦЕНТРОВАНА) */}
                   <div
-                    className={`absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full ${getDotColor(
+                    className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full ${getDotColor(
                       team.workload_strain_index,
                     )}`}
                     style={{
                       left: `${dotPositionRelativeToPill}%`,
-                      // Трохи зсуваємо, щоб крапка була точно по центру свого значення
-                      transform: "translate(-50%, -50%)",
                     }}
                   ></div>
                 </div>
+
+                {/* Тултип (Hover Card) */}
+                {hoveredIndex === index && (
+                  <div className="absolute z-20 bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] p-4 flex justify-between items-center text-sm pointer-events-none animate-in fade-in zoom-in duration-200">
+                    <div className="flex flex-col gap-1 text-left">
+                      <span className="text-grayscale-700 text-[14px] text-center">
+                        Команда
+                      </span>
+                      <span className="text-grayscale-900 text-[14px] text-center">
+                        {team.team_name}
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-1 text-right">
+                      <span className="text-grayscale-700 text-[14px] text-center">
+                        Медіана
+                      </span>
+                      <span
+                        className={`text-[14px] text-center ${getTextColor(team.workload_strain_index)}`}
+                      >
+                        {team.workload_strain_index.toFixed(1)}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}

@@ -6,6 +6,7 @@ import Icon from "../../shared/Icon";
 import { MetricSummaryList } from "./hr/MetricSummaryList";
 import MetricsHistoryList from "./hr/MetricsHistoryList";
 import { SurveyCompletionTable } from "./hr/SurveyCompletionTable";
+import { WorkloadChart } from "./hr/WorkloadChart";
 
 export const HRDashboard = () => {
   const dispatch = useAppDispatch();
@@ -43,6 +44,7 @@ export const HRDashboard = () => {
       <MetricSummaryList metricsSummary={metrics.metrics_summary} />
       <MetricsHistoryList metricsHistory={metrics.metrics_history} />
       <SurveyCompletionTable data={metrics.engagement} />
+      <WorkloadChart data={metrics.workload_current} />
 
       {/* <pre>{JSON.stringify(metrics, null, 2)}</pre> */}
     </>

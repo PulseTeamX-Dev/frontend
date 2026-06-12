@@ -63,6 +63,14 @@ export interface HREngagementItem {
   low_engagement_signal: boolean;
 }
 
+export interface HRWorkloadCurrent {
+  team_name: string;
+  workload_strain_index: 4;
+  workload_min: 4;
+  workload_max: 10;
+  workload_status: string;
+}
+
 export interface HROperationsItem {
   week_start: string;
   alert_level: string;
@@ -77,7 +85,8 @@ export interface HROperationsItem {
 
 export interface HRMetrics {
   metrics_summary: HRMetricsSummaryContainer;
-  metrics_history: HeatmapItem[]; // Теплова карта має ту саму структуру
+  metrics_history: HeatmapItem[];
+  workload_current: HRWorkloadCurrent[];
   retention: HRRetentionItem[];
   engagement: HREngagementItem[];
   operations: HROperationsItem[];
