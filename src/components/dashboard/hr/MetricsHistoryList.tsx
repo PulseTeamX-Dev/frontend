@@ -7,7 +7,12 @@ interface MetricsHistoryListProps {
   metricsHistory: HeatmapItem[];
 }
 
-type MetricKey = "stress_index" | "trust_index" | "clarity_index";
+// 1. Додали нову метрику
+type MetricKey =
+  | "stress_index"
+  | "trust_index"
+  | "clarity_index"
+  | "workload_strain_index";
 
 const metricOptions: { key: MetricKey; label: string; title: string }[] = [
   {
@@ -25,11 +30,17 @@ const metricOptions: { key: MetricKey; label: string; title: string }[] = [
     label: "Індекс розуміння",
     title: "Рівень розуміння цілей",
   },
+  {
+    key: "workload_strain_index",
+    label: "Індекс навантаження",
+    title: "Деструктивне навантаження",
+  },
 ];
 
 const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
   const [selectedMetric, setSelectedMetric] =
     useState<MetricKey>("stress_index");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Стан для кастомного дропдауну
 
   const dates = useMemo(() => {
     return Array.from(new Set(metricsHistory.map((m) => m.week_start))).sort();
@@ -49,6 +60,9 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
 
   const currentConfig = metricOptions.find((m) => m.key === selectedMetric)!;
 
+  // Визначаємо поточний (найновіший) тиждень для передачі в Item
+  const latestWeek = dates[dates.length - 1];
+
   return (
     <div className="bg-white rounded-2xl p-6 shadow-sm border font-heading border-gray-100 mt-6 w-full mb-3">
       <div className="flex justify-between items-center mb-6">
@@ -56,22 +70,42 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
           {currentConfig.title}
         </h2>
 
-        <div className="flex items-center gap-2 relative">
-          <select
-            value={selectedMetric}
-            onChange={(e) => setSelectedMetric(e.target.value as MetricKey)}
-            className="appearance-none bg-transparent text-sm font-semibold text-gray-900 cursor-pointer outline-none pr-5 z-10"
+        {/* 3. Кастомний Dropdown (як на макеті) */}
+        <div className="relative">
+          <button
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="flex items-center gap-2 px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white rounded-md text-sm font-semibold transition-colors"
           >
-            {metricOptions.map((opt) => (
-              <option key={opt.key} value={opt.key}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-          <Icon
-            id="caret-down-filled"
-            className="w-3 h-3 text-gray-900 absolute right-0 top-1/2 -translate-y-1/2 z-0 pointer-events-none"
-          />
+            {currentConfig.label}
+            <Icon
+              id="caret-down-filled"
+              className={`w-3 h-3 text-white transition-transform duration-200 ${
+                isDropdownOpen ? "rotate-180" : ""
+              }`}
+            />
+          </button>
+
+          {/* Випадаючий список */}
+          {isDropdownOpen && (
+            <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 shadow-lg rounded-md py-1 z-20 flex flex-col">
+              {metricOptions.map((opt) => (
+                <button
+                  key={opt.key}
+                  className={`text-left px-4 py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${
+                    selectedMetric === opt.key
+                      ? "text-gray-900 bg-gray-50"
+                      : "text-gray-600"
+                  }`}
+                  onClick={() => {
+                    setSelectedMetric(opt.key);
+                    setIsDropdownOpen(false); // Закриваємо при виборі
+                  }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
 
@@ -81,18 +115,14 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
           gridTemplateColumns: `auto repeat(${dates.length}, minmax(60px, 1fr))`,
         }}
       >
-        {/* Рядки даних: Назва команди + її клітинки */}
         {teams.map((team) => (
           <React.Fragment key={team}>
-            {/* Назва команди зліва */}
             <div className="flex items-center justify-end pr-4 text-sm text-gray-500 font-medium">
               {team}
             </div>
 
-            {/* Клітинки графіка для цієї команди */}
             {dates.map((date) => {
               const dataPoint = historyMap.get(`${team}_${date}`);
-              // Беремо значення обраної метрики, якщо дані є
               const value = dataPoint ? dataPoint[selectedMetric] : null;
 
               return (
@@ -100,19 +130,16 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
                   key={`${team}_${date}`}
                   value={value as number | null}
                   metricKey={selectedMetric}
+                  isCurrentWeek={date === latestWeek} // <--- Передаємо флаг поточного тижня
                 />
               );
             })}
           </React.Fragment>
         ))}
 
-        {/* Останній рядок: Дати (як на дизайні знизу) */}
         <React.Fragment>
-          {/* Пуста клітинка зліва під командами */}
           <div></div>
-
           {dates.map((date) => {
-            // Робимо формат дати: з "2026-05-11" робимо "11.05"
             const [, month, day] = date.split("-");
             return (
               <div

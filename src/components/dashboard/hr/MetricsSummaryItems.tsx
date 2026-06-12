@@ -49,10 +49,12 @@ export const MetricsSummaryItems = ({
         </span>
         {trend !== 0 && (
           <span
-            className={`flex items-center gap-0.5 px-2 py-0.5 rounded-lg shrink-0 ${trendClass}`}
+            className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded-lg shrink-0 ${trendClass}`}
           >
             <Icon id={iconId} className="w-3 h-3" />
-            <span className="text-xs font-semibold">{trendDisplayValue}</span>
+            <span className="text-xs font-semibold">
+              {isPercentage ? `${trendDisplayValue} %` : trendDisplayValue}
+            </span>
           </span>
         )}
       </div>

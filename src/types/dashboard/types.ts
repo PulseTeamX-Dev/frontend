@@ -10,6 +10,7 @@ export interface HRMetricsSummaryContainer {
   burnout_risk: HRMetricSummary;
   safety_feeling: HRMetricSummary;
   anonymity_trust: HRMetricSummary;
+  critical_overload: HRMetricSummary;
 }
 
 export interface HeatmapItem {

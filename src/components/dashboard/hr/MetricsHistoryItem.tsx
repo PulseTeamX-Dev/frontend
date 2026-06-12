@@ -3,28 +3,43 @@ import Icon from "../../../shared/Icon";
 interface MetricsHistoryItemProps {
   value: number | null | undefined;
   metricKey: string;
+  isCurrentWeek: boolean; // Отримуємо з батьківського компонента
 }
 
-const MetricsHistoryItem = ({ value, metricKey }: MetricsHistoryItemProps) => {
+const MetricsHistoryItem = ({
+  value,
+  metricKey,
+  isCurrentWeek,
+}: MetricsHistoryItemProps) => {
+  // 2. Логіка пустих станів
   if (value === null || value === undefined) {
     return (
       <div className="h-14 md:h-16 rounded-xl bg-grayscale-200 flex items-center justify-center opacity-50">
-        <Icon id="lock" className="w-6 h-6 text-grayscale-700" />
+        {isCurrentWeek ? (
+          // Замочок для поточного тижня (ще не назбирали 5 відповідей)
+          <Icon id="lock" className="w-6 h-6 text-grayscale-700" />
+        ) : (
+          // Сумний смайлик для минулих тижнів (опитування проігнороване)
+          <Icon id="face-sad" className="w-6 h-6 text-grayscale-700" />
+        )}
       </div>
     );
   }
 
-  const isRiskMetric = metricKey === "stress_index";
+  // Визначаємо, які метрики є "ризиковими" (чим більше - тим гірше)
+  const isRiskMetric =
+    metricKey === "stress_index" || metricKey === "workload_strain_index";
 
   const getLevel = () => {
     if (isRiskMetric) {
-      if (value < 4) return "low";
-      if (value < 7) return "medium";
-      return "high";
+      if (value < 4) return "low"; // Зелений
+      if (value < 7) return "medium"; // Жовтий
+      return "high"; // Червоний
     }
-    if (value > 7) return "low";
-    if (value > 5) return "medium";
-    return "high";
+    // Для позитивних метрик (Довіра, Ясність) - все навпаки
+    if (value > 7) return "low"; // Зелений
+    if (value > 5) return "medium"; // Жовтий
+    return "high"; // Червоний
   };
 
   const level = getLevel();

@@ -34,6 +34,11 @@ const metricConfig: Record<
     prefix: "Найменший",
     isPercentage: true,
   },
+  critical_overload: {
+    title: "Перевантаженість",
+    prefix: "🔥 команди:",
+    isPercentage: true,
+  },
 };
 
 export const MetricSummaryList = ({ metricsSummary }: MetricSummaryProps) => {
@@ -43,20 +48,12 @@ export const MetricSummaryList = ({ metricsSummary }: MetricSummaryProps) => {
   ][];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-6 lg:grid-cols-5 gap-4 w-full">
-      {metricsArray.map(([key, data], index) => {
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 w-full">
+      {metricsArray.map(([key, data]) => {
         const config = metricConfig[key];
 
-        let gridClasses = "col-span-1 md:col-span-2 lg:col-span-1";
-
-        if (index === 4) {
-          gridClasses = "col-span-2 md:col-span-3 lg:col-span-1";
-        } else if (index === 3) {
-          gridClasses = "col-span-1 md:col-span-3 lg:col-span-1";
-        }
-
         return (
-          <div key={key} className={gridClasses}>
+          <div key={key}>
             <MetricsSummaryItems
               title={config.title}
               prefix={config.prefix}

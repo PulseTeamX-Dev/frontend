@@ -44,7 +44,7 @@ export const HRDashboard = () => {
       <MetricsHistoryList metricsHistory={metrics.metrics_history} />
       <SurveyCompletionTable data={metrics.engagement} />
 
-      <pre>{JSON.stringify(metrics, null, 2)}</pre>
+      {/* <pre>{JSON.stringify(metrics, null, 2)}</pre> */}
     </>
   );
 };
