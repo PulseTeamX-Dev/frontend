@@ -65,9 +65,9 @@ export interface HREngagementItem {
 
 export interface HRWorkloadCurrent {
   team_name: string;
-  workload_strain_index: 4;
-  workload_min: 4;
-  workload_max: 10;
+  workload_strain_index: number;
+  workload_min: number;
+  workload_max: number;
   workload_status: string;
 }
 

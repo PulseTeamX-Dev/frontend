@@ -1,0 +1,108 @@
+import {
+  Radar,
+  RadarChart as RechartsRadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  ResponsiveContainer,
+} from "recharts";
+import type { RadarData } from "../../../redux/dashboard/types";
+import { Title } from "../../../shared/Title";
+
+interface RadarChartProps {
+  data: RadarData[];
+}
+
+export const RadarChart = ({ data }: RadarChartProps) => {
+  if (!data || data.length === 0) return null;
+
+  // 1. Сортуємо дані по датах: поточний тиждень (новіший), потім минулий
+  const sortedData = [...data].sort(
+    (a, b) =>
+      new Date(b.week_start).getTime() - new Date(a.week_start).getTime(),
+  );
+
+  const currentWeek = sortedData[0];
+  const previousWeek = sortedData[1];
+
+  // 2. Структура для Recharts
+  const chartData = [
+    {
+      subject: "Спокій",
+      current: currentWeek?.axis_stress_inv || 0,
+      previous: previousWeek?.axis_stress_inv || 0,
+    },
+    {
+      subject: "Гармонія",
+      current: currentWeek?.axis_conflict_inv || 0,
+      previous: previousWeek?.axis_conflict_inv || 0,
+    },
+    {
+      subject: "Підтримка",
+      current: currentWeek?.axis_trust || 0,
+      previous: previousWeek?.axis_trust || 0,
+    },
+    {
+      subject: "Ясність",
+      current: currentWeek?.axis_clarity || 0,
+      previous: previousWeek?.axis_clarity || 0,
+    },
+    {
+      subject: "Навантаженість",
+      current: currentWeek?.axis_workload_balance || 0,
+      previous: previousWeek?.axis_workload_balance || 0,
+    },
+  ];
+
+  return (
+    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex flex-col grow min-h-85">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 w-full">
+        <Title tag="h2" variant="light">
+          Радар команди
+        </Title>
+
+        <div className="flex items-center gap-4 text-xs font-medium text-gray-600">
+          <div className="flex items-center gap-1.5">
+            <span className="w-3 h-3 bg-[#fca5a5] rounded-sm opacity-80"></span>
+            <span>Поточний тиждень</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="w-3 h-3 bg-[#38bdf8] rounded-sm opacity-80"></span>
+            <span>Минулий тиждень</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ФІКС: Передаємо фіксовану висоту 260 прямо в ResponsiveContainer */}
+      <div className="w-full h-[260px] relative text-xs">
+        <ResponsiveContainer width="100%" height={260}>
+          <RechartsRadarChart
+            cx="50%"
+            cy="50%"
+            outerRadius="75%"
+            data={chartData}
+          >
+            <PolarGrid stroke="#e5e7eb" />
+            <PolarAngleAxis
+              dataKey="subject"
+              tick={{ fill: "#4b5563", fontSize: 12, fontWeight: 300 }}
+            />
+            <Radar
+              name="Минулий тиждень"
+              dataKey="previous"
+              stroke="#38bdf8"
+              fill="#0ea5e9"
+              fillOpacity={0.15}
+            />
+            <Radar
+              name="Поточний тиждень"
+              dataKey="current"
+              stroke="#f97316"
+              fill="#f97316"
+              fillOpacity={0.2}
+            />
+          </RechartsRadarChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+};

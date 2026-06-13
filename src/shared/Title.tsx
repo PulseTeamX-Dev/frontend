@@ -16,12 +16,11 @@ export const Title = ({
   children,
   className = "",
 }: TitleProps) => {
-  const baseStyles =
-    "font-heading text-neutral-900 tracking-tight transition-all duration-200";
+  const baseStyles = "text-grayscale-900 mb-2";
 
   const stylesByTag: Record<TitleTag, string> = {
     h1: "text-2xl md:text-2xl",
-    h2: "text-base md:text-xl",
+    h2: "text-[20px] md:text-[18px]",
     h3: "text-base",
     h4: "text-sm",
   };
@@ -32,8 +31,8 @@ export const Title = ({
       light: "font-light leading-6 md:leading-8",
     },
     h2: {
-      bold: "font-bold leading-5 md:leading-6",
-      light: "font-light leading-5 md:leading-6",
+      bold: "font-bold leading-tight",
+      light: "font-light leading-tight",
     },
     h3: { bold: "font-bold", light: "font-light" },
     h4: { bold: "font-bold", light: "font-light" },

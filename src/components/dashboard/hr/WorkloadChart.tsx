@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { HRWorkloadCurrent } from "../../../types/dashboard/types";
+import { Title } from "../../../shared/Title";
 
 interface WorkloadChartProps {
   data: HRWorkloadCurrent[];
@@ -27,17 +28,18 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
     return "text-red-500";
   };
 
-  // Функція для точного переведення шкали 1-10 у відсотки 0-100%
   const getPercent = (score: number) => {
-    const clamped = Math.max(1, Math.min(10, score));
-    return ((clamped - 1) / 9) * 100;
+    const s = Math.max(1, Math.min(10, score));
+    if (s < 4) return ((s - 1) / 3) * 30;
+    if (s <= 7) return 30 + ((s - 4) / 3) * 40;
+    return 70 + ((s - 7) / 3) * 30;
   };
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 w-full mb-6 relative">
-      <h2 className="text-[20px] text-gray-900 font-light leading-tight mb-2">
+    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 w-full relative">
+      <Title tag="h2" variant="light">
         Навантаженість
-      </h2>
+      </Title>
 
       <div className="text-center mb-6">
         <span className="text-2xl font-bold text-green-600">
@@ -47,24 +49,20 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
       </div>
 
       <div className="relative w-full">
-        {/* 1. ТРИКОЛІРНИЙ ФОН (Пропорції шкали 1-10) */}
+        {/* 1. Триколірний фон */}
         <div className="flex w-full h-28 rounded-xl overflow-hidden opacity-60">
-          {/* Зона 1 - 3 (Неповна): ширина 22.22% */}
-          <div className="w-[22.2222%] bg-[#d0eefc]"></div>
-          {/* Зона 3 - 7 (Оптимальна): ширина 44.4444% */}
-          <div className="w-[44.4444%] bg-[#d1f4da]"></div>
-          {/* Зона 7 - 10 (Перенавантаження): ширина 33.3333% */}
-          <div className="w-[33.3334%] bg-[#fbe0e0]"></div>
+          <div className="w-[30%] bg-[#d0eefc]"></div>
+          <div className="w-[40%] bg-[#d1f4da]"></div>
+          <div className="w-[30%] bg-[#fbe0e0]"></div>
         </div>
 
-        {/* 2. ПОВЗУНКИ (ПІГУЛКИ КОМАНД) */}
+        {/* 2. Повзунки */}
         <div className="absolute inset-0 flex flex-col justify-evenly py-2">
           {data.map((team, index) => {
             const leftPosition = getPercent(team.workload_min);
             const rightPosition = getPercent(team.workload_max);
-            const pillWidth = rightPosition - leftPosition;
+            const pillWidth = Math.max(2, rightPosition - leftPosition);
 
-            // Позиція крапки всередині самої пігулки у відсотках
             const dotPercent = getPercent(team.workload_strain_index);
             const dotPositionRelativeToPill =
               pillWidth > 0
@@ -73,7 +71,7 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
 
             return (
               <div
-                key={`workload_${index}`}
+                key={`chart_team_${team.team_name}_${index}`}
                 className="relative w-full h-3 cursor-pointer"
                 onMouseEnter={() => setHoveredIndex(index)}
                 onMouseLeave={() => setHoveredIndex(null)}
@@ -86,7 +84,7 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
                     width: `${pillWidth}%`,
                   }}
                 >
-                  {/* Крапка (ЦЕНТРОВАНА за рахунок поєднання translate-x і left) */}
+                  {/* Крапка поточного значення */}
                   <div
                     className={`absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full z-10 ${getDotColor(
                       team.workload_strain_index,
@@ -97,19 +95,19 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
                   ></div>
                 </div>
 
-                {/* Тултип (Hover Card) */}
+                {/* Тултип (Вставили валідні класи замісти grayscale) */}
                 {hoveredIndex === index && (
                   <div className="absolute z-20 bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] p-4 flex justify-between items-center text-sm pointer-events-none animate-in fade-in zoom-in duration-200">
                     <div className="flex flex-col gap-1 text-left">
-                      <span className="text-grayscale-700 text-xs font-medium">
+                      <span className="text-gray-500 text-xs font-medium">
                         Команда
                       </span>
-                      <span className="text-grayscale-900 font-semibold">
+                      <span className="text-gray-900 font-semibold">
                         {team.team_name}
                       </span>
                     </div>
                     <div className="flex flex-col gap-1 text-right">
-                      <span className="text-grayscale-700 text-xs font-medium">
+                      <span className="text-gray-500 text-xs font-medium">
                         Медіана
                       </span>
                       <span
@@ -128,9 +126,9 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
         </div>
       </div>
 
-      {/* 3. ПІДПИСИ ШКАЛИ */}
+      {/* 3. Підписи шкали */}
       <div className="flex justify-between w-full mt-4 text-xs font-medium">
-        <div className="text-blue-400 text-left">
+        <div className="text-blue-500 text-left">
           <p>&lt;4</p>
           <p>Неповна</p>
         </div>
@@ -138,7 +136,7 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
           <p>4-7</p>
           <p>Оптимальна</p>
         </div>
-        <div className="text-red-400 text-right">
+        <div className="text-red-500 text-right">
           <p>7&gt;</p>
           <p>Перенавантаження</p>
         </div>
