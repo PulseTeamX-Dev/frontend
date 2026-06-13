@@ -52,14 +52,13 @@ export const MetricsSummaryItems = ({
   const formattedScore = score.toFixed(1).replace(".", ",");
 
   return (
-    // Виправлена висота
     <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col justify-between min-h-[160px] h-full w-full transition-all hover:shadow-md">
       <div className="flex flex-col justify-between h-12 items-start gap-2 w-full">
-        <span className="text-[14px] md:text-[15px] lg:text-[16px] text-grayscale-900 font-second-family font-light leading-tight">
+        <span className="text-[15px] md:text-[16px] lg:text-[17px] text-grayscale-900 font-second-family font-light leading-tight">
           {title}
         </span>
 
-        {title !== "Довіра анонімності" && title !== "Перевантаженість" && (
+        {title !== "Індекс анонімності" && title !== "Перевантаженість" && (
           <span
             className={`flex items-center justify-center gap-0.5 px-1.5 py-0.5 rounded-lg shrink-0 w-16 self-end ${trendClass}`}
           >
@@ -69,7 +68,7 @@ export const MetricsSummaryItems = ({
         )}
       </div>
 
-      <div className="flex items-center justify-center my-3 flex-grow">
+      <div className="flex items-center justify-center my-3 grow">
         <span className={`text-3xl md:text-4xl font-bold ${scoreClass}`}>
           {formattedScore}
           {isPercentage ? (
@@ -80,7 +79,6 @@ export const MetricsSummaryItems = ({
         </span>
       </div>
 
-      {/* Title додано для тултипу при обрізці */}
       <div
         className="text-xs text-grayscale-700 text-center font-normal truncate w-full"
         title={`${prefix} ${worstTeam}`}

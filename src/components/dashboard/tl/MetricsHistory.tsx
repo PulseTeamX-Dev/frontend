@@ -21,35 +21,47 @@ export const MetricsHistory = ({ heatmapData }: TLMetricsHistoryProps) => {
     });
   };
 
-  // Helper для кольору комірки строго за бізнес-моделлю та палітрою макета
-  const getCellBg = (metricName: string, value: number) => {
-    const isInverse =
-      metricName === "stress" ||
-      metricName === "conflict" ||
-      metricName === "burnout";
+  // ПЕРЕВИКОРИСТАНА ЛОГІКА СТИЛІЗАЦІЇ З HR-ХІТМЕПУ
+  const getCellStyles = (metricKey: string, value: number) => {
+    // Визначаємо, які метрики є "ризиковими" (чим більше - тим гірше)
+    // Додали сюди conflict та burnout, щоб покрити всі серверні інверсні метрики
+    const isRiskMetric =
+      metricKey === "stress_index" ||
+      metricKey === "workload_strain_index" ||
+      metricKey === "conflict_risk" ||
+      metricKey === "burnout_risk_index";
 
-    if (isInverse) {
-      if (value < 4) return "bg-[#e8f7ee] text-[#10b981]";
-      if (value < 7) return "bg-[#fef3c7] text-[#d97706]";
-      return "bg-[#fee2e2] text-[#ef4444]";
-    } else {
-      if (value >= 7) return "bg-[#e8f7ee] text-[#10b981]";
-      if (value >= 5) return "bg-[#fef3c7] text-[#d97706]";
-      return "bg-[#fee2e2] text-[#ef4444]";
-    }
+    const getLevel = () => {
+      if (isRiskMetric) {
+        if (value < 4) return "low"; // Зелений
+        if (value < 7) return "medium"; // Жовтий
+        return "high"; // Червоний
+      }
+      // Для позитивних метрик (Довіра, Ясність, Безпека) - все навпаки
+      if (value >= 7) return "low"; // Зелений
+      if (value >= 5) return "medium"; // Жовтий
+      return "high"; // Червоний
+    };
+
+    const level = getLevel();
+
+    // Повернули фірмові пастельні кольори дизайнерів + покраску тексту під кожен рівень
+    const styles: Record<string, string> = {
+      low: "bg-green-100 text-[#10b981]", // Зелений фон + Зелений текст
+      medium: "bg-yellow-200 text-[#d97706]", // Жовтий фон + Жовтий текст
+      high: "bg-red-500 text-white", // Червоний фон + Червоний текст
+    };
+
+    return styles[level];
   };
 
   const metricsRows = [
-    { label: "Індекс стресу", key: "stress_index", name: "stress" },
-    { label: "Рівень довіри", key: "trust_index", name: "trust" },
-    { label: "Ясність завдань", key: "clarity_index", name: "clarity" },
-    {
-      label: "Психологічна безпека",
-      key: "psychological_safety_index",
-      name: "safety",
-    },
-    { label: "Ризик вигорання", key: "burnout_risk_index", name: "burnout" },
-    { label: "Risk конфліктів", key: "conflict_risk", name: "conflict" },
+    { label: "Індекс стресу", key: "stress_index" },
+    { label: "Рівень довіри", key: "trust_index" },
+    { label: "Ясність завдань", key: "clarity_index" },
+    { label: "Психологічна безпека", key: "psychological_safety_index" },
+    { label: "Ризик вигорання", key: "burnout_risk_index" },
+    { label: "Ризик конфліктів", key: "conflict_risk" },
   ];
 
   return (
@@ -78,9 +90,10 @@ export const MetricsHistory = ({ heatmapData }: TLMetricsHistoryProps) => {
                       key={`${row.key}_${week.week_start}`}
                       className="p-1 md:p-1.5"
                     >
+                      {/* Сюди тепер прилітають готові класи фону та кольору тексту */}
                       <div
-                        className={`w-full py-4 md:py-5 rounded-xl text-center text-sm md:text-base font-semibold tracking-tight transition-all ${getCellBg(
-                          row.name,
+                        className={`w-full py-4 md:py-5 rounded-xl text-center text-sm md:text-base font-semibold tracking-tight transition-all ${getCellStyles(
+                          row.key,
                           numericValue,
                         )}`}
                       >
@@ -93,10 +106,9 @@ export const MetricsHistory = ({ heatmapData }: TLMetricsHistoryProps) => {
             ))}
           </tbody>
 
-          {/* НАДІЙНИЙ ФІКС ДАТ: Тепер жодних дивів у tr, тільки чисті td */}
+          {/* Надійний підпис дат знизу */}
           <tfoot>
             <tr className="border-none">
-              {/* Пуста нижня ліва комірка для назв */}
               <td className="py-2"></td>
               {sortedWeeks.map((week) => (
                 <td

@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
 import { fetchMetrics } from "../../redux/dashboard/operation";
-import { Title } from "../../shared/Title";
-import Icon from "../../shared/Icon";
 import { MetricSummaryList } from "./hr/MetricSummaryList";
 import MetricsHistoryList from "./hr/MetricsHistoryList";
 import { SurveyCompletionTable } from "./hr/SurveyCompletionTable";
@@ -30,7 +28,7 @@ export const HRDashboard = () => {
 
   return (
     <>
-      <div className="flex gap-1 items-center mb-6">
+      {/* <div className="flex gap-1 items-center mb-6">
         <Icon id="logo" className="w-8 h-8" />
         <Title
           tag="h1"
@@ -38,11 +36,10 @@ export const HRDashboard = () => {
         >
           Огляд
         </Title>
-      </div>
+      </div> */}
 
       <MetricSummaryList metricsSummary={metrics.metrics_summary} />
 
-      {/* ПРАВИЛЬНИЙ АДАПТИВНИЙ КОНТЕЙНЕР */}
       <div className="flex flex-col lg:flex-row gap-4 mt-6 w-full items-stretch">
         <div className="w-full lg:w-7/12 flex flex-col">
           <MetricsHistoryList metricsHistory={metrics.metrics_history} />

@@ -10,7 +10,7 @@ const metricConfig: Record<
   { title: string; prefix: string; isPercentage: boolean }
 > = {
   response_rate: {
-    title: "Відсоток відповідей",
+    title: "Активність",
     prefix: "Найменший",
     isPercentage: true,
   },
@@ -30,7 +30,7 @@ const metricConfig: Record<
     isPercentage: false,
   },
   anonymity_trust: {
-    title: "Довіра анонімності",
+    title: "Індекс анонімності",
     prefix: "Найменший",
     isPercentage: true,
   },

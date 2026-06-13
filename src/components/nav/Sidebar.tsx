@@ -46,12 +46,9 @@ export const Sidebar = () => {
     <aside
       className="
       z-50 bg-white shrink-0 border-gray-200
-      /* Мобілка: знизу, висота 70px */
       fixed bottom-0 left-0 w-full h-[70px] border-t shadow-[0_-4px_10px_rgba(0,0,0,0.05)]
-      /* Планшет: зліва, ширина 80px */
       md:relative md:h-screen md:w-[80px] md:flex md:flex-col md:border-t-0 md:border-r md:p-4 md:shadow-none
-      /* Десктоп: розширюємо до 250px */
-      lg:w-[250px]
+      lg:w-[230px]
     "
     >
       <UserProfileMin />
@@ -99,14 +96,12 @@ export const Sidebar = () => {
               to="/create-pulse"
               className={({ isActive }) => `
                 flex items-center justify-center transition-all duration-200 h-full w-full
-                /* Мобільні стилі (як звичайна іконка меню) */
                 ${
                   isActive
                     ? "text-grayscale-900 md:text-white"
-                    : "text-grayscale-500 hover:bg-orange-50 md:hover:text-white"
+                    : "text-grayscale-500 md:hover:bg-primary-hover md:hover:text-white"
                 }
                 bg-transparent
-                /* Планшетні/Десктопні стилі (як яскрава кнопка) */
                 md:bg-[#F26E3B] md:text-white md:rounded-xl md:shadow-md md:hover:bg--primary-hover 
                 md:!p-3 lg:!px-4 lg:!py-3 md:w-12 md:h-12 lg:w-full lg:h-auto
               `}

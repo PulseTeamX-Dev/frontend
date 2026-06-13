@@ -17,9 +17,9 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
     : "0.0";
 
   const getDotColor = (score: number) => {
-    if (score < 4) return "bg-blue-500";
-    if (score < 7) return "bg-green-500";
-    return "bg-red-500";
+    if (score < 4) return "bg-blue-700";
+    if (score < 7) return "bg-green-600";
+    return "bg-red-600";
   };
 
   const getTextColor = (score: number) => {
@@ -51,9 +51,9 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
       <div className="relative w-full">
         {/* 1. Триколірний фон */}
         <div className="flex w-full h-28 rounded-xl overflow-hidden opacity-60">
-          <div className="w-[30%] bg-[#d0eefc]"></div>
-          <div className="w-[40%] bg-[#d1f4da]"></div>
-          <div className="w-[30%] bg-[#fbe0e0]"></div>
+          <div className="w-[30%] bg-blue-500"></div>
+          <div className="w-[40%] bg-green-200"></div>
+          <div className="w-[30%] bg-red-500"></div>
         </div>
 
         {/* 2. Повзунки */}

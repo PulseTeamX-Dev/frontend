@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import type { HeatmapItem } from "../../../types/dashboard/types";
 import MetricsHistoryItem from "./MetricsHistoryItem";
 import Icon from "../../../shared/Icon";
+import { Title } from "../../../shared/Title";
 
 interface MetricsHistoryListProps {
   metricsHistory: HeatmapItem[];
@@ -61,17 +62,17 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
   const latestWeek = dates[dates.length - 1];
 
   return (
-    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border font-heading border-gray-100 w-full flex flex-col">
+    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex flex-col">
       {/* Адаптивна шапка */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h2 className="text-xl text-gray-900 font-light leading-tight">
+        <Title tag="h2" variant="light">
           {currentConfig.title}
-        </h2>
+        </Title>
 
         <div className="relative">
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 px-3 py-1.5 bg-orange-500 hover:bg-orange-600 text-white rounded-md text-sm font-semibold transition-colors"
+            className="flex items-center gap-2 px-3 py-1.5 bg-primary-active hover:bg-primary-hover text-white rounded-md text-sm font-semibold transition-colors"
           >
             {currentConfig.label}
             <Icon
@@ -87,8 +88,8 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
                   key={opt.key}
                   className={`text-left px-4 py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${
                     selectedMetric === opt.key
-                      ? "text-gray-900 bg-gray-50"
-                      : "text-gray-600"
+                      ? "text-grayscale-900 bg-gray-50"
+                      : "text-grayscale-600"
                   }`}
                   onClick={() => {
                     setSelectedMetric(opt.key);

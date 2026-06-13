@@ -1,4 +1,5 @@
 import Icon from "../../../shared/Icon";
+import { Title } from "../../../shared/Title";
 import type { EngagementData } from "../../../types/dashboard/types";
 import { getBadgeClass } from "../../../utils/getBadgeClass";
 
@@ -8,10 +9,10 @@ interface SurveyCompletionTableProps {
 
 export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
   return (
-    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full mb-0 md:mb-4 flex-grow">
-      <h2 className="text-[20px] text-gray-900 font-light font-heading leading-tight mb-4">
+    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full mb-0 grow">
+      <Title tag="h2" variant="light">
         Стан заповнення опитувань
-      </h2>
+      </Title>
 
       {/* Обертка для скролу на мобільному */}
       <div className="w-full overflow-x-auto pb-2">

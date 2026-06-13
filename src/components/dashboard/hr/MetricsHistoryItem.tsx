@@ -45,8 +45,8 @@ const MetricsHistoryItem = ({
   const level = getLevel();
 
   const styles: Record<string, string> = {
-    low: "bg-green-50 text-green-700",
-    medium: "bg-yellow-200 text-yellow-800",
+    low: "bg-green-100 text-[#10b981]",
+    medium: "bg-yellow-200 text-[#d97706]",
     high: "bg-red-500 text-white",
   };
 

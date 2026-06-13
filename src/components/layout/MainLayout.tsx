@@ -6,7 +6,7 @@ export const MainLayout = () => {
     <div className="flex h-screen bg-gray-50 overflow-hidden">
       <Sidebar />
 
-      <main className="flex-1 overflow-y-auto pb-[70px] md:pb-0">
+      <main className="flex-1 overflow-y-auto pb-17 md:pb-0">
         <Outlet />
       </main>
     </div>
