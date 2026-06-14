@@ -24,7 +24,6 @@ export interface AlertsResponse {
 // --- ТИПИ ДЛЯ ТІМЛІДА ---
 
 export interface TopCardMetric {
-  score: number;
   trend: number;
 }
 
@@ -62,14 +61,10 @@ export interface TeamLeadMetrics {
   heatmap: HeatmapItem[];
   workload: WorkloadMetric;
   radar: RadarData[];
-  timestamp: string;
-  // Якщо є privacy block, бек може повернути ці поля
   message?: string;
   current_count?: number;
 }
 
-// Оскільки бекенд віддає різне для HR і TL, метрики можуть бути будь-яким з цих двох типів.
-// На фронтенді доведеться перевіряти тип (наприклад, перевіряючи наявність поля `top_cards` або `metrics_summary`)
 export type DashboardMetricsUnion = HRMetrics | TeamLeadMetrics;
 
 export interface DashboardState {

@@ -1,3 +1,4 @@
+import Icon from "../../../shared/Icon";
 import { Title } from "../../../shared/Title";
 import type { HeatmapItem } from "../../../types/dashboard/types";
 
@@ -65,7 +66,7 @@ export const MetricsHistory = ({ heatmapData }: TLMetricsHistoryProps) => {
   ];
 
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 w-full flex flex-col justify-between">
+    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 w-full h-full flex flex-col justify-between">
       <Title tag="h2" variant="light">
         Динамічний тепловий профіль команди
       </Title>
@@ -81,16 +82,34 @@ export const MetricsHistory = ({ heatmapData }: TLMetricsHistoryProps) => {
                 </td>
 
                 {/* Великі, витягнуті картки значень */}
-                {sortedWeeks.map((week) => {
+                {sortedWeeks.map((week, index) => {
                   const val = week[row.key as keyof HeatmapItem];
-                  const numericValue = typeof val === "number" ? val : 0;
+                  const isCurrentWeek = index === sortedWeeks.length - 1;
 
+                  // Якщо даних немає (null або undefined) — малюємо пустий стан
+                  if (val === null || val === undefined) {
+                    return (
+                      <td
+                        key={`${row.key}_${week.week_start}`}
+                        className="p-1 md:p-1.5"
+                      >
+                        <div className="w-full py-4 md:py-5 rounded-xl bg-gray-100 flex items-center justify-center opacity-60">
+                          <Icon
+                            id={isCurrentWeek ? "lock" : "face-sad"}
+                            className="w-5 h-5 text-gray-400"
+                          />
+                        </div>
+                      </td>
+                    );
+                  }
+
+                  // Якщо дані є — малюємо кольорову плитку
+                  const numericValue = typeof val === "number" ? val : 0;
                   return (
                     <td
                       key={`${row.key}_${week.week_start}`}
                       className="p-1 md:p-1.5"
                     >
-                      {/* Сюди тепер прилітають готові класи фону та кольору тексту */}
                       <div
                         className={`w-full py-4 md:py-5 rounded-xl text-center text-sm md:text-base font-semibold tracking-tight transition-all ${getCellStyles(
                           row.key,

@@ -15,7 +15,6 @@ interface RadarChartProps {
 export const RadarChart = ({ data }: RadarChartProps) => {
   if (!data || data.length === 0) return null;
 
-  // 1. Сортуємо дані по датах: поточний тиждень (новіший), потім минулий
   const sortedData = [...data].sort(
     (a, b) =>
       new Date(b.week_start).getTime() - new Date(a.week_start).getTime(),
@@ -24,7 +23,6 @@ export const RadarChart = ({ data }: RadarChartProps) => {
   const currentWeek = sortedData[0];
   const previousWeek = sortedData[1];
 
-  // 2. Структура для Recharts
   const chartData = [
     {
       subject: "Спокій",
@@ -54,7 +52,7 @@ export const RadarChart = ({ data }: RadarChartProps) => {
   ];
 
   return (
-    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex flex-col grow min-h-85">
+    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex flex-col h-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-4 w-full">
         <Title tag="h2" variant="light">
           Радар команди
@@ -72,9 +70,8 @@ export const RadarChart = ({ data }: RadarChartProps) => {
         </div>
       </div>
 
-      {/* ФІКС: Передаємо фіксовану висоту 260 прямо в ResponsiveContainer */}
-      <div className="w-full h-[260px] relative text-xs">
-        <ResponsiveContainer width="100%" height={260}>
+      <div className="w-full flex-grow relative min-h-[280px] text-xs flex items-center justify-center">
+        <ResponsiveContainer width="100%" height="100%" minHeight={280}>
           <RechartsRadarChart
             cx="50%"
             cy="50%"

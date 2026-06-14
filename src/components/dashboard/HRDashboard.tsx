@@ -49,6 +49,8 @@ export const HRDashboard = () => {
           <WorkloadChart data={metrics.workload_current} />
         </div>
       </div>
+
+      {/* <pre>{JSON.stringify(metrics, null, 2)}</pre> */}
     </>
   );
 };

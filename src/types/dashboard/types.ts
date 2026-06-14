@@ -44,15 +44,6 @@ export interface EngagementData {
   low_engagement_signal: boolean;
 }
 
-export interface HRRetentionItem {
-  week_start: string;
-  dashboard_role: string;
-  active_users: number;
-  total_users: number;
-  retention_rate_pct: number;
-  avg_session_minutes: number;
-}
-
 export interface HREngagementItem {
   survey_id: number;
   team_id: number;
@@ -71,23 +62,9 @@ export interface HRWorkloadCurrent {
   workload_status: string;
 }
 
-export interface HROperationsItem {
-  week_start: string;
-  alert_level: string;
-  alert_type: string;
-  total_alerts: number;
-  resolved_count: number;
-  resolution_rate_pct: number;
-  avg_resolution_hours: number | null;
-  median_resolution_hours: number | null;
-  unresolved_count: number;
-}
-
 export interface HRMetrics {
   metrics_summary: HRMetricsSummaryContainer;
   metrics_history: HeatmapItem[];
   workload_current: HRWorkloadCurrent[];
-  retention: HRRetentionItem[];
   engagement: HREngagementItem[];
-  operations: HROperationsItem[];
 }
