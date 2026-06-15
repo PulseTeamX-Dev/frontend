@@ -1,44 +1,47 @@
-import { useState } from "react";
 import { FrequencySelector } from "../components/createPulse/FrequencySelector";
+import { Dropdown } from "../components/createPulse/Dropdown";
+import { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
+import { fetchQuestions } from "../redux/surveys/operation";
+import { selectQuestions, selectSurveyLoading,} from "../redux/surveys/selectors";
 
-const SelectButton = ({ text }: { text: string }) => (
-  <button
-    className="
-      h-11
-      px-5
-      bg-[#F26E3B]
-      text-white
-      rounded-full
-      flex
-      items-center
-      gap-2
-      text-sm
-    "
-  >
-    {text}
-    <span>⌄</span>
-  </button>
-);
 
 export const CreatePulsePage = () => {
-  const [questions, setQuestions] = useState([
-    "Чи відчували ви напруження у спілкуванні цього тижня?",
-    "Чи відчували ви надмірне робоче навантаження?",
-    "Чи зрозумілі вам пріоритети та очікування від роботи?",
-    "Чи комфортно вам висловлювати свою думку в команді?",
-  ]);
+  const dispatch = useAppDispatch();
+  const questions = useAppSelector(selectQuestions);
+  const isLoading = useAppSelector(selectSurveyLoading);
+
+  useEffect(() => {
+  dispatch(fetchQuestions());
+}, [dispatch]);
 
   const [frequency, setFrequency] = useState<
     "weekly" | "biweekly" | "monthly"
   >("weekly");
 
-  const [sendDay] = useState("Понеділок");
-  const [sendTime] = useState("10:00");
+  const [sendDay, setSendDay] = useState("Понеділок");
+  const [sendTime, setSendTime] = useState("10:00");
 
-  const [deadlineDay] = useState("П'ятниця");
-  const [deadlineTime] = useState("14:00");
+  const [deadlineDay, setDeadlineDay] = useState("П'ятниця");
+  const [deadlineTime, setDeadlineTime] = useState("14:00");
 
-  
+  const days = [
+  "Понеділок",
+  "Вівторок",
+  "Середа",
+  "Четвер",
+  "П'ятниця",
+];
+
+const times = [
+  "09:00",
+  "10:00",
+  "11:00",
+  "12:00",
+  "13:00",
+  "14:00",
+  "15:00",
+];
 
   return (
     <div className="max-w-[708px] mx-auto py-8 flex flex-col gap-4">
@@ -50,14 +53,22 @@ export const CreatePulsePage = () => {
         </h2>
 
         <div className="flex flex-col gap-4">
-          {questions.map((question, index) => (
-            <div key={index}>
+          {isLoading ? (
+    <div className="text-center py-6">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#F26E3B]" />
+    </div>
+  ) : (
+    questions
+      .filter((q) => q.is_active)
+      .sort((a, b) => a.sort_order - b.sort_order)
+      .map((question, index) => (
+            <div key={question.question_id}>
               <label className="block text-xs text-gray-400 mb-2">
                 Питання {index + 1}
               </label>
 
               <input
-                value={question}
+                value={question.text_ua}
                 readOnly
                 className="
                 w-full
@@ -70,7 +81,7 @@ export const CreatePulsePage = () => {
                 "
               />
             </div>
-          ))}
+          )))}
         </div>
       </div>
 
@@ -103,14 +114,23 @@ export const CreatePulsePage = () => {
   <span className="text-gray-500">
     День та час надсилання
   </span>
+ <div className="flex gap-3">
+  <Dropdown
+      value={sendDay}
+      options={days}
+      onChange={setSendDay}
+    />
 
-  <div className="flex gap-3">
-    <SelectButton text="Понеділок" />
-    <SelectButton text="10:00" />
-  </div>
+    <Dropdown
+      value={sendTime}
+      options={times}
+      onChange={setSendTime}
+      width="82px"
+    />
+</div>
 </div>
 
-        {/* Deadline */}
+       
 
         <div className="border rounded-xl p-3 flex justify-between items-center">
           <span className="text-gray-500">
@@ -118,8 +138,18 @@ export const CreatePulsePage = () => {
           </span>
 
           <div className="flex gap-3">
-            <SelectButton text="П'ятниця" />
-            <SelectButton text="14:00" />
+            <Dropdown
+      value={deadlineDay}
+      options={days}
+      onChange={setDeadlineDay}
+    />
+
+    <Dropdown
+      value={deadlineTime}
+      options={times}
+      onChange={setDeadlineTime}
+      width="82px"
+    />
           </div>
         </div>
 
