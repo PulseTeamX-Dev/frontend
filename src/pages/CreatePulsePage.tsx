@@ -6,14 +6,30 @@ import { fetchQuestions } from "../redux/surveys/operation";
 import { selectQuestions, selectSurveyLoading,} from "../redux/surveys/selectors";
 
 
+
 export const CreatePulsePage = () => {
   const dispatch = useAppDispatch();
   const questions = useAppSelector(selectQuestions);
+  const [editedQuestions, setEditedQuestions] = useState<
+  Record<number, string>
+>({});
+  const handleQuestionChange = (
+    questionId: number,
+    value: string,
+  ) => {
+    setEditedQuestions((prev) => ({
+      ...prev,
+      [questionId]: value,
+    }));
+  };
+
   const isLoading = useAppSelector(selectSurveyLoading);
 
   useEffect(() => {
   dispatch(fetchQuestions());
 }, [dispatch]);
+
+
 
   const [frequency, setFrequency] = useState<
     "weekly" | "biweekly" | "monthly"
@@ -54,10 +70,10 @@ const times = [
 
         <div className="flex flex-col gap-4">
           {isLoading ? (
-    <div className="text-center py-6">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#F26E3B]" />
-    </div>
-  ) : (
+            <div className="text-center py-6">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#F26E3B]" />
+            </div>
+                        ) : (
     questions
       .filter((q) => q.is_active)
       .sort((a, b) => a.sort_order - b.sort_order)
@@ -68,8 +84,16 @@ const times = [
               </label>
 
               <input
-                value={question.text_ua}
-                readOnly
+                value={
+                  editedQuestions[question.question_id]
+                  ?? question.text_ua
+                }
+                onChange={(e) =>
+                  handleQuestionChange(
+                    question.question_id,
+                    e.target.value,
+                  )
+                }
                 className="
                 w-full
                 h-11
@@ -81,7 +105,9 @@ const times = [
                 "
               />
             </div>
-          )))}
+          ))
+        )
+          }
         </div>
       </div>
 
