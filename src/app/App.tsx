@@ -9,6 +9,8 @@ import { ProtectedRoute } from "../utils/ProtectedRoute";
 import { MainLayout } from "../components/layout/MainLayout";
 import { fetchCurrentUser } from "../redux/auth/operation";
 import { fetchProfile } from "../redux/profile/operation";
+import { PrivacyPolicyPage } from "../pages/PrivacyPolicyPage";
+import { TermsPage } from "../pages/TermsPage";
 
 const LoginPage = lazy(() =>
   import("../pages/LoginPage").then((m) => ({ default: m.LoginPage })),
@@ -124,6 +126,16 @@ function App() {
                 />
               }
             />
+
+            <Route
+                  path="/privacy"
+                  element={<PrivacyPolicyPage />}
+                />
+
+            <Route
+                  path="/terms"
+                  element={<TermsPage />}
+/>
           </Routes>
         </Suspense>
       </BrowserRouter>
