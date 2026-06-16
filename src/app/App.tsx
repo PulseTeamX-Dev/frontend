@@ -10,7 +10,7 @@ import { MainLayout } from "../components/layout/MainLayout";
 import { fetchCurrentUser } from "../redux/auth/operation";
 import { fetchProfile } from "../redux/profile/operation";
 import { PrivacyPolicyPage } from "../pages/PrivacyPolicyPage";
-import { TermsPage } from "../pages/TermsPage";
+import { TermsOfUsePage } from "../pages/TermsOfUsePage";
 
 const LoginPage = lazy(() =>
   import("../pages/LoginPage").then((m) => ({ default: m.LoginPage })),
@@ -134,7 +134,7 @@ function App() {
 
             <Route
                   path="/terms"
-                  element={<TermsPage />}
+                  element={<TermsOfUsePage />}
 />
           </Routes>
         </Suspense>

@@ -5,6 +5,7 @@ import { Title } from "../../shared/Title";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
 import { acceptInvite, loginUser } from "../../redux/auth/operation";
 import { selectAuthLoading } from "../../redux/auth/selectors";
+import { Link } from "react-router-dom";
 export const InviteForm = ({ token }: { token: string }) => {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectAuthLoading);
@@ -118,22 +119,30 @@ export const InviteForm = ({ token }: { token: string }) => {
           </div>
           <label
             htmlFor="remember"
-            className="text-[14px] leading-[1.4] text-light-txt cursor-pointer select-none font-medium transition-colors"
+            className="
+                        text-[14px]
+                        leading-[1.4]
+                        text-light-txt
+                        cursor-pointer
+                        select-none
+                        font-medium
+                        transition-colors
+                      "
           >
             Я погоджуюся з{" "}
-            <a
-              href="#"
+            <Link
+              to="/terms"
               className="text-grayscale-900 hover:underline underline-offset-2"
             >
               Умовами користування
-            </a>{" "}
+            </Link>{" "}
             та{" "}
-            <a
-              href="#"
+            <Link
+              to="/privacy"
               className="text-grayscale-900 hover:underline underline-offset-2"
             >
               Політикою конфіденційності
-            </a>
+            </Link>
           </label>
         </div>
 
