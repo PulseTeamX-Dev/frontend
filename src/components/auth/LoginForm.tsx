@@ -3,11 +3,15 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
 import { useState } from "react";
 import { selectAuthLoading } from "../../redux/auth/selectors";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import type { LoginCredentials } from "../../redux/auth/types";
 import { loginUser } from "../../redux/auth/operation";
 import { toast } from "react-toastify";
 import Icon from "../../shared/Icon";
 import { Input } from "../../shared/Input";
+
+// Імпортуємо ресолвер та схему
+import { zodResolver } from "@hookform/resolvers/zod";
+import { loginSchema, type LoginFormData } from "../../validation/authSchemas";
+// (якщо Yup, то імпортуєш yupResolver з @hookform/resolvers/yup)
 
 const LoginForm = ({
   onForgotPasswordClick,
@@ -16,22 +20,23 @@ const LoginForm = ({
 }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-
   const [isVisible, setIsVisible] = useState(false);
+  const isLoading = useAppSelector(selectAuthLoading);
 
   const togglePasswordVisibility = () => {
     setIsVisible((prev) => !prev);
   };
 
-  const isLoading = useAppSelector(selectAuthLoading);
-
+  // Передаємо resolver у useForm. Типізуємо форму нашою схемою!
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginCredentials>();
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema), // <--- ВСЯ ВАЛІДАЦІЯ ТЕПЕР ТУТ
+  });
 
-  const onSubmit: SubmitHandler<LoginCredentials> = async (data) => {
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
       await dispatch(loginUser(data)).unwrap();
       navigate("/dashboard");
@@ -41,7 +46,7 @@ const LoginForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
       <Input
         id="email"
         type="email"
@@ -51,13 +56,7 @@ const LoginForm = ({
         leftIcon="mail"
         error={errors.email?.message}
         helperText="Будь ласка, використовуйте вашу робочу електронну адресу."
-        {...register("email", {
-          required: "Пошта є обов'язковою",
-          pattern: {
-            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            message: "Невірний формат пошти",
-          },
-        })}
+        {...register("email")} // <--- Чисто і просто! Жодних інлайнових об'єктів валідації
       />
 
       {/* Блок з Паролем */}
@@ -82,13 +81,9 @@ const LoginForm = ({
               />
             </button>
           }
-          {...register("password", {
-            required: "Пароль є обов'язковим",
-            minLength: { value: 6, message: "Мінімум 6 символів" },
-          })}
+          {...register("password")} // <--- Пробіли відсічуться автоматично на рівні схеми!
         />
 
-        {/* Окрема кнопка "Забули пароль?", яка не залежить від помилок */}
         <div className="flex justify-end mt-2">
           <button
             type="button"

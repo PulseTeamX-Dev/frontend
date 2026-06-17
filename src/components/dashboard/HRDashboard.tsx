@@ -40,11 +40,11 @@ export const HRDashboard = () => {
 
       <MetricSummaryList metricsSummary={metrics.metrics_summary} />
 
-      <div className="flex flex-col lg:flex-row gap-4 mt-6 w-full items-stretch">
-        <div className="w-full lg:w-7/12 flex flex-col">
+      <div className="flex flex-col xl:flex-row gap-4 mt-6 w-full items-stretch">
+        <div className="w-full xl:w-7/12 flex flex-col">
           <MetricsHistoryList metricsHistory={metrics.metrics_history} />
         </div>
-        <div className="w-full lg:w-5/12 flex flex-col gap-4">
+        <div className="w-full xl:w-5/12 flex flex-col gap-4">
           <SurveyCompletionTable data={metrics.engagement} />
           <WorkloadChart data={metrics.workload_current} />
         </div>

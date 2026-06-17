@@ -50,7 +50,7 @@ export const MetricsHistory = ({ heatmapData }: TLMetricsHistoryProps) => {
     const styles: Record<string, string> = {
       low: "bg-green-100 text-[#10b981]", // Зелений фон + Зелений текст
       medium: "bg-yellow-200 text-[#d97706]", // Жовтий фон + Жовтий текст
-      high: "bg-red-500 text-white", // Червоний фон + Червоний текст
+      high: "bg-red-600 text-white", // Червоний фон + Червоний текст
     };
 
     return styles[level];

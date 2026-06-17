@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Title } from "../../shared/Title";
 import { Input } from "../../shared/Input";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
@@ -7,6 +6,14 @@ import { selectAuthLoading } from "../../redux/auth/selectors";
 import { resetRecoverStatus } from "../../redux/auth/slice";
 import lockImg from "../../assets/img/lock.png";
 
+// Нові імпорти валідації
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  forgotPasswordSchema,
+  type ForgotPasswordFormData,
+} from "../../validation/authSchemas";
+
 interface Props {
   onBack: () => void;
 }
@@ -14,30 +21,30 @@ interface Props {
 export const ForgotPasswordForm = ({ onBack }: Props) => {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectAuthLoading);
-
   const globalError = useAppSelector((state) => state.auth.error);
 
-  const [email, setEmail] = useState("");
-  const [localError, setLocalError] = useState("");
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<ForgotPasswordFormData>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: { email: "" },
+  });
 
-  // Хендлер зміни тексту в інпуті
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setEmail(value);
+  const onSubmit: SubmitHandler<ForgotPasswordFormData> = (data) => {
+    dispatch(recoverPassword(data.email));
+  };
 
-    if (localError) setLocalError("");
+  // Очищаємо помилку бекенду при введенні нових символів
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setValue("email", e.target.value, { shouldValidate: true });
     if (globalError) dispatch(resetRecoverStatus());
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim()) {
-      return setLocalError("Будь ласка, введіть електронну пошту.");
-    }
-    dispatch(recoverPassword(email));
-  };
-
-  const displayError = localError || globalError;
+  // Пріоритет віддаємо локальній помилці Zod, якщо її немає — беремо помилку з сервера
+  const displayError = errors.email?.message || globalError;
 
   return (
     <div className="w-full flex flex-col">
@@ -59,26 +66,28 @@ export const ForgotPasswordForm = ({ onBack }: Props) => {
         Забули пароль?
       </Title>
       <p className="text-[14px] text-center text-light-txt mb-8">
-        Введіть вашу電子 електронну пошту, і ми надішлемо посилання для скидання
+        Введіть вашу електронну пошту, і ми надішлемо посилання для скидання
         пароля.
       </p>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-4"
+        noValidate
+      >
         <Input
           type="email"
-          autoComplete="email"
+          id="email"
           label="Електронна пошта"
           placeholder="name@company.com"
           leftIcon="user"
-          value={email}
-          onChange={handleEmailChange}
           error={displayError as string}
           helperText={
             !displayError
               ? "На вказану адресу електронної пошти ми надішлемо інструкцію відновлення пароля."
               : ""
           }
-          required
+          {...register("email", { onChange: handleInputChange })}
         />
 
         <button

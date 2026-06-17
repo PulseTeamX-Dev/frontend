@@ -41,7 +41,7 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
         Навантаженість
       </Title>
 
-      <div className="flex-grow flex flex-col justify-center mt-3">
+      <div className="grow flex flex-col justify-center mt-3">
         <div className="text-center mb-3">
           <span className="text-2xl font-bold text-green-600">
             {averageScore.replace(".", ",")}

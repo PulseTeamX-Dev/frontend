@@ -41,8 +41,8 @@ export const MetricsSummaryItems = ({
     safeTrend === 0
       ? "bg-gray-50 border border-gray-200 text-gray-500"
       : isGoodTrend
-        ? "bg-green-50 border border-green-200 text-green-700"
-        : "bg-red-50 border border-red-200 text-red-700";
+        ? "bg-green-100 border border-green-300 text-green-700"
+        : "bg-red-100 border border-red-300 text-red-700";
 
   const iconId = safeTrend < 0 ? "caret-down-filled" : "caret-up-filled";
 
