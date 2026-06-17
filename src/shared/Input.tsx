@@ -56,8 +56,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                   ? "text-error"
                   : success
                     ? "text-success"
-                    : // ВИПРАВЛЕНО: Прибрали жовтий ховер та фокус, залишили grayscale-700
-                      "text-grayscale-700"
+                    : "text-grayscale-700"
               }`}
             >
               {/* fill-current можна прибрати звідси, бо ми додали його в сам Icon */}

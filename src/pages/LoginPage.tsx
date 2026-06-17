@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
 import { selectIsAuthenticated } from "../redux/auth/selectors";
 import { resetRecoverStatus } from "../redux/auth/slice";
-
-// Твої компоненти
 import AuthSuccess from "../components/ui/AuthSuccess";
 import { CheckEmailView } from "../components/ui/CheckEmailView";
 import Icon from "../shared/Icon";

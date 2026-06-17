@@ -47,7 +47,7 @@ const MetricsHistoryItem = ({
   const styles: Record<string, string> = {
     low: "bg-green-100 text-[#10b981]",
     medium: "bg-yellow-200 text-[#d97706]",
-    high: "bg-red-500 text-white",
+    high: "bg-red-600 text-white",
   };
 
   return (

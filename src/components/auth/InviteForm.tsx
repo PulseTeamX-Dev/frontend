@@ -6,42 +6,47 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
 import { acceptInvite, loginUser } from "../../redux/auth/operation";
 import { selectAuthLoading } from "../../redux/auth/selectors";
 import { Link } from "react-router-dom";
+
+// Імпортуємо ресолвер та Zod-інструменти
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  inviteSchema,
+  type InviteFormData,
+} from "../../validation/authSchemas";
+import { toast } from "react-toastify";
+
 export const InviteForm = ({ token }: { token: string }) => {
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectAuthLoading);
-
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [localError, setLocalError] = useState("");
   const [isVisible, setIsVisible] = useState(false);
-  const [isAgreed, setIsAgreed] = useState(false);
 
   const togglePasswordVisibility = () => setIsVisible((prev) => !prev);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLocalError("");
+  // Підключаємо ресолвер
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<InviteFormData>({
+    resolver: zodResolver(inviteSchema),
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+      isAgreed: false,
+    },
+  });
 
-    if (password !== confirmPassword) {
-      return setLocalError("Паролі не співпадають!");
-    }
-    if (password.length < 6) {
-      return setLocalError("Пароль має містити мінімум 6 символів.");
-    }
-    if (!isAgreed) {
-      return setLocalError("Необхідно погодитися з умовами користування.");
-    }
-
+  const onSubmit: SubmitHandler<InviteFormData> = async (data) => {
     try {
       const response = await dispatch(
-        acceptInvite({ token, password }),
+        acceptInvite({ token, password: data.password }),
       ).unwrap();
 
       const email = response.user.email;
-
-      await dispatch(loginUser({ email, password })).unwrap();
+      await dispatch(loginUser({ email, password: data.password })).unwrap();
     } catch (error: unknown) {
-      setLocalError((error as string) || "Сталася помилка. Спробуйте пізніше.");
+      toast.error((error as string) || "Сталася помилка. Спробуйте пізніше.");
     }
   };
 
@@ -55,13 +60,18 @@ export const InviteForm = ({ token }: { token: string }) => {
         Вітаємо!
       </Title>
       <p className="text-[12px] text-center text-light-txt mb-8">
-        Давайте розпочнемо
+        Let's get started!
       </p>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      {/* noValidate ОБОВ'ЯЗКОВО */}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-4"
+        noValidate
+      >
         <Input
           type={isVisible ? "text" : "password"}
-          label="Cтворіть пароль"
+          label="Створіть пароль"
           placeholder="••••••••"
           leftIcon="lock"
           rightIcon={
@@ -76,10 +86,10 @@ export const InviteForm = ({ token }: { token: string }) => {
               />
             </button>
           }
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+          error={errors.password?.message}
+          {...register("password")}
         />
+
         <Input
           type={isVisible ? "text" : "password"}
           label="Підтвердіть пароль"
@@ -97,53 +107,53 @@ export const InviteForm = ({ token }: { token: string }) => {
               />
             </button>
           }
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          error={localError}
-          required
+          error={errors.confirmPassword?.message}
+          {...register("confirmPassword")}
         />
 
-        <div className="flex items-start gap-3 pt-2 pl-1">
-          <div className="relative flex items-center justify-center w-6 h-6 shrink-0 mt-0.5">
-            <input
-              type="checkbox"
-              id="remember"
-              checked={isAgreed}
-              onChange={(e) => setIsAgreed(e.target.checked)}
-              className="peer appearance-none w-full h-full border-2 border-light-txt rounded-[6px] bg-transparent cursor-pointer checked:border-grayscale-700 hover:border-yellow-500 transition-colors focus:outline-none"
-            />
-            <Icon
-              id="check"
-              className="absolute fill-current w-4 h-4 text-grayscale-700 opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity"
-            />
+        {/* Блок з Чекбоксом та Помилкою лінку користування */}
+        <div className="flex flex-col gap-1 pt-2 pl-1">
+          <div className="flex items-start gap-3">
+            <div className="relative flex items-center justify-center w-6 h-6 shrink-0 mt-0.5">
+              <input
+                type="checkbox"
+                id="remember"
+                className="peer appearance-none w-full h-full border-2 border-light-txt rounded-[6px] bg-transparent cursor-pointer checked:border-grayscale-700 hover:border-yellow-500 transition-colors focus:outline-none"
+                {...register("isAgreed")}
+              />
+              <Icon
+                id="check"
+                className="absolute fill-current w-4 h-4 text-grayscale-700 opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity"
+              />
+            </div>
+            <label
+              htmlFor="remember"
+              className="text-[14px] leading-[1.4] text-light-txt cursor-pointer select-none font-medium transition-colors"
+            >
+              Я погоджуюся з{" "}
+              <a
+                href="#"
+                className="text-grayscale-900 hover:underline underline-offset-2"
+              >
+                Умовами користування
+              </a>{" "}
+              та{" "}
+              <a
+                href="#"
+                className="text-grayscale-900 hover:underline underline-offset-2"
+              >
+                Політикою конфіденційності
+              </a>
+            </label>
           </div>
-          <label
-            htmlFor="remember"
-            className="
-                        text-[14px]
-                        leading-[1.4]
-                        text-light-txt
-                        cursor-pointer
-                        select-none
-                        font-medium
-                        transition-colors
-                      "
-          >
-            Я погоджуюся з{" "}
-            <Link
-              to="/terms"
-              className="text-grayscale-900 hover:underline underline-offset-2"
-            >
-              Умовами користування
-            </Link>{" "}
-            та{" "}
-            <Link
-              to="/privacy"
-              className="text-grayscale-900 hover:underline underline-offset-2"
-            >
-              Політикою конфіденційності
-            </Link>
-          </label>
+
+          {/* Вивід кастомної помилки для чекбокса */}
+          {errors.isAgreed?.message && (
+            <div className="flex items-center gap-1.5 mt-2 text-xs text-error font-medium">
+              <Icon id="circle-warning-filled" className="w-4 h-4 shrink-0" />
+              <span>{errors.isAgreed.message}</span>
+            </div>
+          )}
         </div>
 
         <button

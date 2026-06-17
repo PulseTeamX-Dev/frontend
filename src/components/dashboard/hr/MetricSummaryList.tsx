@@ -11,27 +11,27 @@ const metricConfig: Record<
 > = {
   response_rate: {
     title: "Активність",
-    prefix: "Найменший",
+    prefix: "MIN",
     isPercentage: true,
   },
   conflict_risk: {
     title: "Ризик конфлікту",
-    prefix: "Найбільший",
+    prefix: "MAX",
     isPercentage: false,
   },
   burnout_risk: {
     title: "Ризик вигорання",
-    prefix: "Найбільший",
+    prefix: "MAX",
     isPercentage: false,
   },
   safety_feeling: {
     title: "Відчуття безпеки",
-    prefix: "Найменший",
+    prefix: "MIN",
     isPercentage: false,
   },
   anonymity_trust: {
     title: "Індекс анонімності",
-    prefix: "Найменший",
+    prefix: "MIN",
     isPercentage: true,
   },
   critical_overload: {
@@ -48,7 +48,8 @@ export const MetricSummaryList = ({ metricsSummary }: MetricSummaryProps) => {
   ][];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 w-full">
+    // ФІКС: Змінили lg:grid-cols-6 на xl:grid-cols-6
+    <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 w-full">
       {metricsArray.map(([key, data]) => {
         const config = metricConfig[key];
 

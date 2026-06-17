@@ -22,8 +22,8 @@ export const TrendCard = ({
 
   // Якщо метрика стресу росте (trend > 0) — це погано (червоний)
   const trendClass = isGoodTrend
-    ? "bg-green-50 border border-green-200 text-green-700"
-    : "bg-red-50 border border-red-200 text-red-700";
+    ? "bg-green-100 border border-green-300 text-green-700"
+    : "bg-red-100 border border-red-300 text-red-700";
 
   // Логіка для стрілочки
   const iconId = trend < 0 ? "caret-down-filled" : "caret-up-filled";

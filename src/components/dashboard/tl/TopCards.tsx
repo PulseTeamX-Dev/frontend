@@ -26,7 +26,7 @@ export const TopCards = ({
     CIRCUMFERENCE - (engagement.pct / 100) * CIRCUMFERENCE;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full items-stretch">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 w-full items-stretch">
       {/* КАРТКА 1: ВІДСОТОК ВІДПОВІДЕЙ */}
       <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 flex flex-col justify-between h-full">
         <Title tag="h2" variant="light">
