@@ -131,19 +131,21 @@ export const InviteForm = ({ token }: { token: string }) => {
               className="text-[14px] leading-[1.4] text-light-txt cursor-pointer select-none font-medium transition-colors"
             >
               Я погоджуюся з{" "}
-              <a
-                href="#"
+              <Link 
                 className="text-grayscale-900 hover:underline underline-offset-2"
-              >
+                to="/terms">
                 Умовами користування
-              </a>{" "}
+              </Link>
+
+                
+              {" "}
               та{" "}
-              <a
-                href="#"
-                className="text-grayscale-900 hover:underline underline-offset-2"
-              >
-                Політикою конфіденційності
-              </a>
+              <Link 
+              className="text-grayscale-900 hover:underline underline-offset-2"
+              to="/privacy">
+                  Політикою конфіденційності
+              </Link>
+                
             </label>
           </div>
 
