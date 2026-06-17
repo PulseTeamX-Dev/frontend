@@ -12,6 +12,7 @@ export interface TeamMember {
   team_id: number;
   is_active: boolean;
   created_at: string;
+  email: string;
 }
 
 export interface TeamState {
@@ -27,3 +28,11 @@ export interface ImportEmailsResponse {
   message: string;
   count: number;
 }
+
+export type FormValues = {
+  newMembers: { email: string }[];
+};
+
+export type TeamMemberWithOptionalId = TeamMember & {
+  id?: number;
+};
