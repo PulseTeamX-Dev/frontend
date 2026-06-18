@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchAlerts } from "./operation";
+import { fetchAlerts, fetchAlertsAnalytics, resolveAlert } from "./operation";
 import type { AlertsState } from "./types";
 
 const initialState: AlertsState = {
   alerts: [],
   isLoading: false,
   error: null,
+  analytics: null,
 };
 
 const alertsSlice = createSlice({
@@ -25,6 +26,27 @@ const alertsSlice = createSlice({
       .addCase(fetchAlerts.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload ?? null;
+      })
+      .addCase(resolveAlert.fulfilled, (state, action) => {
+        const alert = state.alerts.find(
+          (item) => item.alert_id === action.payload,
+        );
+
+        if (alert) {
+          alert.resolved_at = new Date().toISOString();
+        }
+
+        state.alerts.sort((a, b) => {
+          if (!a.resolved_at && b.resolved_at) return -1;
+          if (a.resolved_at && !b.resolved_at) return 1;
+
+          return (
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          );
+        });
+      })
+      .addCase(fetchAlertsAnalytics.fulfilled, (state, action) => {
+        state.analytics = action.payload;
       });
   },
 });
