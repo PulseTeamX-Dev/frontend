@@ -10,18 +10,7 @@ import { selectQuestions, selectSurveyLoading,} from "../redux/surveys/selectors
 export const CreatePulsePage = () => {
   const dispatch = useAppDispatch();
   const questions = useAppSelector(selectQuestions);
-  const [editedQuestions, setEditedQuestions] = useState<
-  Record<number, string>
->({});
-  const handleQuestionChange = (
-    questionId: number,
-    value: string,
-  ) => {
-    setEditedQuestions((prev) => ({
-      ...prev,
-      [questionId]: value,
-    }));
-  };
+  
 
   const isLoading = useAppSelector(selectSurveyLoading);
 
@@ -85,15 +74,9 @@ const times = [
 
               <input
                 value={
-                  editedQuestions[question.question_id]
-                  ?? question.text_ua
+                  question.text_ua
                 }
-                onChange={(e) =>
-                  handleQuestionChange(
-                    question.question_id,
-                    e.target.value,
-                  )
-                }
+                
                 className="
                 w-full
                 h-11
