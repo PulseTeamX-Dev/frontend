@@ -3,8 +3,8 @@ import {
   RadarChart as RechartsRadarChart,
   PolarGrid,
   PolarAngleAxis,
-  PolarRadiusAxis, // <--- Додали вісь радіуса
-  Tooltip, // <--- Додали тултіп
+  PolarRadiusAxis,
+  Tooltip,
   ResponsiveContainer,
 } from "recharts";
 import type { RadarData } from "../../../redux/dashboard/types";
@@ -27,27 +27,32 @@ export const RadarChart = ({ data }: RadarChartProps) => {
 
   const chartData = [
     {
-      subject: "Спокій",
+      // axis_stress_inv ➔ Стресостійкість
+      subject: "Стресостійкість",
       current: currentWeek?.axis_stress_inv || 0,
       previous: previousWeek?.axis_stress_inv || 0,
     },
     {
+      // axis_conflict_inv ➔ Гармонія
       subject: "Гармонія",
       current: currentWeek?.axis_conflict_inv || 0,
       previous: previousWeek?.axis_conflict_inv || 0,
     },
     {
-      subject: "Підтримка",
+      // axis_trust ➔ Довіра
+      subject: "Довіра",
       current: currentWeek?.axis_trust || 0,
       previous: previousWeek?.axis_trust || 0,
     },
     {
+      // axis_clarity ➔ Ясність
       subject: "Ясність",
       current: currentWeek?.axis_clarity || 0,
       previous: previousWeek?.axis_clarity || 0,
     },
     {
-      subject: "Навантаженість",
+      // axis_workload_balance ➔ Баланс навантаження
+      subject: "Баланс навантаження",
       current: currentWeek?.axis_workload_balance || 0,
       previous: previousWeek?.axis_workload_balance || 0,
     },
@@ -74,7 +79,6 @@ export const RadarChart = ({ data }: RadarChartProps) => {
 
       <div className="w-full flex-grow relative min-h-[280px] text-xs flex items-center justify-center">
         <ResponsiveContainer width="100%" height="100%" minHeight={280}>
-          {/* Додали outerRadius 70% щоб звільнити місце для цифр шкали */}
           <RechartsRadarChart
             cx="50%"
             cy="50%"
@@ -87,7 +91,7 @@ export const RadarChart = ({ data }: RadarChartProps) => {
               tick={{ fill: "#4b5563", fontSize: 12, fontWeight: 500 }}
             />
 
-            {/* ФІКС: Жорстко фіксуємо шкалу від 0 до 10, додаємо 6 поділок (0,2,4,6,8,10) */}
+            {/* Шкала суворо від 0 до 10 із 6 точками розподілу */}
             <PolarRadiusAxis
               angle={30}
               domain={[0, 10]}
@@ -95,12 +99,12 @@ export const RadarChart = ({ data }: RadarChartProps) => {
               tickCount={6}
             />
 
-            {/* ФІКС: Красивий тултіп при наведенні */}
+            {/* Кастомний тултіп для точних значень при наведенні */}
             <Tooltip
               contentStyle={{
                 borderRadius: "16px",
                 border: "1px solid #f3f4f6",
-                boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.1)",
+                boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.05)",
               }}
               itemStyle={{ fontWeight: 600, fontSize: "14px" }}
             />
