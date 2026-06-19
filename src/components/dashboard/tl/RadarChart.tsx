@@ -3,6 +3,8 @@ import {
   RadarChart as RechartsRadarChart,
   PolarGrid,
   PolarAngleAxis,
+  PolarRadiusAxis, // <--- Додали вісь радіуса
+  Tooltip, // <--- Додали тултіп
   ResponsiveContainer,
 } from "recharts";
 import type { RadarData } from "../../../redux/dashboard/types";
@@ -72,17 +74,37 @@ export const RadarChart = ({ data }: RadarChartProps) => {
 
       <div className="w-full flex-grow relative min-h-[280px] text-xs flex items-center justify-center">
         <ResponsiveContainer width="100%" height="100%" minHeight={280}>
+          {/* Додали outerRadius 70% щоб звільнити місце для цифр шкали */}
           <RechartsRadarChart
             cx="50%"
             cy="50%"
-            outerRadius="75%"
+            outerRadius="70%"
             data={chartData}
           >
             <PolarGrid stroke="#e5e7eb" />
             <PolarAngleAxis
               dataKey="subject"
-              tick={{ fill: "#4b5563", fontSize: 12, fontWeight: 300 }}
+              tick={{ fill: "#4b5563", fontSize: 12, fontWeight: 500 }}
             />
+
+            {/* ФІКС: Жорстко фіксуємо шкалу від 0 до 10, додаємо 6 поділок (0,2,4,6,8,10) */}
+            <PolarRadiusAxis
+              angle={30}
+              domain={[0, 10]}
+              tick={{ fill: "#9ca3af", fontSize: 10 }}
+              tickCount={6}
+            />
+
+            {/* ФІКС: Красивий тултіп при наведенні */}
+            <Tooltip
+              contentStyle={{
+                borderRadius: "16px",
+                border: "1px solid #f3f4f6",
+                boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.1)",
+              }}
+              itemStyle={{ fontWeight: 600, fontSize: "14px" }}
+            />
+
             <Radar
               name="Минулий тиждень"
               dataKey="previous"

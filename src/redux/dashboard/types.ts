@@ -38,6 +38,9 @@ export interface WorkloadMetric {
   min: number;
   max: number;
   status: string;
+  overload_count: number;
+  underload_count: number;
+  response_count: number;
 }
 
 export interface RadarData {

@@ -7,6 +7,7 @@ import { RadarChart } from "./tl/RadarChart";
 // Імпортуємо інтерфейс, який ми щойно створили в types
 import type { TeamLeadMetrics } from "../../redux/dashboard/types";
 import Icon from "../../shared/Icon";
+import { Title } from "../../shared/Title";
 
 export const TLDashboard = () => {
   const dispatch = useAppDispatch();
@@ -43,12 +44,24 @@ export const TLDashboard = () => {
       workload_min: tlMetrics.workload?.min ?? 0,
       workload_max: tlMetrics.workload?.max ?? 0,
       workload_status: tlMetrics.workload?.status || "Unknown",
+      // ДОДАНО:
+      overload_count: tlMetrics.workload?.overload_count || 0,
+      underload_count: tlMetrics.workload?.underload_count || 0,
+      response_count: tlMetrics.workload?.response_count || 0,
     },
   ];
 
   return (
     <div className="flex flex-col gap-6">
-      {/* ПОВІДОМЛЕННЯ ПРО ЗБІР ДАНИХ */}
+      <div className="flex gap-1 items-center mb-6">
+        <Icon id="logo" className="w-8 h-8" />
+        <Title
+          tag="h1"
+          className="text-[16px] md:text-[18px] text-grayscale-900 font-second-family font-light"
+        >
+          {`Огляд стану команди: ${teamName}`}
+        </Title>
+      </div>
       {isPrivacyLocked && (
         <div className="w-full bg-orange-50 border border-orange-200 rounded-2xl p-4 flex items-center gap-3 text-orange-800 animate-in fade-in duration-300">
           <Icon
