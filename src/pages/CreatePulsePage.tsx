@@ -10,9 +10,28 @@ import { selectQuestions, selectSurveyLoading,} from "../redux/surveys/selectors
 export const CreatePulsePage = () => {
   const dispatch = useAppDispatch();
   const questions = useAppSelector(selectQuestions);
-  
-
   const isLoading = useAppSelector(selectSurveyLoading);
+  const [title, setTitle] = useState("");
+  const handleSubmit = () => {
+          const dto = {
+            title,
+
+            questionIds: questions
+              .filter((q) => q.is_active)
+              .sort((a, b) => a.sort_order - b.sort_order)
+              .map((q) => q.question_id),
+
+            frequency,
+
+            sendDay,
+            sendTime,
+
+            deadlineDay,
+            deadlineTime,
+          };
+
+          console.log(dto);
+        };
 
   useEffect(() => {
   dispatch(fetchQuestions());
@@ -53,31 +72,46 @@ const times = [
       {/* КАРТКА 1 */}
 
       <div className="bg-white rounded-lg shadow-sm p-4">
-        <h2 className="text-xl font-bold mb-6">
-          Створити опитування
-        </h2>
+        <h2 className="text-xl font-bold mb-6">Створити опитування</h2>
+        <div>
+          <label className="block text-xs text-gray-400 mb-2">
+            Назва опитування
+          </label>
 
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Weekly HR Pulse"
+            className="
+      w-full
+      h-11
+      px-4
+      rounded-xl
+      border
+      border-gray-300
+      outline-none
+    "
+          />
+        </div>
         <div className="flex flex-col gap-4">
           {isLoading ? (
             <div className="text-center py-6">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#F26E3B]" />
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#F26E3B]" />
             </div>
-                        ) : (
-    questions
-      .filter((q) => q.is_active)
-      .sort((a, b) => a.sort_order - b.sort_order)
-      .map((question, index) => (
-            <div key={question.question_id}>
-              <label className="block text-xs text-gray-400 mb-2">
-                Питання {index + 1}
-              </label>
+          ) : (
+            questions
+              .filter((q) => q.is_active)
+              .sort((a, b) => a.sort_order - b.sort_order)
+              .map((question, index) => (
+                <div key={question.question_id}>
+                  <label className="block text-xs text-gray-400 mb-2">
+                    Питання {index + 1}
+                  </label>
 
-              <input
-                value={
-                  question.text_ua
-                }
-                
-                className="
+                  <input
+                    readOnly
+                    value={question.text_ua}
+                    className="
                 w-full
                 h-11
                 px-4
@@ -86,85 +120,65 @@ const times = [
                 border-gray-300
                 outline-none
                 "
-              />
-            </div>
-          ))
-        )
-          }
+                  />
+                </div>
+              ))
+          )}
         </div>
       </div>
 
       {/* КАРТКА 2 */}
 
       <div className="bg-white rounded-lg shadow-sm p-4 flex flex-col gap-4">
-        <h2 className="text-[20px] font-bold mb-4">
-          Періодичність опитувань
-        </h2>
+        <h2 className="text-[20px] font-bold mb-4">Періодичність опитувань</h2>
 
         {/* Частота */}
 
-        
+        <div className="border rounded-xl p-3 flex justify-between items-center ">
+          <span className="text-gray-500">Частота опитування</span>
 
-  <div className="border rounded-xl p-3 flex justify-between items-center ">
-  <span className="text-gray-500">
-    Частота опитування
-  </span>
-
-  <FrequencySelector
-    value={frequency}
-    onChange={setFrequency}
-  />
-</div>
-        
+          <FrequencySelector value={frequency} onChange={setFrequency} />
+        </div>
 
         {/* Надсилання */}
 
-  <div className="border rounded-xl p-3 flex justify-between items-center">
-  <span className="text-gray-500">
-    День та час надсилання
-  </span>
- <div className="flex gap-3">
-  <Dropdown
-      value={sendDay}
-      options={days}
-      onChange={setSendDay}
-    />
+        <div className="border rounded-xl p-3 flex justify-between items-center">
+          <span className="text-gray-500">День та час надсилання</span>
+          <div className="flex gap-3">
+            <Dropdown value={sendDay} options={days} onChange={setSendDay} />
 
-    <Dropdown
-      value={sendTime}
-      options={times}
-      onChange={setSendTime}
-      width="82px"
-    />
-</div>
-</div>
-
-       
+            <Dropdown
+              value={sendTime}
+              options={times}
+              onChange={setSendTime}
+              width="82px"
+            />
+          </div>
+        </div>
 
         <div className="border rounded-xl p-3 flex justify-between items-center">
-          <span className="text-gray-500">
-            Кінцевий термін
-          </span>
+          <span className="text-gray-500">Кінцевий термін</span>
 
           <div className="flex gap-3">
             <Dropdown
-      value={deadlineDay}
-      options={days}
-      onChange={setDeadlineDay}
-    />
+              value={deadlineDay}
+              options={days}
+              onChange={setDeadlineDay}
+            />
 
-    <Dropdown
-      value={deadlineTime}
-      options={times}
-      onChange={setDeadlineTime}
-      width="82px"
-    />
+            <Dropdown
+              value={deadlineTime}
+              options={times}
+              onChange={setDeadlineTime}
+              width="82px"
+            />
           </div>
         </div>
 
         {/* Кнопка */}
 
         <button
+          onClick={handleSubmit}
           className="
           mt-4
           w-fit
