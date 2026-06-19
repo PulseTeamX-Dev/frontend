@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo } from "react"; // <-- Додали імпорт
 import Icon from "../../../shared/Icon";
 import { Title } from "../../../shared/Title";
 import type { EngagementData } from "../../../types/dashboard/types";
@@ -23,10 +23,10 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
         Стан заповнення опитувань
       </Title>
 
-      <div className="w-full flex-1 overflow-y-auto overflow-x-auto min-h-0 pb-1 pr-1 custom-scrollbar">
-        <div className="min-w-[360px]">
-          {/* Липкий Заголовок */}
-          <div className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-2 mb-3 text-grayscale-500 font-medium text-[12px] md:text-[13px] text-center sticky top-0 bg-white z-10 pb-2 border-b border-gray-50">
+      <div className="w-full overflow-x-auto pb-2">
+        <div className="min-w-100">
+          {/* Заголовки */}
+          <div className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-2 mb-3 text-grayscale-700 text-[14px] text-center">
             <div className="text-left"></div>
             <div>Надіслано</div>
             <div>Відповіли</div>
@@ -34,7 +34,7 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
           </div>
 
           {/* Рядки */}
-          <div className="flex flex-col gap-3 md:gap-4 mt-1">
+          <div className="flex flex-col gap-4">
             {sortedData.map((item) => (
               <div
                 key={item.team_id}
