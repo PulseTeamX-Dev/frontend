@@ -1,3 +1,4 @@
+import { useMemo } from "react"; // <-- Додали імпорт
 import Icon from "../../../shared/Icon";
 import { Title } from "../../../shared/Title";
 import type { EngagementData } from "../../../types/dashboard/types";
@@ -8,15 +9,23 @@ interface SurveyCompletionTableProps {
 }
 
 export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
+  const sortedData = useMemo(() => {
+    return [...data].sort((a, b) => {
+      if (a.low_engagement_signal && !b.low_engagement_signal) return -1;
+      if (!a.low_engagement_signal && b.low_engagement_signal) return 1;
+
+      return a.response_rate_pct - b.response_rate_pct;
+    });
+  }, [data]);
+
   return (
     <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full mb-0 grow">
       <Title tag="h2" variant="light">
         Стан заповнення опитувань
       </Title>
 
-      {/* Обертка для скролу на мобільному */}
       <div className="w-full overflow-x-auto pb-2">
-        <div className="min-w-[400px]">
+        <div className="min-w-100">
           {/* Заголовки */}
           <div className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-2 mb-3 text-grayscale-700 text-[14px] text-center">
             <div className="text-left"></div>
@@ -27,7 +36,7 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
 
           {/* Рядки */}
           <div className="flex flex-col gap-4">
-            {data.map((item) => (
+            {sortedData.map((item) => (
               <div
                 key={item.team_id}
                 className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-2 items-center border-b border-gray-50 pb-2 last:border-0 last:pb-0"

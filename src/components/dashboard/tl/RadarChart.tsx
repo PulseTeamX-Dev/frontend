@@ -3,6 +3,8 @@ import {
   RadarChart as RechartsRadarChart,
   PolarGrid,
   PolarAngleAxis,
+  PolarRadiusAxis,
+  Tooltip,
   ResponsiveContainer,
 } from "recharts";
 import type { RadarData } from "../../../redux/dashboard/types";
@@ -25,27 +27,32 @@ export const RadarChart = ({ data }: RadarChartProps) => {
 
   const chartData = [
     {
-      subject: "Спокій",
+      // axis_stress_inv ➔ Стресостійкість
+      subject: "Стресостійкість",
       current: currentWeek?.axis_stress_inv || 0,
       previous: previousWeek?.axis_stress_inv || 0,
     },
     {
+      // axis_conflict_inv ➔ Гармонія
       subject: "Гармонія",
       current: currentWeek?.axis_conflict_inv || 0,
       previous: previousWeek?.axis_conflict_inv || 0,
     },
     {
-      subject: "Підтримка",
+      // axis_trust ➔ Довіра
+      subject: "Довіра",
       current: currentWeek?.axis_trust || 0,
       previous: previousWeek?.axis_trust || 0,
     },
     {
+      // axis_clarity ➔ Ясність
       subject: "Ясність",
       current: currentWeek?.axis_clarity || 0,
       previous: previousWeek?.axis_clarity || 0,
     },
     {
-      subject: "Навантаженість",
+      // axis_workload_balance ➔ Баланс навантаження
+      subject: "Баланс навантаження",
       current: currentWeek?.axis_workload_balance || 0,
       previous: previousWeek?.axis_workload_balance || 0,
     },
@@ -75,14 +82,33 @@ export const RadarChart = ({ data }: RadarChartProps) => {
           <RechartsRadarChart
             cx="50%"
             cy="50%"
-            outerRadius="75%"
+            outerRadius="70%"
             data={chartData}
           >
             <PolarGrid stroke="#e5e7eb" />
             <PolarAngleAxis
               dataKey="subject"
-              tick={{ fill: "#4b5563", fontSize: 12, fontWeight: 300 }}
+              tick={{ fill: "#4b5563", fontSize: 12, fontWeight: 500 }}
             />
+
+            {/* Шкала суворо від 0 до 10 із 6 точками розподілу */}
+            <PolarRadiusAxis
+              angle={30}
+              domain={[0, 10]}
+              tick={{ fill: "#9ca3af", fontSize: 10 }}
+              tickCount={6}
+            />
+
+            {/* Кастомний тултіп для точних значень при наведенні */}
+            <Tooltip
+              contentStyle={{
+                borderRadius: "16px",
+                border: "1px solid #f3f4f6",
+                boxShadow: "0 10px 15px -3px rgb(0 0 0 / 0.05)",
+              }}
+              itemStyle={{ fontWeight: 600, fontSize: "14px" }}
+            />
+
             <Radar
               name="Минулий тиждень"
               dataKey="previous"

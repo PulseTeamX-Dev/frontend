@@ -5,6 +5,8 @@ import { MetricSummaryList } from "./hr/MetricSummaryList";
 import MetricsHistoryList from "./hr/MetricsHistoryList";
 import { SurveyCompletionTable } from "./hr/SurveyCompletionTable";
 import { WorkloadChart } from "./hr/WorkloadChart";
+import Icon from "../../shared/Icon";
+import { Title } from "../../shared/Title";
 
 export const HRDashboard = () => {
   const dispatch = useAppDispatch();
@@ -28,15 +30,19 @@ export const HRDashboard = () => {
 
   return (
     <>
-      {/* <div className="flex gap-1 items-center mb-6">
-        <Icon id="logo" className="w-8 h-8" />
+      <div className="flex gap-2 items-center mb-5 mt-1">
+        <Icon
+          id="logo"
+          className="w-8 h-8 text-primary-active shrink-0 transform -translate-y-1.25"
+        />
         <Title
           tag="h1"
-          className="text-[16px] md:text-[18px] text-grayscale-900 font-second-family font-light"
+          variant="light"
+          className="text-[18px] md:text-xl text-grayscale-900 font-heading mb-0 leading-none"
         >
           Огляд
         </Title>
-      </div> */}
+      </div>
 
       <MetricSummaryList metricsSummary={metrics.metrics_summary} />
 
