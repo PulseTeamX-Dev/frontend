@@ -107,7 +107,7 @@ const AlertResolutionChart = ({ data }: Props) => {
   }));
 
   return (
-    <div className="bg-white rounded-3xl border p-6">
+    <div className="bg-white rounded-3xl border p-6 h-full">
       <div className="grid grid-cols-1 lg:grid-cols-[70%_30%] gap-6">
         {/* ГРАФІК */}
         <div>
@@ -139,6 +139,8 @@ const AlertResolutionChart = ({ data }: Props) => {
                 maxBarSize={24}
                 minPointSize={2}
                 name="Critical"
+                fill="#ef4444"
+                legendType="rect"
                 shape={(props) => (
                   <ProgressBar
                     {...props}
@@ -158,6 +160,8 @@ const AlertResolutionChart = ({ data }: Props) => {
                 maxBarSize={24}
                 minPointSize={2}
                 name="Warning"
+                fill="#f59e0b"
+                legendType="rect"
                 shape={(props) => (
                   <ProgressBar
                     {...props}
