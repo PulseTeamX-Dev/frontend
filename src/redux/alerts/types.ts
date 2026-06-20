@@ -2,10 +2,14 @@ export interface Alert {
   alert_id: number;
   team_id: string;
   team_name: string;
+  alert_level: "CRITICAL" | "WARNING";
+  alert_type: string;
   alert_type_label: string;
+  metric_value: number | null;
   created_at: string;
   resolved_at: string | null;
   resolved_by: number | null;
+  resolution_note: string | null;
 }
 
 export interface AlertResolution {

@@ -72,7 +72,7 @@ const RetentionChart = ({ data, role, setRole }: Props) => {
     Math.max(data.length, 1);
 
   return (
-    <div className="bg-white rounded-3xl border p-5 min-h-[420px]">
+    <div className="bg-white rounded-3xl border p-5 h-full min-h-[420px]">
       <div className="flex items-center justify-between mb-5">
         <h3 className="text-lg font-semibold">
           Тривалість використання платформи
