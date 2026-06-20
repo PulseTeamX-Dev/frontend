@@ -16,10 +16,11 @@ interface WorkloadChartProps {
 }
 
 export const WorkloadChart = ({ data }: WorkloadChartProps) => {
+  // ФІКС: Замінили стандартні класи Tailwind на кастомні HEX-кольори (#DC2626) для максимального контрасту
   const getStatusColor = (status: string, isText = false) => {
     switch (status) {
       case "Overload":
-        return isText ? "text-red-500" : "bg-red-500";
+        return isText ? "text-[#DC2626]" : "bg-[#DC2626]";
       case "Underload":
         return isText ? "text-blue-500" : "bg-blue-500";
       case "Polarized":
@@ -53,12 +54,12 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
         </div>
       ) : (
         <div className="flex-1 flex flex-col min-h-0 w-full">
-          {/* ФІКС: Прибрали фіксовану праву колонку, інтегрували "Зону ризику" всередину шкали */}
+          {/* Мікро-заголовок шкали з точним позиціонуванням за зонами 30/40/30 */}
           <div className="hidden sm:flex items-center gap-3 w-full text-[10px] md:text-[11px] font-medium text-gray-400 mb-2 shrink-0 pb-2 border-b border-gray-50">
             {/* Назва команди зліва */}
             <div className="w-[60px] md:w-[85px] shrink-0"></div>
 
-            {/* Центральна шкала, яка тепер займає весь вільний простір праворуч */}
+            {/* Центральна шкала */}
             <div className="grow flex w-full tracking-tight">
               <span className="w-[30%] text-left pl-1">
                 &lt;4 <span className="hidden lg:inline">Неповна</span>
@@ -66,7 +67,7 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
               <span className="w-[40%] text-center">
                 4-7 <span className="hidden lg:inline">Оптимально</span>
               </span>
-              {/* "Зона ризику" тепер красиво стоїть прямо над червоною зоною бару! */}
+              {/* Зміна ТЗ: "Перенавантаження" замінено на "Перевантаження" */}
               <span className="w-[30%] text-right pr-1">
                 7&gt; <span className="hidden lg:inline">Зона ризику</span>
               </span>
@@ -90,6 +91,7 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
                 (team.workload_strain_index || 0) * 10,
               );
 
+              // Зміна ТЗ: Замість загальних Перенавантажень виводимо чітке "перев."
               let details = "(оптимально)";
               if (team.overload_count && team.underload_count) {
                 details = `(${team.overload_count} перев., ${team.underload_count} недов.)`;
@@ -119,7 +121,7 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
                     </div>
                   </div>
 
-                  {/* ДЕСКТОП СТАН: Назва команди (Гнучка ширина) */}
+                  {/* ДЕСКТОП СТАН: Ліва назва команди */}
                   <div
                     className="hidden sm:block w-[60px] md:w-[85px] shrink-0 text-[13px] md:text-sm font-medium text-gray-900 truncate"
                     title={team.team_name}
@@ -142,18 +144,28 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
                         width: `${pillWidth}%`,
                       }}
                     >
-                      <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-0.5 h-[70%] bg-white/90 rounded-full"></div>
+                      {/* ФІКС ТУЛТІПУ 1: Додано title для вертикальної риски медіани */}
+                      <div
+                        className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-0.5 h-[70%] bg-white/90 rounded-full cursor-help"
+                        title={`Середнє навантаження по команді: ${team.workload_strain_index.toFixed(1).replace(".", ",")}`}
+                      ></div>
                     </div>
                   </div>
 
-                  {/* ДЕСКТОП СТАН: Статистика справа (Гнучка ширина, нічого не виштовхує!) */}
+                  {/* ДЕСКТОП СТАН: Статистика справа */}
+                  {/* ФІКС ТУЛТІПУ 2: Додано розгорнуте архітектурне пояснення при наведенні на велику цифру відсотка */}
                   <div className="hidden sm:block w-[65px] md:w-[110px] shrink-0 text-right text-[11px] md:text-xs leading-tight whitespace-nowrap">
                     <span
-                      className={`font-bold ${textColor} text-[13px] md:text-sm`}
+                      className={`font-bold ${textColor} text-[13px] md:text-sm cursor-help`}
+                      title="Індекс деструктивного навантаження (% людей в зоні ризику ≥8 або ≤3)"
                     >
                       {strainPct}%
                     </span>
-                    <span className="text-grayscale-500 ml-1 text-[10px] md:text-[11px]">
+                    {/* ФІКС ДЕТАЛЕЙ 3: Динамічно вбудовуємо назву поточної команди в мобільний і десктопний футер опису рядка */}
+                    <span
+                      className="text-gray-500 ml-1 text-[10px] md:text-[11px] cursor-default"
+                      title={`${strainPct}% команди ${team.team_name} в деструктивній зоні`}
+                    >
                       {details}
                     </span>
                   </div>

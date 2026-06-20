@@ -4,8 +4,8 @@ interface MetricsSummaryItemsProps {
   title: string;
   prefix: string;
   isPercentage: boolean;
-  score: number | null; // Безпечно приймаємо null з бекенду
-  trend: number | null; // Безпечно приймаємо null з бекенду
+  score: number | null;
+  trend: number | null;
   worstTeam: string;
 }
 
@@ -17,26 +17,25 @@ export const MetricsSummaryItems = ({
   trend,
   worstTeam,
 }: MetricsSummaryItemsProps) => {
-  // ФІКС: Якщо прилетів null (даних немає), примусово ставимо 0
   const safeScore = score ?? 0;
   const safeTrend = trend ?? 0;
 
+  // ФІКС: Оновили ключове слово на "Перевантаження"
   const isNegativeMetric =
     title.includes("Risk") ||
     title.includes("Ризик") ||
     title.includes("стресу") ||
-    title.includes("Перевантаженість");
+    title.includes("Перевантаження");
 
   const isInvert =
     title === "Ризик конфлікту" ||
     title === "Ризик вигорання" ||
     title.includes("стресу") ||
-    title.includes("Перевантаженість");
+    title.includes("Перевантаження");
 
   // --- ОБРОБКА ТРЕНДУ ---
   const isGoodTrend = isNegativeMetric ? safeTrend < 0 : safeTrend > 0;
 
-  // Якщо тренд рівно 0 (або став 0 через відсутність даних), робимо нейтральну сіру плашку
   const trendClass =
     safeTrend === 0
       ? "bg-gray-50 border border-gray-200 text-gray-500"
@@ -55,13 +54,14 @@ export const MetricsSummaryItems = ({
         : "0,0";
 
   // --- ОБРОБКА СКОРУ ---
+  // ФІКС: Замінили "text-error" на насичений і контрастний "text-[#DC2626]"
   let scoreClass;
   if (isInvert) {
-    scoreClass = safeScore > 5 ? "text-error" : "text-success";
+    scoreClass = safeScore > 5 ? "text-[#DC2626]" : "text-success";
   } else if (isPercentage) {
-    scoreClass = safeScore > 50 ? "text-success" : "text-error";
+    scoreClass = safeScore > 50 ? "text-success" : "text-[#DC2626]";
   } else {
-    scoreClass = safeScore > 5 ? "text-success" : "text-error";
+    scoreClass = safeScore > 5 ? "text-success" : "text-[#DC2626]";
   }
 
   const formattedScore = safeScore.toFixed(1).replace(".", ",");
@@ -73,7 +73,8 @@ export const MetricsSummaryItems = ({
           {title}
         </span>
 
-        {title !== "Індекс анонімності" && title !== "Перевантаженість" && (
+        {/* ФІКС: Оновили перевірку на нову назву "Перевантаження" */}
+        {title !== "Індекс анонімності" && title !== "Перевантаження" && (
           <span
             className={`flex items-center justify-center gap-0.5 px-1.5 py-0.5 rounded-lg shrink-0 min-w-[64px] self-end ${trendClass}`}
           >
