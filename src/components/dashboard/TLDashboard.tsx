@@ -53,7 +53,7 @@ export const TLDashboard = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex gap-2 items-center mb-4 mt-1">
+      <div className="flex gap-2 items-center">
         <Icon
           id="logo"
           className="w-8 h-8 text-primary-active shrink-0 transform -translate-y-1.25"
@@ -100,13 +100,16 @@ export const TLDashboard = () => {
         />
       </div>
 
-      <div className="flex flex-col xl:flex-row gap-4 w-full items-stretch">
+      {/* Основна сітка (Звільнили від жорсткої висоти!) */}
+      <div className="flex flex-col xl:flex-row gap-4 w-full items-start">
+        {/* ЛІВА КОЛОНКА (Хітмеп) - тягнеться за контентом */}
         <div className="w-full xl:w-1/2 flex flex-col">
           <MetricsHistory heatmapData={tlMetrics.heatmap} />
         </div>
 
+        {/* ПРАВА КОЛОНКА (Радар) - розтягується під ліву колонку або має свій розмір */}
         <div
-          className={`w-full xl:w-1/2 flex flex-col transition-all duration-300 ${isPrivacyLocked ? "opacity-40 pointer-events-none filter blur-[2px]" : ""}`}
+          className={`w-full xl:w-1/2 flex flex-col self-stretch transition-all duration-300 ${isPrivacyLocked ? "opacity-40 pointer-events-none filter blur-[2px]" : ""}`}
         >
           <RadarChart data={tlMetrics.radar} />
         </div>

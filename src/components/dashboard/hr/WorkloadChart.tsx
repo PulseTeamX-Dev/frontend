@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Title } from "../../../shared/Title";
 
 export interface EnhancedWorkloadData {
@@ -17,23 +16,6 @@ interface WorkloadChartProps {
 }
 
 export const WorkloadChart = ({ data }: WorkloadChartProps) => {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-
-  const averageScore = data.length
-    ? data.reduce((sum, item) => sum + item.workload_strain_index, 0) /
-      data.length
-    : 0;
-
-  // ФІКС 1: Колір хедера тепер залежить виключно від БД (пріоритет у Overload)
-  let dominantStatus = "Optimal";
-  if (data.some((d) => d.workload_status === "Overload")) {
-    dominantStatus = "Overload";
-  } else if (data.some((d) => d.workload_status === "Underload")) {
-    dominantStatus = "Underload";
-  } else if (data.some((d) => d.workload_status === "Polarized")) {
-    dominantStatus = "Polarized";
-  }
-
   const getStatusColor = (status: string, isText = false) => {
     switch (status) {
       case "Overload":
@@ -48,8 +30,6 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
     }
   };
 
-  const headerColor = getStatusColor(dominantStatus, true);
-
   const getPercent = (score: number) => {
     const s = Math.max(1, Math.min(10, score));
     if (s < 4) return ((s - 1) / 3) * 30;
@@ -57,138 +37,132 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
     return 70 + ((s - 7) / 3) * 30;
   };
 
-  // Агрегація даних для динамічного футера
-  const totalResponses = data.reduce(
-    (sum, t) => sum + (t.response_count || 0),
-    0,
-  );
-  const totalOverload = data.reduce(
-    (sum, t) => sum + (t.overload_count || 0),
-    0,
-  );
-  const totalUnderload = data.reduce(
-    (sum, t) => sum + (t.underload_count || 0),
-    0,
-  );
-  const riskPct = totalResponses
-    ? Math.round(((totalOverload + totalUnderload) / totalResponses) * 100)
-    : 0;
-
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 w-full h-full flex flex-col justify-between relative">
-      <Title tag="h2" variant="light">
+    <div className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 w-full flex-1 flex flex-col min-h-0">
+      <Title
+        tag="h2"
+        variant="light"
+        className="mb-3 shrink-0 text-[15px] md:text-base"
+      >
         Навантаженість
       </Title>
 
-      <div className="grow flex flex-col justify-center mt-3">
-        {/* Динамічний колір хедера */}
-        <div className="text-center mb-4">
-          <span
-            className={`text-[32px] md:text-4xl font-bold ${headerColor} transition-colors duration-300`}
-          >
-            {averageScore.toFixed(1).replace(".", ",")}
-          </span>
-          <span className="text-gray-500 text-lg font-medium">/10</span>
+      {data.length === 0 ? (
+        <div className="grow flex items-center justify-center text-sm text-gray-400">
+          Немає даних
         </div>
+      ) : (
+        <div className="flex-1 flex flex-col min-h-0 w-full">
+          {/* ФІКС: Прибрали фіксовану праву колонку, інтегрували "Зону ризику" всередину шкали */}
+          <div className="hidden sm:flex items-center gap-3 w-full text-[10px] md:text-[11px] font-medium text-gray-400 mb-2 shrink-0 pb-2 border-b border-gray-50">
+            {/* Назва команди зліва */}
+            <div className="w-[60px] md:w-[85px] shrink-0"></div>
 
-        <div className="relative w-full py-1">
-          {/* Базовий фон шкали (сірий, тонкий) */}
-          <div className="w-full h-4 bg-gray-100 rounded-full border border-gray-200/50"></div>
+            {/* Центральна шкала, яка тепер займає весь вільний простір праворуч */}
+            <div className="grow flex w-full tracking-tight">
+              <span className="w-[30%] text-left pl-1">
+                &lt;4 <span className="hidden lg:inline">Неповна</span>
+              </span>
+              <span className="w-[40%] text-center">
+                4-7 <span className="hidden lg:inline">Оптимально</span>
+              </span>
+              {/* "Зона ризику" тепер красиво стоїть прямо над червоною зоною бару! */}
+              <span className="w-[30%] text-right pr-1">
+                7&gt; <span className="hidden lg:inline">Зона ризику</span>
+              </span>
+            </div>
 
-          {/* Плаваючі спреди команд */}
-          <div className="absolute inset-0 flex flex-col justify-center">
+            {/* Порожній симетричний контейнер-заглушка замість захардкоджених 150px */}
+            <div className="w-[65px] md:w-[110px] shrink-0"></div>
+          </div>
+
+          {/* Скрол-контейнер для списку команд */}
+          <div className="flex-1 overflow-y-auto flex flex-col gap-4 md:gap-5 mt-1 custom-scrollbar w-full">
             {data.map((team, index) => {
               const leftPosition = getPercent(team.workload_min);
               const rightPosition = getPercent(team.workload_max);
               const pillWidth = Math.max(1, rightPosition - leftPosition);
+
               const teamColor = getStatusColor(team.workload_status);
+              const textColor = getStatusColor(team.workload_status, true);
+
+              const strainPct = Math.round(
+                (team.workload_strain_index || 0) * 10,
+              );
+
+              let details = "(оптимально)";
+              if (team.overload_count && team.underload_count) {
+                details = `(${team.overload_count} перев., ${team.underload_count} недов.)`;
+              } else if (team.overload_count) {
+                details = `(${team.overload_count} перев.)`;
+              } else if (team.underload_count) {
+                details = `(${team.underload_count} недов.)`;
+              }
 
               return (
                 <div
-                  key={`chart_team_${team.team_name}_${index}`}
-                  className="absolute h-4 w-full cursor-pointer group"
-                  onMouseEnter={() => setHoveredIndex(index)}
-                  onMouseLeave={() => setHoveredIndex(null)}
+                  key={`${team.team_name}_${index}`}
+                  className="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-3 w-full pb-3 sm:pb-0 border-b border-gray-50/50 sm:border-none last:border-none"
                 >
-                  <div
-                    className={`absolute h-full rounded-full shadow-sm transition-all duration-300 ${teamColor} group-hover:scale-y-125 z-10`}
-                    style={{
-                      left: `${leftPosition}%`,
-                      width: `${pillWidth}%`,
-                    }}
-                  >
-                    {/* Біла вертикальна риска по центру спреду */}
-                    <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-0.5 h-[60%] bg-white/90 rounded-full"></div>
+                  {/* МОБІЛЬНИЙ СТАН */}
+                  <div className="flex justify-between items-center sm:hidden w-full mb-0.5">
+                    <span className="text-[13px] font-semibold text-gray-900 truncate max-w-[60%]">
+                      {team.team_name}
+                    </span>
+                    <div className="text-[11px] whitespace-nowrap text-right">
+                      <span className={`font-bold ${textColor} text-[13px]`}>
+                        {strainPct}%{" "}
+                      </span>
+                      <span className="text-gray-400 font-medium">
+                        {details}
+                      </span>
+                    </div>
                   </div>
 
-                  {/* Tooltip */}
-                  {hoveredIndex === index && (
-                    <div className="absolute z-20 bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 bg-white border border-gray-100 rounded-2xl shadow-lg p-4 flex justify-between items-center text-sm pointer-events-none animate-in fade-in zoom-in duration-200">
-                      <div className="flex flex-col gap-1 text-left">
-                        <span className="text-gray-500 text-xs font-medium">
-                          Команда
-                        </span>
-                        <span className="text-gray-900 font-semibold">
-                          {team.team_name}
-                        </span>
-                      </div>
-                      <div className="flex flex-col gap-1 text-right">
-                        <span className="text-gray-500 text-xs font-medium">
-                          Статус
-                        </span>
-                        <span
-                          className={`font-semibold ${getStatusColor(team.workload_status, true)}`}
-                        >
-                          {team.workload_status}
-                        </span>
-                      </div>
+                  {/* ДЕСКТОП СТАН: Назва команди (Гнучка ширина) */}
+                  <div
+                    className="hidden sm:block w-[60px] md:w-[85px] shrink-0 text-[13px] md:text-sm font-medium text-gray-900 truncate"
+                    title={team.team_name}
+                  >
+                    {team.team_name}
+                  </div>
+
+                  {/* ЦЕНТР: Спред */}
+                  <div className="grow relative h-3 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="absolute inset-0 flex opacity-40">
+                      <div className="w-[30%] h-full bg-blue-100 border-r border-white/50"></div>
+                      <div className="w-[40%] h-full bg-green-100 border-r border-white/50"></div>
+                      <div className="w-[30%] h-full bg-red-100"></div>
                     </div>
-                  )}
+
+                    <div
+                      className={`absolute h-full rounded-full shadow-sm ${teamColor} z-10`}
+                      style={{
+                        left: `${leftPosition}%`,
+                        width: `${pillWidth}%`,
+                      }}
+                    >
+                      <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-0.5 h-[70%] bg-white/90 rounded-full"></div>
+                    </div>
+                  </div>
+
+                  {/* ДЕСКТОП СТАН: Статистика справа (Гнучка ширина, нічого не виштовхує!) */}
+                  <div className="hidden sm:block w-[65px] md:w-[110px] shrink-0 text-right text-[11px] md:text-xs leading-tight whitespace-nowrap">
+                    <span
+                      className={`font-bold ${textColor} text-[13px] md:text-sm`}
+                    >
+                      {strainPct}%
+                    </span>
+                    <span className="text-grayscale-500 ml-1 text-[10px] md:text-[11px]">
+                      {details}
+                    </span>
+                  </div>
                 </div>
               );
             })}
           </div>
         </div>
-
-        {/* Підписи шкали */}
-        <div className="flex justify-between w-full mt-2 text-[10px] md:text-xs font-medium text-gray-400">
-          <div className="text-left w-1/3">
-            <p>&lt;4</p>
-            <p>Неповна</p>
-          </div>
-          <div className="text-center w-1/3">
-            <p>4-7</p>
-            <p>Оптимальна</p>
-          </div>
-          <div className="text-right w-1/3">
-            <p>7&gt;</p>
-            <p>Перенавантаження</p>
-          </div>
-        </div>
-
-        {/* ФІКС 2: Динамічний Footer із чітким словом "людей" за ТЗ */}
-        {totalResponses > 0 && (
-          <div className="mt-4 pt-3 border-t border-gray-50 text-[11px] md:text-xs font-medium text-center text-gray-500 leading-relaxed">
-            <span className="text-gray-900 font-bold">{riskPct}%</span> команди
-            в деструктивній зоні:{" "}
-            {totalOverload > 0 ? (
-              <span className="text-red-500 font-bold">
-                {totalOverload} людей перевантажені
-              </span>
-            ) : (
-              "перевантажених немає"
-            )}
-            {totalUnderload > 0 && (
-              <>
-                ,{" "}
-                <span className="text-blue-500 font-bold">
-                  {totalUnderload} людей недовантажені
-                </span>
-              </>
-            )}
-          </div>
-        )}
-      </div>
+      )}
     </div>
   );
 };

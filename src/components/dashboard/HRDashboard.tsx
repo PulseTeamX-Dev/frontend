@@ -30,7 +30,7 @@ export const HRDashboard = () => {
 
   return (
     <>
-      <div className="flex gap-2 items-center mb-5 mt-1">
+      <div className="flex gap-2 items-center">
         <Icon
           id="logo"
           className="w-8 h-8 text-primary-active shrink-0 transform -translate-y-1.25"
@@ -46,17 +46,19 @@ export const HRDashboard = () => {
 
       <MetricSummaryList metricsSummary={metrics.metrics_summary} />
 
-      <div className="flex flex-col xl:flex-row gap-4 mt-6 w-full items-stretch">
-        <div className="w-full xl:w-7/12 flex flex-col">
+      {/* ФІКС СІТКИ: Змінили пропорції з 7/12 та 5/12 на рівні 50% / 50% */}
+      <div className="flex flex-col xl:flex-row gap-5 mt-6 w-full items-stretch xl:h-[560px]">
+        {/* ЛІВА КОЛОНКА (Хітмеп) - тепер 1/2 */}
+        <div className="w-full xl:w-1/2 flex flex-col min-h-0">
           <MetricsHistoryList metricsHistory={metrics.metrics_history} />
         </div>
-        <div className="w-full xl:w-5/12 flex flex-col gap-4">
+
+        {/* ПРАВА КОЛОНКА (Картки) - тепер теж 1/2 (отримала +8% чистої ширини!) */}
+        <div className="w-full xl:w-1/2 flex flex-col gap-4 min-h-0">
           <SurveyCompletionTable data={metrics.engagement} />
           <WorkloadChart data={metrics.workload_current} />
         </div>
       </div>
-
-      {/* <pre>{JSON.stringify(metrics, null, 2)}</pre> */}
     </>
   );
 };
