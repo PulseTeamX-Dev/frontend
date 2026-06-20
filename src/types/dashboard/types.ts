@@ -60,6 +60,7 @@ export interface HRWorkloadCurrent {
   workload_min: number;
   workload_max: number;
   workload_status: string;
+  workload_avg: number;
 }
 
 export interface HRMetrics {
