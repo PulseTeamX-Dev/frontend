@@ -34,6 +34,8 @@ export const SignalsPage = () => {
   const handleResolve = async (alertId: number) => {
     try {
       await dispatch(resolveAlert(alertId)).unwrap();
+      dispatch(fetchAlerts());
+      dispatch(fetchAlertsAnalytics());
 
       toast.success("Сигнал позначено як вирішений");
     } catch {

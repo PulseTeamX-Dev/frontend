@@ -192,7 +192,7 @@ const AlertResolutionChart = ({ data }: Props) => {
         <div className="border-l pl-6">
           <div className="text-sm text-gray-500">ПОТОЧНИЙ ТИЖДЕНЬ</div>
 
-          {/* <div
+          <div
             className={`text-5xl font-bold mt-2 ${
               latest.resolution_rate_pct < 50
                 ? "text-red-600"
@@ -202,17 +202,19 @@ const AlertResolutionChart = ({ data }: Props) => {
             }`}
           >
             {latest.resolution_rate_pct}%
-          </div> */}
-
-          <div className="text-5xl font-bold mt-2 text-green-600">
-            {latest.resolution_rate_pct}%
           </div>
 
           <div className="text-lg mt-4">Вирішено:</div>
 
           <div className="mt-3 h-3 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="bg-green-500 h-full rounded-full"
+              className={`h-full rounded-full ${
+                latest.resolution_rate_pct < 50
+                  ? "bg-red-500"
+                  : latest.resolution_rate_pct < 70
+                    ? "bg-yellow-500 "
+                    : "bg-green-500"
+              }`}
               style={{
                 width: `${latest.resolution_rate_pct}%`,
               }}
