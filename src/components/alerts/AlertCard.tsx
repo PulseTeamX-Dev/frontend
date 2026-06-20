@@ -97,7 +97,7 @@ const AlertCard = ({ alert, onResolve }: Props) => {
   return (
     <div className="relative group">
       <div
-        className={`bg-white rounded-3xl border border-gray-200 p-5 transition-all hover:shadow-md ${
+        className={`flex flex-col min-h-[180px] bg-white rounded-3xl border border-gray-200 p-5 transition-all hover:shadow-md ${
           isResolved
             ? "bg-gray-50 border-gray-200 opacity-60 text-gray-400"
             : "bg-white border-gray-200 hover:shadow-md"
