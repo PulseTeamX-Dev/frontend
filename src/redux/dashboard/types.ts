@@ -41,6 +41,7 @@ export interface WorkloadMetric {
   overload_count: number;
   underload_count: number;
   response_count: number;
+  workload_avg?: number;
 }
 
 export interface RadarData {

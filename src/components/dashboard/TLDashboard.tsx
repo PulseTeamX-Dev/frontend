@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
 import { MetricsHistory } from "./tl/MetricsHistory";
 import { TopCards } from "./tl/TopCards";
 import { RadarChart } from "./tl/RadarChart";
-// Імпортуємо інтерфейс, який ми щойно створили в types
 import type { TeamLeadMetrics } from "../../redux/dashboard/types";
 import Icon from "../../shared/Icon";
 import { Title } from "../../shared/Title";
@@ -29,7 +28,6 @@ export const TLDashboard = () => {
     return <div>Помилка: отримано некоректні дані для TL дашборду</div>;
   }
 
-  // МАГІЯ ТАЙПСКРИПТУ: Кастимо до конкретного типу, оскільки перевірку вище пройдено успішно
   const tlMetrics = metrics as TeamLeadMetrics;
 
   const isPrivacyLocked = tlMetrics.privacy_block;
@@ -44,7 +42,8 @@ export const TLDashboard = () => {
       workload_min: tlMetrics.workload?.min ?? 0,
       workload_max: tlMetrics.workload?.max ?? 0,
       workload_status: tlMetrics.workload?.status || "Unknown",
-      // ДОДАНО:
+      // ФІКС ТИПІЗАЦІЇ VERCEL: Додали обов'язкове поле workload_avg
+      workload_avg: tlMetrics.workload?.workload_avg || 0,
       overload_count: tlMetrics.workload?.overload_count || 0,
       underload_count: tlMetrics.workload?.underload_count || 0,
       response_count: tlMetrics.workload?.response_count || 0,
@@ -100,14 +99,12 @@ export const TLDashboard = () => {
         />
       </div>
 
-      {/* Основна сітка (Звільнили від жорсткої висоти!) */}
+      {/* Основна сітка */}
       <div className="flex flex-col xl:flex-row gap-4 w-full items-start">
-        {/* ЛІВА КОЛОНКА (Хітмеп) - тягнеться за контентом */}
         <div className="w-full xl:w-1/2 flex flex-col">
           <MetricsHistory heatmapData={tlMetrics.heatmap} />
         </div>
 
-        {/* ПРАВА КОЛОНКА (Радар) - розтягується під ліву колонку або має свій розмір */}
         <div
           className={`w-full xl:w-1/2 flex flex-col self-stretch transition-all duration-300 ${isPrivacyLocked ? "opacity-40 pointer-events-none filter blur-[2px]" : ""}`}
         >
