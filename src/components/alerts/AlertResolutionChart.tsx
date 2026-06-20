@@ -117,7 +117,7 @@ const AlertResolutionChart = ({ data }: Props) => {
             Зафарбована частина стовпців — кількість вирішених сигналів
           </p>
 
-          <div className="flex gap-6 text-sm font-medium mb-4">
+          <div className="flex justify-between gap-8 text-sm font-medium mb-4">
             <span className="text-gray-700">Кіл-ть сповіщень</span>
 
             <span className="text-blue-600">Час на розв'язання (год)</span>
@@ -192,7 +192,7 @@ const AlertResolutionChart = ({ data }: Props) => {
         <div className="border-l pl-6">
           <div className="text-sm text-gray-500">ПОТОЧНИЙ ТИЖДЕНЬ</div>
 
-          <div
+          {/* <div
             className={`text-5xl font-bold mt-2 ${
               latest.resolution_rate_pct < 50
                 ? "text-red-600"
@@ -201,6 +201,10 @@ const AlertResolutionChart = ({ data }: Props) => {
                   : "text-green-600"
             }`}
           >
+            {latest.resolution_rate_pct}%
+          </div> */}
+
+          <div className="text-5xl font-bold mt-2 text-green-600">
             {latest.resolution_rate_pct}%
           </div>
 
