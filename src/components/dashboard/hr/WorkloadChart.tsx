@@ -152,8 +152,6 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
                     </div>
                   </div>
 
-                  {/* ДЕСКТОП СТАН: Статистика справа */}
-                  {/* ФІКС ТУЛТІПУ 2: Додано розгорнуте архітектурне пояснення при наведенні на велику цифру відсотка */}
                   <div className="hidden sm:block w-[65px] md:w-[110px] shrink-0 text-right text-[11px] md:text-xs leading-tight whitespace-nowrap">
                     <span
                       className={`font-bold ${textColor} text-[13px] md:text-sm cursor-help`}
