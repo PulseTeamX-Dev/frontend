@@ -107,7 +107,7 @@ const AlertResolutionChart = ({ data }: Props) => {
   }));
 
   return (
-    <div className="bg-white rounded-3xl border p-6">
+    <div className="bg-white rounded-3xl border p-6 h-full">
       <div className="grid grid-cols-1 lg:grid-cols-[70%_30%] gap-6">
         {/* ГРАФІК */}
         <div>
@@ -117,7 +117,7 @@ const AlertResolutionChart = ({ data }: Props) => {
             Зафарбована частина стовпців — кількість вирішених сигналів
           </p>
 
-          <div className="flex gap-6 text-sm font-medium mb-4">
+          <div className="flex justify-between gap-8 text-sm font-medium mb-4">
             <span className="text-gray-700">Кіл-ть сповіщень</span>
 
             <span className="text-blue-600">Час на розв'язання (год)</span>
@@ -139,6 +139,8 @@ const AlertResolutionChart = ({ data }: Props) => {
                 maxBarSize={24}
                 minPointSize={2}
                 name="Critical"
+                fill="#ef4444"
+                legendType="rect"
                 shape={(props) => (
                   <ProgressBar
                     {...props}
@@ -158,6 +160,8 @@ const AlertResolutionChart = ({ data }: Props) => {
                 maxBarSize={24}
                 minPointSize={2}
                 name="Warning"
+                fill="#f59e0b"
+                legendType="rect"
                 shape={(props) => (
                   <ProgressBar
                     {...props}
@@ -204,7 +208,13 @@ const AlertResolutionChart = ({ data }: Props) => {
 
           <div className="mt-3 h-3 bg-gray-200 rounded-full overflow-hidden">
             <div
-              className="bg-green-500 h-full rounded-full"
+              className={`h-full rounded-full ${
+                latest.resolution_rate_pct < 50
+                  ? "bg-red-500"
+                  : latest.resolution_rate_pct < 70
+                    ? "bg-yellow-500 "
+                    : "bg-green-500"
+              }`}
               style={{
                 width: `${latest.resolution_rate_pct}%`,
               }}

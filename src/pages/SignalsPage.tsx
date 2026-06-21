@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
-
 import {
   fetchAlerts,
   resolveAlert,
@@ -13,11 +12,11 @@ import {
   selectUnresolvedAlertsCount,
   selectAlertsAnalytics,
 } from "../redux/alerts/selectors";
-
 import AlertCard from "../components/alerts/AlertCard";
 import SignalsAnalytics from "../components/alerts/SignalsAnalytics";
 import Icon from "../shared/Icon";
 import { Title } from "../shared/Title";
+import { PageLoader } from "../shared/Loader";
 
 export const SignalsPage = () => {
   const dispatch = useAppDispatch();
@@ -35,6 +34,8 @@ export const SignalsPage = () => {
   const handleResolve = async (alertId: number) => {
     try {
       await dispatch(resolveAlert(alertId)).unwrap();
+      dispatch(fetchAlerts());
+      dispatch(fetchAlertsAnalytics());
 
       toast.success("Сигнал позначено як вирішений");
     } catch {
@@ -60,8 +61,19 @@ export const SignalsPage = () => {
         </div>
       </div>
 
+      {analytics && (
+        <>
+          <SignalsAnalytics
+            alertsResolution={analytics.alerts_resolution}
+            retentionHr={analytics.retention_hr}
+            retentionTeamLead={analytics.retention_team_lead}
+          />
+          <div className="my-4 border-t border-gray-200" />
+        </>
+      )}
+
       {loading ? (
-        <div className="text-center py-10">Завантаження...</div>
+        <PageLoader />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
           {alerts.map((alert) => (
@@ -72,14 +84,6 @@ export const SignalsPage = () => {
             />
           ))}
         </div>
-      )}
-
-      {analytics && (
-        <SignalsAnalytics
-          alertsResolution={analytics.alerts_resolution}
-          retentionHr={analytics.retention_hr}
-          retentionTeamLead={analytics.retention_team_lead}
-        />
       )}
     </div>
   );

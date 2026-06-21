@@ -13,14 +13,13 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
     return [...data].sort((a, b) => {
       if (a.low_engagement_signal && !b.low_engagement_signal) return -1;
       if (!a.low_engagement_signal && b.low_engagement_signal) return 1;
-
       return a.response_rate_pct - b.response_rate_pct;
     });
   }, [data]);
 
   return (
-    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full mb-0 grow">
-      <Title tag="h2" variant="light">
+    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex-1 flex flex-col min-h-[180px]">
+      <Title tag="h2" variant="light" className="mb-3 shrink-0">
         Стан заповнення опитувань
       </Title>
 
@@ -39,7 +38,7 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
             {sortedData.map((item) => (
               <div
                 key={item.team_id}
-                className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-2 items-center border-b border-gray-50 pb-2 last:border-0 last:pb-0"
+                className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-2 items-center border-b border-gray-50 pb-2.5 last:border-0 last:pb-0"
               >
                 <div className="text-left flex flex-col justify-center">
                   {item.low_engagement_signal && (
@@ -48,24 +47,26 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
                         id="circle-warning-filled"
                         className="w-3.5 h-3.5"
                       />
-                      <span className="text-[12px]">Критично</span>
+                      <span className="text-[11px] font-medium leading-none">
+                        Критично
+                      </span>
                     </div>
                   )}
-                  <span className="text-[15px] md:text-[16px] text-grayscale-900 font-medium">
+                  <span className="text-[14px] md:text-[15px] text-grayscale-900 font-medium truncate pr-2">
                     {item.team_name}
                   </span>
                 </div>
 
-                <div className="text-center text-[15px] md:text-[16px] text-grayscale-900">
+                <div className="text-center text-[14px] md:text-[15px] text-grayscale-900 font-semibold">
                   {item.total_sent}
                 </div>
-                <div className="text-center text-[15px] md:text-[16px] text-grayscale-900">
+                <div className="text-center text-[14px] md:text-[15px] text-grayscale-900 font-semibold">
                   {item.responses}
                 </div>
 
                 <div className="flex justify-center">
                   <span
-                    className={`px-2 py-1.5 md:py-2.5 rounded-lg text-xs font-semibold ${getBadgeClass(item.response_rate_pct)}`}
+                    className={`w-13 px-2 py-1 md:py-1.5 rounded-lg text-[11px] text-center md:text-xs font-bold ${getBadgeClass(item.response_rate_pct)}`}
                   >
                     {item.response_rate_pct}%
                   </span>

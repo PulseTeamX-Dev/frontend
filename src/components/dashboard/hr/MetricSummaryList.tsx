@@ -35,7 +35,7 @@ const metricConfig: Record<
     isPercentage: true,
   },
   critical_overload: {
-    title: "Перевантаженість",
+    title: "Перевантаження",
     prefix: "",
     isPercentage: true,
   },

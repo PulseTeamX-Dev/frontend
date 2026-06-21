@@ -62,10 +62,10 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
   const latestWeek = dates[dates.length - 1];
 
   return (
-    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex flex-col">
-      {/* Адаптивна шапка */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <Title tag="h2" variant="light">
+    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex-1 flex flex-col min-h-0">
+      {/* Шапка не скролиться */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5 shrink-0">
+        <Title tag="h2" variant="light" className="mb-0">
           {currentConfig.title}
         </Title>
 
@@ -104,16 +104,22 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
         </div>
       </div>
 
-      <div className="w-full overflow-x-auto pb-2 flex-grow">
+      {/* Зона контенту з внутрішнім скролом */}
+      <div className="w-full flex-1 overflow-y-auto overflow-x-auto min-h-0 pb-2 custom-scrollbar pr-1">
         <div
-          className="grid gap-3 min-w-[420px]"
+          className="grid gap-3 min-w-[420px] min-h-full"
           style={{
             gridTemplateColumns: `auto repeat(${dates.length}, minmax(64px, 1fr))`,
+            // ФІКС: 1fr змушує рядки розтягуватися на всю доступну висоту. Якщо команд багато, вони обріжуться по 56px і з'явиться скрол
+            gridTemplateRows:
+              teams.length > 0
+                ? `repeat(${teams.length}, minmax(56px, 1fr)) auto`
+                : "auto",
           }}
         >
           {teams.map((team) => (
             <React.Fragment key={team}>
-              <div className="flex items-center justify-end pr-4 text-sm text-gray-500 font-medium">
+              <div className="flex items-center justify-end pr-4 text-[13px] md:text-sm text-gray-500 font-medium h-full">
                 {team}
               </div>
               {dates.map((date) => {
@@ -139,7 +145,7 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
               return (
                 <div
                   key={`date_${date}`}
-                  className="text-center text-xs text-gray-500 font-medium pt-2"
+                  className="text-center text-[11px] md:text-xs text-gray-400 font-medium pt-2"
                 >
                   {day}.{month}
                 </div>

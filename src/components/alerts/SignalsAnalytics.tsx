@@ -22,7 +22,7 @@ const SignalsAnalytics = ({
 
   return (
     <div className="mt-10">
-      <div className="grid grid-cols-1 xl:grid-cols-[2fr_1.3fr] gap-6 items-start">
+      <div className="grid grid-cols-1 xl:grid-cols-[2fr_1.3fr] gap-6 xl:items-stretch">
         <AlertResolutionChart data={alertsResolution} />
         <RetentionChart data={retentionData} role={role} setRole={setRole} />
       </div>
