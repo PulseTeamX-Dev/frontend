@@ -1,7 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { toast } from "react-toastify";
-
 import type {
   TeamInfo,
   TeamMember,
@@ -16,14 +15,10 @@ import {
   archiveMember,
   fetchTeams,
 } from "../../redux/teams/operation";
-
 import { Input } from "../../shared/Input";
 import { Button } from "../../shared/Button";
 
-// 1. Константи
 const DEFAULT_FIELDS_COUNT = 3;
-const ROLE_LEAD = "Тім лід";
-const ROLE_MEMBER = "Учасник";
 
 export interface TeamAccordionItemProps {
   team: TeamInfo;
@@ -36,6 +31,8 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+
   const [locallyAddedUsers, setLocallyAddedUsers] = useState<TeamMember[]>(
     () => {
       const saved = localStorage.getItem(`saved_users_team_${team.team_id}`);
@@ -54,10 +51,7 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
     }
   }, [locallyAddedUsers, team.team_id]);
 
-  // Логіка злиття серверних та локальних користувачів із маскуванням для анонімності
   const combinedUsers = useMemo<TeamMemberWithOptionalId[]>(() => {
-    console.log(`Team ${team.name} users from props:`, team.users);
-
     const serverUsers: TeamMember[] =
       team.users && Array.isArray(team.users)
         ? team.is_active
@@ -65,54 +59,18 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
           : team.users
         : [];
 
-    // Функція для безпечного маскування пошти
-    const maskEmail = (emailStr: string) => {
-      if (!emailStr || !emailStr.includes("@")) return emailStr;
-      const [name, domain] = emailStr.split("@");
-      const starCount = Math.min(name.length, 5);
-      const maskedName = "*".repeat(starCount);
-      return `${maskedName}@${domain}`;
-    };
-
-    // 1. Якщо сервер повернув юзерів, мапимо їх і підставляємо маски/локальні дані
-    if (serverUsers.length > 0) {
-      return serverUsers.map((sUser, index) => {
-        const localMatch = locallyAddedUsers[index];
-
-        const displayEmail = sUser.email
-          ? maskEmail(sUser.email)
-          : localMatch?.email
-            ? maskEmail(localMatch.email)
-            : `Анонімний учасник (ID: ${sUser.user_id})`;
-
-        return {
-          ...sUser,
-          email: displayEmail,
-        };
-      });
-    }
-
-    // 2. Якщо сервер ще порожній, але в локальному стейті вже є додані юзери
-    // (тобто щойно натиснули "Додати", іде запит), показуємо МИТТЄВІ заглушки
-    if (locallyAddedUsers.length > 0) {
-      return locallyAddedUsers.map((lUser) => ({
-        ...lUser,
-        email: maskEmail(lUser.email) || "Створення учасника...",
-      }));
-    }
-    return [];
+    return [...serverUsers, ...locallyAddedUsers].sort((a, b) => {
+      const emailA = a.email || "";
+      const emailB = b.email || "";
+      return emailA.localeCompare(emailB);
+    });
   }, [team.users, team.is_active, locallyAddedUsers]);
 
   const { register, handleSubmit, reset, control } = useForm<FormValues>({
-    defaultValues: {
-      newMembers: getInitialMembers(),
-    },
+    defaultValues: { newMembers: getInitialMembers() },
   });
 
-  const { fields, remove } = useFieldArray({
-    control,
-    name: "newMembers",
-  });
+  const { fields, remove } = useFieldArray({ control, name: "newMembers" });
 
   const handleRotateToken = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -125,16 +83,26 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
   };
 
   const handleArchiveTeam = async () => {
+    const confirmed = window.confirm(
+      `Ви впевнені, що хочете архівувати команду "${team.name}"?`,
+    );
+
+    if (!confirmed) return;
+
     try {
       await dispatch(archiveTeam(team.team_id)).unwrap();
-      toast.success("Команду успішно архівовано");
-      await dispatch(fetchTeams()).unwrap();
-    } catch (err) {
-      toast.error((err as string) || "Помилка архівації команди");
+      toast.success("Команду архівовано");
+    } catch {
+      toast.error("Помилка архівації");
     }
   };
 
-  const handleRemoveExistingMember = async (userId: number) => {
+  const handleRemoveExistingMember = async (userId: number, email: string) => {
+    const isConfirmed = window.confirm(
+      `Ви впевнені, що хочете видалити учасника "${email}"?`,
+    );
+    if (!isConfirmed) return;
+
     if (userId < 0) {
       setLocallyAddedUsers((prev) => prev.filter((u) => u.user_id !== userId));
       toast.success("Учасника видалено зі списку");
@@ -151,45 +119,60 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
   };
 
   const onSubmitEmails = async (data: FormValues) => {
+    // 1. Очищаємо від порожніх значень
     const emailsToImport = data.newMembers
-      .map((m) => m.email.trim())
-      .filter((email) => email.length > 0);
+      .map((m) => m.email?.trim())
+      .filter((email): email is string => !!email && email.length > 0);
 
     if (emailsToImport.length === 0) {
       toast.warn("Будь ласка, заповніть хоча б один email");
       return;
     }
 
+    const uniqueInForm = Array.from(
+      new Set(emailsToImport.map((e) => e.toLowerCase())),
+    );
+    if (uniqueInForm.length !== emailsToImport.length) {
+      toast.warn("Ви ввели однакові email-адреси у формі.");
+      return;
+    }
+
+    const serverEmails = (team.users || [])
+      .filter((u) => u.email)
+      .map((u) => u.email.toLowerCase());
+    const localEmails = (locallyAddedUsers || []).map((u) =>
+      u.email.toLowerCase(),
+    );
+    const allExistingEmails = new Set([...serverEmails, ...localEmails]);
+    const uniqueNewEmails = emailsToImport.filter(
+      (email) => !allExistingEmails.has(email.toLowerCase()),
+    );
+
+    if (uniqueNewEmails.length === 0) {
+      toast.error("Введені учасники вже є в команді");
+      return;
+    }
+
     try {
       setIsSubmitting(true);
-
+      // Відправляємо на сервер
       await dispatch(
-        importTeamEmails({ teamId: team.team_id, emails: emailsToImport }),
+        importTeamEmails({ teamId: team.team_id, emails: uniqueNewEmails }),
       ).unwrap();
-
-      toast.success("Учасників успішно додано");
+      toast.success("Нових учасників успішно додано");
       await dispatch(fetchTeams()).unwrap();
 
-      const newVirtualUsers: TeamMember[] = emailsToImport.map((email, idx) => {
-        const uniqueId = -(Date.now() + idx + Math.floor(Math.random() * 1000));
-
-        return {
-          user_id: uniqueId,
+      const newVirtualUsers: TeamMember[] = uniqueNewEmails.map(
+        (email, idx) => ({
+          user_id: -(Date.now() + idx + Math.floor(Math.random() * 1000)),
           team_id: team.team_id,
           is_active: true,
           created_at: new Date().toISOString(),
           email: email,
-        };
-      });
+        }),
+      );
 
-      setLocallyAddedUsers((prev) => {
-        const existingEmails = new Set(prev.map((u) => u.email.toLowerCase()));
-        const filteredNew = newVirtualUsers.filter(
-          (u) => !existingEmails.has(u.email.toLowerCase()),
-        );
-        return [...prev, ...filteredNew];
-      });
-
+      setLocallyAddedUsers((prev) => [...prev, ...newVirtualUsers]);
       reset({ newMembers: getInitialMembers() });
     } catch (err) {
       toast.error((err as string) || "Помилка при додаванні");
@@ -208,7 +191,7 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
         className="flex items-center justify-between p-5 cursor-pointer hover:bg-slate-50 transition-colors select-none"
       >
         <span
-          className={`font-semibold text-lg ${!team.is_active ? "text-gray-400 line-through" : "text-gray-800"}`}
+          className={`font-semibold text-lg ${!team.is_active ? "text-gray-400" : "text-gray-800"}`}
         >
           {team.name}
         </span>
@@ -237,7 +220,7 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
                   readOnly
                   value={
                     team.team_token
-                      ? `${window.location.origin}/join/${team.team_token}`
+                      ? `${window.location.origin}/surveys/${team.team_token}`
                       : "Токен відсутній"
                   }
                   className="bg-transparent flex-1 text-sm text-gray-700 outline-none"
@@ -258,48 +241,38 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
             <label className="text-sm font-medium text-gray-400 block">
               Пошти учасників команди
             </label>
-
             <div className="space-y-3">
-              {fields.map((field, index) => {
-                const currentRole = index === 0 ? ROLE_LEAD : ROLE_MEMBER;
-                return (
-                  <div key={field.id} className="relative flex items-center">
-                    <div className="flex-1 relative">
-                      <Input
-                        id={`newMembers.${index}.email`}
-                        type="email"
-                        placeholder="email@gmail.com"
-                        leftIcon="mail"
-                        disabled={!team.is_active || isSubmitting}
-                        {...register(`newMembers.${index}.email` as const, {
-                          pattern: {
-                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                            message: "Некоректний формат email",
-                          },
-                        })}
-                      />
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-3">
-                        <span
-                          className={`text-xs px-2.5 py-1 rounded-full border font-medium ${currentRole === ROLE_LEAD ? "bg-green-50 text-green-600 border-green-200" : "bg-gray-50 text-gray-600 border-gray-200"}`}
+              {fields.map((field, index) => (
+                <div key={field.id} className="relative flex items-center">
+                  <div className="flex-1 relative">
+                    <Input
+                      id={`newMembers.${index}.email`}
+                      type="email"
+                      placeholder="email@gmail.com"
+                      leftIcon="mail"
+                      disabled={!team.is_active || isSubmitting}
+                      {...register(`newMembers.${index}.email` as const, {
+                        pattern: {
+                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                          message: "Некоректний формат email",
+                        },
+                      })}
+                    />
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-3">
+                      {team.is_active && !isSubmitting && (
+                        <button
+                          type="button"
+                          onClick={() => remove(index)}
+                          className="text-gray-300 hover:text-red-500 transition-colors"
                         >
-                          {currentRole}
-                        </span>
-                        {index > 0 && team.is_active && !isSubmitting && (
-                          <button
-                            type="button"
-                            onClick={() => remove(index)}
-                            className="text-gray-300 hover:text-red-500 transition-colors"
-                          >
-                            🗑️
-                          </button>
-                        )}
-                      </div>
+                          🗑️
+                        </button>
+                      )}
                     </div>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
-
             <div className="flex items-center justify-end pt-4 border-t border-gray-50">
               {team.is_active ? (
                 <>
@@ -326,64 +299,64 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
               )}
             </div>
           </form>
-
           {/* НИЖНЯ СЕКЦІЯ: Збережені учасники */}
           {combinedUsers.length > 0 && (
             <div className="pt-6 border-t border-gray-100 space-y-4">
               <label className="text-sm font-medium text-gray-400 block">
                 Збережені учасники команди
               </label>
-
+              <Input
+                placeholder="Пошук за email..."
+                leftIcon="search"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="mb-2"
+              />
               <div className="space-y-3">
-                {combinedUsers.map((user, index) => {
-                  const displayedRole = index === 0 ? ROLE_LEAD : ROLE_MEMBER;
-                  const currentUserId = user.id ?? user.user_id;
-                  console.log("ARCHIVE USER", user);
-                  console.log("ARCHIVE USER ID", currentUserId);
-
-                  return (
-                    <div
-                      key={`saved-member-${currentUserId}`}
-                      className="relative flex items-center w-full"
-                    >
-                      <div className="w-full relative opacity-80">
-                        <Input
-                          id={`saved-user-${currentUserId}`}
-                          type="text"
-                          value={user.email}
-                          leftIcon="mail"
-                          disabled={true}
-                          className="bg-gray-50/50 text-gray-400 select-none border-gray-200"
-                        />
-
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center gap-4 z-10">
-                          <span
-                            className={`text-xs px-2.5 py-1 rounded-full border font-medium ${
-                              displayedRole === ROLE_LEAD
-                                ? "bg-green-50 text-green-600 border-green-200"
-                                : "bg-gray-50 text-gray-600 border-gray-200"
-                            }`}
-                          >
-                            {displayedRole}
-                          </span>
-
+                {combinedUsers
+                  .filter((u) => u.email && u.email.trim() !== "")
+                  .filter((u) =>
+                    (u.email || "")
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()),
+                  )
+                  .map((user) => {
+                    const currentUserId = user.id ?? user.user_id;
+                    return (
+                      <div
+                        key={`saved-member-${currentUserId}`}
+                        className="relative flex items-center w-full"
+                      >
+                        <div className="w-full relative opacity-80">
+                          <Input
+                            id={`saved-user-${currentUserId}`}
+                            type="text"
+                            value={user.email || ""}
+                            leftIcon="mail"
+                            disabled={true}
+                            className="bg-gray-50/50 text-gray-400 select-none border-gray-200"
+                          />
                           {team.is_active && (
-                            <button
-                              type="button"
-                              onClick={() =>
-                                handleRemoveExistingMember(currentUserId)
-                              }
-                              className="text-gray-400 hover:text-red-500 transition-colors p-1"
-                              title="Видалити учасника"
-                            >
-                              🗑️
-                            </button>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleRemoveExistingMember(
+                                    currentUserId,
+                                    user.email || "",
+                                  )
+                                }
+                                className="text-gray-400 hover:text-red-500 transition-colors p-1"
+                                title="Видалити учасника"
+                              >
+                                🗑️
+                              </button>
+                            </div>
                           )}
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
               </div>
             </div>
           )}

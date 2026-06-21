@@ -92,17 +92,19 @@ const teamSlice = createSlice({
       .addCase(archiveMember.pending, handlePending)
       .addCase(archiveMember.fulfilled, (state, action) => {
         state.isLoading = false;
-
-        const member = state.members.find(
-          (m) => m.user_id === action.payload.user_id,
+        const team = state.teams.find(
+          (t) => t.team_id === action.payload.team_id,
         );
-
-        if (member) {
-          member.is_active = false;
+        if (team && team.users) {
+          const member = team.users.find(
+            (m) => m.user_id === action.payload.user_id,
+          );
+          if (member) {
+            member.is_active = false;
+          }
         }
       })
       .addCase(archiveMember.rejected, handleRejected)
-
       // archiveTeam
       .addCase(archiveTeam.pending, handlePending)
       .addCase(archiveTeam.fulfilled, (state, action) => {

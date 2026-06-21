@@ -14,7 +14,6 @@ const TeamsPage = () => {
   useEffect(() => {
     dispatch(fetchTeams());
   }, [dispatch]);
-
   // Оптимальне сортування
   const sortedTeams = useMemo(() => {
     return [...teams].sort((a, b) => Number(b.is_active) - Number(a.is_active));
@@ -28,10 +27,8 @@ const TeamsPage = () => {
           Команди
         </h1>
       </div>
-
       {/* Форма створення команди */}
       <TeamsAddForm />
-
       {/* Нижня частина: Списки існуючих команд */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
