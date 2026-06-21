@@ -4,34 +4,60 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
 import { fetchQuestions } from "../redux/surveys/operation";
 import { selectQuestions, selectSurveyLoading,} from "../redux/surveys/selectors";
+import { toast } from "react-toastify";
 
-
+interface PulseConfig {
+  id: string;
+  title: string;
+  questionIds: (number | string)[];
+  frequency: "weekly" | "biweekly" | "monthly";
+  sendDay: string;
+  sendTime: string;
+  deadlineDay: string;
+  deadlineTime: string;
+}
 
 export const CreatePulsePage = () => {
   const dispatch = useAppDispatch();
   const questions = useAppSelector(selectQuestions);
   const isLoading = useAppSelector(selectSurveyLoading);
   const [title, setTitle] = useState("");
-  const handleSubmit = () => {
-          const dto = {
-            title,
+  const [savedPulses, setSavedPulses] = useState<PulseConfig[]>(() => {
+  const stored = localStorage.getItem("pulseConfigs");
 
+  if (!stored) return [];
+
+  try {
+    return JSON.parse(stored);
+  } catch {
+    return [];
+  }
+});
+  const handleSubmit = () => {
+     if (!title.trim()) {
+    toast.error("Вкажіть назву опитування");
+    return;
+  }
+    const dto: PulseConfig = {
+      id: crypto.randomUUID(),
+      title,
             questionIds: questions
               .filter((q) => q.is_active)
               .sort((a, b) => a.sort_order - b.sort_order)
               .map((q) => q.question_id),
 
             frequency,
-
             sendDay,
             sendTime,
-
             deadlineDay,
             deadlineTime,
           };
-
-          console.log(dto);
+          const updated = [...savedPulses, dto];
+          setSavedPulses(updated);
+          localStorage.setItem("pulseConfigs", JSON.stringify(updated));
+          toast.success("Опитування створено");
         };
+         
 
   useEffect(() => {
   dispatch(fetchQuestions());
@@ -45,7 +71,6 @@ export const CreatePulsePage = () => {
 
   const [sendDay, setSendDay] = useState("Понеділок");
   const [sendTime, setSendTime] = useState("10:00");
-
   const [deadlineDay, setDeadlineDay] = useState("П'ятниця");
   const [deadlineTime, setDeadlineTime] = useState("14:00");
 
@@ -66,6 +91,7 @@ const times = [
   "14:00",
   "15:00",
 ];
+
 
   return (
     <div className="max-w-[708px] mx-auto py-8 flex flex-col gap-4">
