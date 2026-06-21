@@ -13,8 +13,8 @@ const renderMetric = (alert: Alert) => {
     "min-w-[80px] text-center px-3 py-1 rounded-xl font-semibold text-sm";
 
   switch (alert.alert_type) {
-    case "stress_high":
-    case "stress_warning":
+    case "stress_high": //'Високий стрес'
+    case "stress_warning": //'Зростання рівня тривожності'
       return (
         <div
           className={` ${
@@ -27,40 +27,40 @@ const renderMetric = (alert: Alert) => {
         </div>
       );
 
-    case "stress_spike":
+    case "stress_spike": //'Різкий стрибок стресу'
       return (
         <div className={`${badgeClass} bg-red-50 text-red-600`}>+{value} ↑</div>
       );
 
-    case "trust_drop":
+    case "trust_drop": //'Зниження довіри'
       return (
         <div className={`${badgeClass} bg-orange-50 text-orange-500`}>
           -{value} ↓
         </div>
       );
 
-    case "low_engagement":
+    case "low_engagement": //'Низька залученість команди'
       return (
         <div className={`${badgeClass} bg-yellow-50 text-yellow-600`}>
           {value}%
         </div>
       );
 
-    case "workload_overload":
+    case "workload_overload": //'Перевантаження'
       return (
         <div className={`${badgeClass} bg-red-50 text-red-600`}>
           {value} / 10
         </div>
       );
 
-    case "workload_underload":
+    case "workload_underload": //'Недовантаження'
       return (
         <div className={`${badgeClass} bg-sky-50 text-sky-600`}>
           {value} / 10
         </div>
       );
 
-    case "burnout_risk":
+    case "burnout_risk": //'Високий ризик вигорання'
       return (
         <div
           className={` ${
@@ -73,7 +73,7 @@ const renderMetric = (alert: Alert) => {
         </div>
       );
 
-    case "conflict_risk":
+    case "conflict_risk": //'Ризик виникнення конфлікту'
       return (
         <div
           className={` ${
@@ -97,7 +97,7 @@ const AlertCard = ({ alert, onResolve }: Props) => {
   return (
     <div className="relative group">
       <div
-        className={`bg-white rounded-3xl border border-gray-200 p-5 transition-all hover:shadow-md ${
+        className={`flex flex-col min-h-[160px] bg-white rounded-3xl border border-gray-200 p-5 transition-all hover:shadow-md ${
           isResolved
             ? "bg-gray-50 border-gray-200 opacity-60 text-gray-400"
             : "bg-white border-gray-200 hover:shadow-md"
@@ -127,7 +127,9 @@ const AlertCard = ({ alert, onResolve }: Props) => {
         <div className="text-gray-500 mb-2">{alert.team_name}</div>
 
         <div className="flex items-start justify-between gap-3">
-          <div className="font-semibold text-xl">{alert.alert_type_label}</div>
+          <div className="font-semibold text-base">
+            {alert.alert_type_label}
+          </div>
           {renderMetric(alert)}
         </div>
       </div>

@@ -121,8 +121,29 @@ const RetentionChart = ({ data, role, setRole }: Props) => {
           />
 
           <Tooltip
-            formatter={(value) => [`${value} хв`, "Середня сесія"]}
-            labelFormatter={(label) => `Тиждень: ${label}`}
+            content={({ active, payload, label }) => {
+              if (!active || !payload?.length) return null;
+
+              const item = payload[0].payload;
+
+              return (
+                <div className="rounded-lg border bg-white p-3 shadow-md">
+                  <div className="font-medium mb-2">Тиждень: {label}</div>
+
+                  <div>
+                    Середня сесія:{" "}
+                    <span className="font-medium">
+                      {item.avg_session_minutes} хв
+                    </span>
+                  </div>
+
+                  <div>
+                    Коефіцієнт утримання користувачів:{" "}
+                    <span className="font-medium">{item.users}</span>
+                  </div>
+                </div>
+              );
+            }}
           />
 
           <ReferenceLine y={15} stroke="#9CA3AF" strokeDasharray="5 5" />
