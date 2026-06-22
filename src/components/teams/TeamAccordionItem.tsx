@@ -52,19 +52,11 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
   }, [locallyAddedUsers, team.team_id]);
 
   const combinedUsers = useMemo<TeamMemberWithOptionalId[]>(() => {
-    const serverUsers: TeamMember[] =
-      team.users && Array.isArray(team.users)
-        ? team.is_active
-          ? team.users.filter((user) => user.is_active !== false)
-          : team.users
-        : [];
-
-    return [...serverUsers, ...locallyAddedUsers].sort((a, b) => {
-      const emailA = a.email || "";
-      const emailB = b.email || "";
-      return emailA.localeCompare(emailB);
-    });
-  }, [team.users, team.is_active, locallyAddedUsers]);
+    const serverUsers: TeamMember[] = team.users || [];
+    return [...serverUsers, ...locallyAddedUsers].sort((a, b) =>
+      (a.email || "").localeCompare(b.email || ""),
+    );
+  }, [team.users, locallyAddedUsers]);
 
   const { register, handleSubmit, reset, control } = useForm<FormValues>({
     defaultValues: { newMembers: getInitialMembers() },
@@ -314,6 +306,7 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
               />
               <div className="space-y-3">
                 {combinedUsers
+                  // Фільтруємо "привидів": тільки записи, де email реально існує і не порожній
                   .filter((u) => u.email && u.email.trim() !== "")
                   .filter((u) =>
                     (u.email || "")
@@ -321,20 +314,20 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
                       .includes(searchTerm.toLowerCase()),
                   )
                   .map((user) => {
-                    const currentUserId = user.id ?? user.user_id;
+                    const currentUserId = user.user_id; // Використовуємо ID з бекенду
                     return (
                       <div
                         key={`saved-member-${currentUserId}`}
                         className="relative flex items-center w-full"
                       >
-                        <div className="w-full relative opacity-80">
+                        <div className="w-full relative">
                           <Input
-                            id={`saved-user-${currentUserId}`}
                             type="text"
-                            value={user.email || ""}
+                            value={user.email} // Підставляємо реальний email з бекенду
                             leftIcon="mail"
                             disabled={true}
-                            className="bg-gray-50/50 text-gray-400 select-none border-gray-200"
+                            // Додаємо сірий колір, якщо команда архівна
+                            className={`bg-gray-50/50 border-gray-200 select-none ${!team.is_active ? "text-gray-400" : "text-gray-600"}`}
                           />
                           {team.is_active && (
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
@@ -343,7 +336,7 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
                                 onClick={() =>
                                   handleRemoveExistingMember(
                                     currentUserId,
-                                    user.email || "",
+                                    user.email,
                                   )
                                 }
                                 className="text-gray-400 hover:text-red-500 transition-colors p-1"

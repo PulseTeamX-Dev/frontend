@@ -26,9 +26,7 @@ export const TopCards = ({
     CIRCUMFERENCE - (engagement.pct / 100) * CIRCUMFERENCE;
 
   return (
-    // ІДЕАЛЬНИЙ ФІКС СІТКИ ДЛЯ ПЛАНШЕТА (MD) ТА ДЕСКТОПА (XL)
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 w-full items-stretch">
-      {/* КАРТКА 1: ВІДСОТОК ВІДПОВІДЕЙ (Займає 1 колонку всюди) */}
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 w-full items-stretch h-45">
       <div className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 flex flex-col justify-between h-full xl:col-span-1">
         <Title
           tag="h2"
@@ -82,7 +80,6 @@ export const TopCards = ({
         </div>
       </div>
 
-      {/* КАРТКА 2: ДОВІРА (Займає 1 колонку всюди) */}
       <div className="xl:col-span-1">
         <TrendCard
           title="Рівень довіри"
@@ -92,7 +89,6 @@ export const TopCards = ({
         />
       </div>
 
-      {/* КАРТКА 3: СТРЕС (ФІКС: на планшеті md:col-span-1, на десктопі xl:col-span-1) */}
       <div className="md:col-span-1 xl:col-span-1">
         <TrendCard
           title="Рівень стресу"
@@ -103,7 +99,7 @@ export const TopCards = ({
         />
       </div>
 
-      <div className="md:col-span-1 xl:col-span-2 flex flex-col h-full min-h-[140px]">
+      <div className="md:col-span-1 xl:col-span-2 flex flex-col h-full ">
         <WorkloadChart data={workload} />
       </div>
     </div>

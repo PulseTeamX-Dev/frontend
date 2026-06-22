@@ -1,4 +1,4 @@
-import { useMemo } from "react"; // <-- Додали імпорт
+import { useMemo } from "react";
 import Icon from "../../../shared/Icon";
 import { Title } from "../../../shared/Title";
 import type { EngagementData } from "../../../types/dashboard/types";
@@ -18,7 +18,7 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
   }, [data]);
 
   return (
-    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex-1 flex flex-col min-h-[180px]">
+    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex-1 flex flex-col h-55">
       <Title tag="h2" variant="light" className="mb-3 shrink-0">
         Стан заповнення опитувань
       </Title>
@@ -40,7 +40,8 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
                 key={item.team_id}
                 className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-2 items-center border-b border-gray-50 pb-2.5 last:border-0 last:pb-0"
               >
-                <div className="text-left flex flex-col justify-center">
+                {/* 🛠️ ФІКС: Додали min-w-0, щоб грів не розпирало від довгого імені */}
+                <div className="text-left flex flex-col justify-center min-w-0">
                   {item.low_engagement_signal && (
                     <div className="flex items-center gap-1 mt-0.5 text-error">
                       <Icon
@@ -52,7 +53,11 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
                       </span>
                     </div>
                   )}
-                  <span className="text-[14px] md:text-[15px] text-grayscale-900 font-medium truncate pr-2">
+                  {/* 🛠️ ФІКС: Додали title для підказу при наведенні */}
+                  <span
+                    className="text-[14px] md:text-[15px] text-grayscale-900 font-medium truncate pr-2"
+                    title={item.team_name}
+                  >
                     {item.team_name}
                   </span>
                 </div>
@@ -66,9 +71,9 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
 
                 <div className="flex justify-center">
                   <span
-                    className={`w-13 px-2 py-1 md:py-1.5 rounded-lg text-[11px] text-center md:text-xs font-bold ${getBadgeClass(item.response_rate_pct)}`}
+                    className={`w-14 px-2 py-1 md:py-1.5 rounded-lg text-[11px] text-center md:text-xs font-bold ${getBadgeClass(item.response_rate_pct)}`}
                   >
-                    {item.response_rate_pct}%
+                    {item.response_rate_pct.toFixed(1).replace(".", ",")}%
                   </span>
                 </div>
               </div>
