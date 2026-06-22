@@ -68,7 +68,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             id={id}
             disabled={disabled}
-            className={`w-full py-3 border rounded-2xl outline-none transition-all placeholder-light-txt
+            className={`w-full py-3 border rounded-2xl outline-none transition-all placeholder-light-txt text-xs sm:text-sm
               ${leftIcon ? "pl-12" : "pl-4"} 
               ${rightIcon ? "pr-12" : "pr-4"} 
               ${getBorderClasses()} 

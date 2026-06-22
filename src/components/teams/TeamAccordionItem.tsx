@@ -110,6 +110,10 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
     }
   };
 
+  const truncateEmail = (email: string, maxLength = 20) => {
+    return email.length > maxLength ? `${email.slice(0, maxLength)}...` : email;
+  };
+
   const onSubmitEmails = async (data: FormValues) => {
     // 1. Очищаємо від порожніх значень
     const emailsToImport = data.newMembers
@@ -183,7 +187,9 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
         className="flex items-center justify-between p-5 cursor-pointer hover:bg-slate-50 transition-colors select-none"
       >
         <span
-          className={`font-semibold text-lg ${!team.is_active ? "text-gray-400" : "text-gray-800"}`}
+          className={`font-semibold text-base sm:text-lg break-all ${
+            !team.is_active ? "text-gray-400" : "text-gray-800"
+          }`}
         >
           {team.name}
         </span>
@@ -201,12 +207,12 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
         <div className="p-6 border-t border-gray-100 bg-white space-y-6">
           {/* Посилання розсилки */}
           {team.is_active && (
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-400 block">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-gray-400">
                 Посилання розсилки
               </label>
-              <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl p-3">
-                <span className="text-gray-400 text-lg">🔗</span>
+              <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-lg p-2 sm:p-3">
+                <span className="text-gray-400 text-sm">🔗</span>
                 <input
                   type="text"
                   readOnly
@@ -215,11 +221,11 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
                       ? `${window.location.origin}/surveys/${team.team_token}`
                       : "Токен відсутній"
                   }
-                  className="bg-transparent flex-1 text-sm text-gray-700 outline-none"
+                  className="bg-transparent flex-1 text-xs sm:text-sm text-gray-600 outline-none truncate"
                 />
                 <button
                   onClick={handleRotateToken}
-                  className="text-gray-400 hover:text-gray-600 p-1"
+                  className="text-gray-400 hover:text-gray-600 p-1 shrink-0"
                   type="button"
                 >
                   🔄
@@ -320,14 +326,13 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
                         key={`saved-member-${currentUserId}`}
                         className="relative flex items-center w-full"
                       >
-                        <div className="w-full relative">
+                        <div className="relative flex items-center w-full">
                           <Input
                             type="text"
-                            value={user.email} // Підставляємо реальний email з бекенду
+                            value={truncateEmail(user.email)}
                             leftIcon="mail"
                             disabled={true}
-                            // Додаємо сірий колір, якщо команда архівна
-                            className={`bg-gray-50/50 border-gray-200 select-none ${!team.is_active ? "text-gray-400" : "text-gray-600"}`}
+                            className={`truncate bg-gray-50/50 border-gray-200 select-none ${!team.is_active ? "text-gray-400" : "text-gray-600"}`}
                           />
                           {team.is_active && (
                             <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10">
