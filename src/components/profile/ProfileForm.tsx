@@ -83,14 +83,18 @@ const ProfileForm = () => {
       <div className="flex justify-center gap-4 pt-4">
         <Button
           type="button"
-          variant="secondary"
+          variant="secondary" // Компонент сам зробить його білим із темним текстом!
           onClick={handleLogout}
-          className="min-w-[120px] rounded-2xl border border-light-txt bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2"
+          className="min-w-[120px] focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 py-[10px] px-[12px]"
         >
           Вийти з акаунту
         </Button>
 
-        <Button type="submit" variant="save" className="min-w-[117px]">
+        <Button
+          type="submit"
+          variant="primary"
+          className="min-w-[117px] py-[10px] px-[12px]"
+        >
           Зберегти зміни
         </Button>
       </div>

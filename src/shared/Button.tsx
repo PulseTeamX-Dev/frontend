@@ -1,4 +1,6 @@
 import React, { type ButtonHTMLAttributes, type ReactNode } from "react";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
@@ -9,19 +11,32 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 export const Button: React.FC<ButtonProps> = ({
   type = "button",
   disabled = false,
+  variant = "primary",
   className = "",
   children,
   onClick,
   ...rest
 }) => {
-  const baseStyles =
-    "py-3.5 rounded-2xl font-semibold text-white transition-all shadow-sm text-white font-semibold";
+  const baseStyles = "py-3.5 font-semibold transition-all shadow-sm rounded-xl";
 
-  const stateStyles = disabled
-    ? "bg-slate-300 cursor-not-allowed"
-    : "bg-primary-active hover:bg-primary-hover active:scale-[0.98]";
+  const variantStyles = {
+    primary:
+      "bg-primary-active text-white hover:bg-primary-hover active:scale-[0.98]",
+    secondary:
+      "bg-white text-grayscale-900 border border-light-txt hover:bg-slate-50",
+  };
 
-  const combinedClasses = `${baseStyles} ${stateStyles} ${className}`.trim();
+  const disabledStyles = disabled
+    ? "bg-slate-300 text-white cursor-not-allowed pointer-events-none"
+    : "";
+
+  const combinedClasses = twMerge(
+    clsx(
+      baseStyles,
+      disabled ? disabledStyles : variantStyles[variant],
+      className,
+    ),
+  );
 
   return (
     <button

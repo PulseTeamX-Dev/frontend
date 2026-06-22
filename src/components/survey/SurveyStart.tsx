@@ -47,12 +47,7 @@ export const SurveyStart = ({ onStart }: SurveyStartProps) => {
       </div>
 
       <div className="mt-2">
-        <Button
-          type="button"
-          variant="survey"
-          onClick={onStart}
-          className="!bg-[#f17837] hover:!opacity-90 active:scale-[0.98] min-w-[200px] !text-white rounded-xl py-3 font-semibold text-base transition-all"
-        >
+        <Button type="button" variant="primary" onClick={onStart}>
           Почати опитування
         </Button>
       </div>
