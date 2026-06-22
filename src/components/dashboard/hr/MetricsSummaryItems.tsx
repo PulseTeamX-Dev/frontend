@@ -44,12 +44,11 @@ export const MetricsSummaryItems = ({
 
   const iconId = safeTrend < 0 ? "caret-down-filled" : "caret-up-filled";
 
-  // 🚀 ЮЗАЄМО УТИЛІТУ ДЛЯ ТРЕНДУ
   const trendDisplayValue =
     safeTrend > 0
       ? `+${formatNumber(safeTrend)}`
       : safeTrend < 0
-        ? `-${formatNumber(safeTrend)}`
+        ? `${formatNumber(safeTrend)}`
         : "0,0";
 
   let scoreClass;
@@ -80,7 +79,6 @@ export const MetricsSummaryItems = ({
 
       <div className="flex items-center justify-center my-3 grow">
         <span className={`text-3xl md:text-4xl font-bold ${scoreClass}`}>
-          {/* 🚀 ЮЗАЄМО УТИЛІТУ ДЛЯ СКОРУ */}
           {formatNumber(safeScore)}
           {isPercentage ? (
             "%"

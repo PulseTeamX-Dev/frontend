@@ -30,11 +30,6 @@ const metricOptions: { key: MetricKey; label: string; title: string }[] = [
     label: "Індекс розуміння",
     title: "Рівень розуміння цілей",
   },
-  {
-    key: "workload_strain_index",
-    label: "Індекс навантаження",
-    title: "Деструктивне навантаження",
-  },
 ];
 
 const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
@@ -42,7 +37,6 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
     useState<MetricKey>("stress_index");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Дати сортуємо хронологічно
   const dates = useMemo(
     () => Array.from(new Set(metricsHistory.map((m) => m.week_start))).sort(),
     [metricsHistory],
@@ -83,7 +77,6 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
 
   return (
     <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex-1 flex flex-col min-h-0">
-      {/* Шапка не скролиться */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5 shrink-0">
         <Title tag="h2" variant="light" className="mb-0">
           {currentConfig.title}
