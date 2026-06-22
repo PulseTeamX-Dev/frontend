@@ -2,12 +2,15 @@ import { FrequencySelector } from "../components/createPulse/FrequencySelector";
 import { Dropdown } from "../components/createPulse/Dropdown";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
+import { fetchTeams } from "../redux/teams/operation";
+import { selectTeams } from "../redux/teams/selectors";
 import { fetchQuestions } from "../redux/surveys/operation";
 import {
   selectQuestions,
   selectSurveyLoading,
 } from "../redux/surveys/selectors";
 import { toast } from "react-toastify";
+
 
 interface PulseConfig {
   id: string;
@@ -18,6 +21,8 @@ interface PulseConfig {
   sendTime: string;
   deadlineDay: string;
   deadlineTime: string;
+  teamId: string;
+  teamName: string;
 }
 
 export const CreatePulsePage = () => {
@@ -25,6 +30,11 @@ export const CreatePulsePage = () => {
   const questions = useAppSelector(selectQuestions);
   const isLoading = useAppSelector(selectSurveyLoading);
   const [title, setTitle] = useState("");
+  const teams = useAppSelector(selectTeams);
+  const [selectedTeamId, setSelectedTeamId] = useState("");
+
+
+
   const [savedPulses, setSavedPulses] = useState<PulseConfig[]>(() => {
     const stored = localStorage.getItem("pulseConfigs");
 
@@ -36,12 +46,14 @@ export const CreatePulsePage = () => {
       return [];
     }
   });
-
+const existingPulse = savedPulses.find(
+  (pulse) => pulse.teamId === selectedTeamId
+);
   const [selectedPulseId, setSelectedPulseId] = useState<string | null>(null);
 
   const loadPulse = (pulse: PulseConfig) => {
     setSelectedPulseId(pulse.id);
-    setTitle(pulse.title);
+    setTitle(pulse.teamName);
 
     setFrequency(pulse.frequency);
 
@@ -52,51 +64,61 @@ export const CreatePulsePage = () => {
     setDeadlineTime(pulse.deadlineTime);
   };
 
-  const deletePulse = (id: string) => {
-    const updated = savedPulses.filter((pulse) => pulse.id !== id);
+  const handleTeamChange = (teamId: string) => {
+  setSelectedTeamId(teamId);
 
-    setSavedPulses(updated);
+  const pulse = savedPulses.find(
+    (p) => p.teamId === teamId
+  );
 
-    localStorage.setItem("pulseConfigs", JSON.stringify(updated));
+  if (pulse) {
+    loadPulse(pulse);
+  } 
+};
 
-    // Якщо видаляємо відкритий зараз Pulse
-    if (selectedPulseId === id) {
-      resetForm();
-    }
+  // const deletePulse = (id: string) => {
+  //   const updated = savedPulses.filter((pulse) => pulse.id !== id);
 
-    toast.success("Опитування видалено");
-  };
+  //   setSavedPulses(updated);
 
-  const resetForm = () => {
-    setSelectedPulseId(null);
+  //   localStorage.setItem("pulseConfigs", JSON.stringify(updated));
 
-    setTitle("");
+  //   // Якщо видаляємо відкритий зараз Pulse
+  //   if (selectedPulseId === id) {
+  //     resetForm();
+  //   }
 
-    setFrequency("weekly");
+  //   toast.success("Опитування видалено");
+  // };
 
-    setSendDay("Понеділок");
-    setSendTime("10:00");
+  // const resetForm = () => {
+  //   setSelectedPulseId(null);
 
-    setDeadlineDay("П'ятниця");
-    setDeadlineTime("14:00");
-  };
+  //   setTitle("");
+
+  //   setFrequency("weekly");
+
+  //   setSendDay("Понеділок");
+  //   setSendTime("10:00");
+
+  //   setDeadlineDay("П'ятниця");
+  //   setDeadlineTime("14:00");
+  // };
 
   const handleSubmit = () => {
-    if (!title.trim()) {
-      toast.error("Вкажіть назву опитування");
-      return;
-    }
-const existingPulse = savedPulses.find(
-  (pulse) =>
-    pulse.id !== selectedPulseId &&
-    pulse.title.trim().toLowerCase() ===
-      title.trim().toLowerCase()
+    // if (!title.trim()) {
+    //   toast.error("Вкажіть назву опитування");
+    //   return;
+    // }
+const selectedTeam = teams.find(
+  (team) => String(team.team_id) === selectedTeamId
 );
 
-if (existingPulse) {
-  toast.error("Опитування з такою назвою вже існує");
-  return;
-}
+  const existingPulse = savedPulses.find(
+  pulse => pulse.teamId === selectedTeamId
+);
+
+
 
     const dto: PulseConfig = {
       id: crypto.randomUUID(),
@@ -111,14 +133,16 @@ if (existingPulse) {
       sendTime,
       deadlineDay,
       deadlineTime,
+      teamId: selectedTeamId,
+      teamName: selectedTeam?.name || "",
     };
 
-    if (selectedPulseId) {
+    if (existingPulse) {
       const updated = savedPulses.map((pulse) =>
-        pulse.id === selectedPulseId
+        pulse.teamId === selectedTeamId
           ? {
               ...dto,
-              id: selectedPulseId,
+              id: pulse.id, 
             }
           : pulse,
       );
@@ -140,6 +164,7 @@ if (existingPulse) {
 
   useEffect(() => {
     dispatch(fetchQuestions());
+    dispatch(fetchTeams());
   }, [dispatch]);
 
   const [frequency, setFrequency] = useState<"weekly" | "biweekly" | "monthly">(
@@ -157,11 +182,11 @@ if (existingPulse) {
 
   return (
     <div className="max-w-[708px] mx-auto py-8 flex flex-col gap-4">
-      <button onClick={() => resetForm()} className="...">
+      {/* <button onClick={() => resetForm()} className="...">
         + Нове опитування
-      </button>
+      </button> */}
 
-      {savedPulses.length > 0 && (
+   {/* {savedPulses.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm p-4">
           <h2 className="text-lg font-bold mb-3">
             Мої Pulse ({savedPulses.length})
@@ -185,7 +210,7 @@ if (existingPulse) {
               }
             `}
                 >
-                  {pulse.title}
+                  {pulse.teamName}
                 </button>
                 <button
                   onClick={() => deletePulse(pulse.id)}
@@ -195,16 +220,55 @@ if (existingPulse) {
                 </button>
               </div>
             ))}
+
+            
+          </div>
+
+          <div>
+  
           </div>
         </div>
-      )}
+      )} */}
 
       {/* КАРТКА 1 */}
 
       <div className="bg-white rounded-lg shadow-sm p-4">
         <h2 className="text-xl font-bold mb-6">Створити опитування</h2>
         <div>
-          <label className="block text-xs text-gray-400 mb-2">
+          <div>
+            <label className="block text-xs text-gray-400 mb-2">
+            Команда
+            </label>
+
+            <select
+            value={selectedTeamId}
+            onChange={(e) => handleTeamChange(e.target.value)}
+            className="
+              w-full
+              h-11
+              px-4
+              rounded-xl
+              border
+              border-gray-300
+            "
+            >
+            <option value="">
+              Оберіть команду
+            </option>
+
+            {teams
+              .filter((team) => team.is_active)
+              .map((team) => (
+                <option
+                  key={team.team_id}
+                  value={String(team.team_id)}
+                >
+                  {team.name}
+                </option>
+                      ))}
+                    </select>
+            </div>
+          {/* <label className="block text-xs text-gray-400 mb-2">
             Назва опитування
           </label>
 
@@ -221,7 +285,7 @@ if (existingPulse) {
             border-gray-300
             outline-none
           "
-          />
+          /> */}
         </div>
         <div className="flex flex-col gap-4">
           {isLoading ? (
@@ -324,7 +388,7 @@ if (existingPulse) {
           transition
           "
         >
-          {selectedPulseId ? "Оновити опитування" : "Створити опитування"}
+          {existingPulse ? "Оновити опитування" : "Запланувати опитування"}
         </button>
       </div>
     </div>
