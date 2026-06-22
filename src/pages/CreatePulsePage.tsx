@@ -86,6 +86,18 @@ export const CreatePulsePage = () => {
       toast.error("Вкажіть назву опитування");
       return;
     }
+const existingPulse = savedPulses.find(
+  (pulse) =>
+    pulse.id !== selectedPulseId &&
+    pulse.title.trim().toLowerCase() ===
+      title.trim().toLowerCase()
+);
+
+if (existingPulse) {
+  toast.error("Опитування з такою назвою вже існує");
+  return;
+}
+
     const dto: PulseConfig = {
       id: crypto.randomUUID(),
       title,
@@ -111,7 +123,7 @@ export const CreatePulsePage = () => {
           : pulse,
       );
 
-      setSavedPulses(updated);
+            setSavedPulses(updated);
 
       localStorage.setItem("pulseConfigs", JSON.stringify(updated));
 
@@ -155,7 +167,7 @@ export const CreatePulsePage = () => {
             Мої Pulse ({savedPulses.length})
           </h2>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {savedPulses.map((pulse) => (
               <div key={pulse.id} className="flex items-center gap-1">
                 <button
@@ -201,14 +213,14 @@ export const CreatePulsePage = () => {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Weekly HR Pulse"
             className="
-      w-full
-      h-11
-      px-4
-      rounded-xl
-      border
-      border-gray-300
-      outline-none
-    "
+            w-full
+            h-11
+            px-4
+            rounded-xl
+            border
+            border-gray-300
+            outline-none
+          "
           />
         </div>
         <div className="flex flex-col gap-4">
@@ -226,19 +238,18 @@ export const CreatePulsePage = () => {
                     Питання {index + 1}
                   </label>
 
-                  <input
-                    readOnly
-                    value={question.text_ua}
-                    className="
-                w-full
-                h-11
-                px-4
-                rounded-xl
-                border
-                border-gray-300
-                outline-none
-                "
-                  />
+                  <div
+  className="
+    w-full
+    p-4
+    rounded-xl
+    border
+    border-gray-300
+    bg-gray-50
+  "
+>
+  {question.text_ua}
+</div>
                 </div>
               ))
           )}
@@ -252,10 +263,13 @@ export const CreatePulsePage = () => {
 
         {/* Частота */}
 
-        <div className="border rounded-xl p-3 flex justify-between items-center ">
+        <div className="border rounded-xl p-3 flex justify-between items-center  flex-col
+                        md:flex-row gap-3">
           <span className="text-gray-500">Частота опитування</span>
 
-          <FrequencySelector value={frequency} onChange={setFrequency} />
+          <FrequencySelector value={frequency} onChange={setFrequency} 
+          
+          />
         </div>
 
         {/* Надсилання */}
