@@ -87,7 +87,6 @@ export const TLDashboard = () => {
         </div>
       )}
 
-      {/* 1. ВЕРХНІ КАРТКИ */}
       <div
         className={`transition-all duration-300 ${isPrivacyLocked ? "opacity-40 pointer-events-none filter blur-[1px]" : ""}`}
       >
