@@ -324,7 +324,7 @@ if (existingPulse) {
           transition
           "
         >
-          {selectedPulseId ? "Оновити опитування" : "Створити опитування"}
+          {selectedPulseId ? "Оновити опитування" : "Запланувати опитування"}
         </button>
       </div>
     </div>
