@@ -7,7 +7,6 @@ import { acceptInvite, loginUser } from "../../redux/auth/operation";
 import { selectAuthLoading } from "../../redux/auth/selectors";
 import { Link } from "react-router-dom";
 
-// Імпортуємо ресолвер та Zod-інструменти
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -15,6 +14,7 @@ import {
   type InviteFormData,
 } from "../../validation/authSchemas";
 import { toast } from "react-toastify";
+import { Button } from "../../shared/Button";
 
 export const InviteForm = ({ token }: { token: string }) => {
   const dispatch = useAppDispatch();
@@ -60,7 +60,7 @@ export const InviteForm = ({ token }: { token: string }) => {
         Вітаємо!
       </Title>
       <p className="text-[12px] text-center text-light-txt mb-8">
-        Let's get started!
+        Давайте розпочнемо
       </p>
 
       {/* noValidate ОБОВ'ЯЗКОВО */}
@@ -123,7 +123,7 @@ export const InviteForm = ({ token }: { token: string }) => {
               />
               <Icon
                 id="check"
-                className="absolute fill-current w-4 h-4 text-grayscale-700 opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity"
+                className="absolute w-[9px] h-[7px] text-grayscale-700"
               />
             </div>
             <label
@@ -131,21 +131,19 @@ export const InviteForm = ({ token }: { token: string }) => {
               className="text-[14px] leading-[1.4] text-light-txt cursor-pointer select-none font-medium transition-colors"
             >
               Я погоджуюся з{" "}
-              <Link 
+              <Link
                 className="text-grayscale-900 hover:underline underline-offset-2"
-                to="/terms">
+                to="/terms"
+              >
                 Умовами користування
-              </Link>
-
-                
-              {" "}
+              </Link>{" "}
               та{" "}
-              <Link 
-              className="text-grayscale-900 hover:underline underline-offset-2"
-              to="/privacy">
-                  Політикою конфіденційності
+              <Link
+                className="text-grayscale-900 hover:underline underline-offset-2"
+                to="/privacy"
+              >
+                Політикою конфіденційності
               </Link>
-                
             </label>
           </div>
 
@@ -158,17 +156,17 @@ export const InviteForm = ({ token }: { token: string }) => {
           )}
         </div>
 
-        <button
+        <Button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3.5 mt-4 bg-[#F26E3B] hover:bg-[#e05d2c] text-white font-medium rounded-2xl transition-colors disabled:opacity-50 flex justify-center items-center h-[52px]"
+          className="w-full py-3.5 mt-4 rounded-2xl transition-colors disabled:opacity-50 flex justify-center items-center h-[52px]"
         >
           {isLoading ? (
             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
           ) : (
             "Продовжити"
           )}
-        </button>
+        </Button>
       </form>
     </div>
   );

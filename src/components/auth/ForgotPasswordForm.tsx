@@ -13,6 +13,7 @@ import {
   forgotPasswordSchema,
   type ForgotPasswordFormData,
 } from "../../validation/authSchemas";
+import { Button } from "../../shared/Button";
 
 interface Props {
   onBack: () => void;
@@ -90,17 +91,17 @@ export const ForgotPasswordForm = ({ onBack }: Props) => {
           {...register("email", { onChange: handleInputChange })}
         />
 
-        <button
+        <Button
           type="submit"
           disabled={isLoading}
-          className="w-full py-3.5 mt-4 bg-[#F26E3B] hover:bg-[#e05d2c] text-white font-medium rounded-2xl transition-colors disabled:opacity-50 h-[52px] flex justify-center items-center"
+          className="w-full py-3.5 mt-4 rounded-2xl transition-colors disabled:opacity-50 h-[52px] flex justify-center items-center"
         >
           {isLoading ? (
             <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
           ) : (
             "Надіслати посилання"
           )}
-        </button>
+        </Button>
       </form>
     </div>
   );

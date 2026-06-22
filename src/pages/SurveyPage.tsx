@@ -234,20 +234,20 @@ export const SurveyPage = () => {
             {!isLastPage ? (
               <Button
                 type="button"
-                variant="survey"
+                variant="primary"
                 disabled={isButtonDisabled}
                 onClick={handleNextPage}
-                className="!bg-[#f17837] hover:!opacity-90 active:scale-[0.98] min-w-[180px] !text-white rounded-xl"
+                className="min-w-45 rounded-xl"
               >
                 Продовжити
               </Button>
             ) : (
               <Button
                 type="button"
-                variant="survey"
+                variant="primary"
                 disabled={isButtonDisabled}
                 onClick={handleSubmit}
-                className="!bg-[#f17837] hover:!opacity-90 active:scale-[0.98] min-w-[180px] !text-white rounded-xl"
+                className="min-w-45 rounded-xl"
               >
                 Надіслати
               </Button>

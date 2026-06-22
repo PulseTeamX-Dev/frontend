@@ -11,6 +11,7 @@ import { Input } from "../../shared/Input";
 // Імпортуємо ресолвер та схему
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginFormData } from "../../validation/authSchemas";
+import { Button } from "../../shared/Button";
 // (якщо Yup, то імпортуєш yupResolver з @hookform/resolvers/yup)
 
 const LoginForm = ({
@@ -115,17 +116,9 @@ const LoginForm = ({
         </label>
       </div>
 
-      <button
-        type="submit"
-        disabled={isLoading}
-        className={`w-full py-3.5 mt-2 rounded-2xl font-semibold text-white transition-all shadow-sm ${
-          isLoading
-            ? "bg-slate-300 cursor-not-allowed"
-            : "bg-primary-active hover:bg-primary-hover active:scale-[0.98]"
-        }`}
-      >
+      <Button type="submit" disabled={isLoading} className="w-full mt-2">
         {isLoading ? "Завантаження..." : "Увійти"}
-      </button>
+      </Button>
     </form>
   );
 };
