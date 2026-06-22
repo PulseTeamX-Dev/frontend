@@ -40,7 +40,8 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
                 key={item.team_id}
                 className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-2 items-center border-b border-gray-50 pb-2.5 last:border-0 last:pb-0"
               >
-                <div className="text-left flex flex-col justify-center">
+                {/* 🛠️ ФІКС: Додали min-w-0, щоб грів не розпирало від довгого імені */}
+                <div className="text-left flex flex-col justify-center min-w-0">
                   {item.low_engagement_signal && (
                     <div className="flex items-center gap-1 mt-0.5 text-error">
                       <Icon
@@ -52,7 +53,11 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
                       </span>
                     </div>
                   )}
-                  <span className="text-[14px] md:text-[15px] text-grayscale-900 font-medium truncate pr-2">
+                  {/* 🛠️ ФІКС: Додали title для підказу при наведенні */}
+                  <span
+                    className="text-[14px] md:text-[15px] text-grayscale-900 font-medium truncate pr-2"
+                    title={item.team_name}
+                  >
                     {item.team_name}
                   </span>
                 </div>
