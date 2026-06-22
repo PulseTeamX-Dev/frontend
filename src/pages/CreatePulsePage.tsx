@@ -10,11 +10,11 @@ import {
   selectSurveyLoading,
 } from "../redux/surveys/selectors";
 import { toast } from "react-toastify";
+import { set } from "zod";
 
 
 interface PulseConfig {
   id: string;
-  title: string;
   questionIds: (number | string)[];
   frequency: "weekly" | "biweekly" | "monthly";
   sendDay: string;
@@ -29,7 +29,7 @@ export const CreatePulsePage = () => {
   const dispatch = useAppDispatch();
   const questions = useAppSelector(selectQuestions);
   const isLoading = useAppSelector(selectSurveyLoading);
-  const [title, setTitle] = useState("");
+  
   const teams = useAppSelector(selectTeams);
   const [selectedTeamId, setSelectedTeamId] = useState("");
 
@@ -49,19 +49,17 @@ export const CreatePulsePage = () => {
 const existingPulse = savedPulses.find(
   (pulse) => pulse.teamId === selectedTeamId
 );
+
+
   
 
   const loadPulse = (pulse: PulseConfig) => {
-    
-    setTitle(pulse.teamName);
-
     setFrequency(pulse.frequency);
-
     setSendDay(pulse.sendDay);
     setSendTime(pulse.sendTime);
-
     setDeadlineDay(pulse.deadlineDay);
     setDeadlineTime(pulse.deadlineTime);
+    setSelectedTeamId(pulse.teamId);
   };
 
   const handleTeamChange = (teamId: string) => {
@@ -122,7 +120,7 @@ const selectedTeam = teams.find(
 
     const dto: PulseConfig = {
       id: crypto.randomUUID(),
-      title,
+      
       questionIds: questions
         .filter((q) => q.is_active)
         .sort((a, b) => a.sort_order - b.sort_order)
