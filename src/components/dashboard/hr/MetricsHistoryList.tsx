@@ -42,14 +42,34 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
     useState<MetricKey>("stress_index");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  // Дати сортуємо хронологічно
   const dates = useMemo(
     () => Array.from(new Set(metricsHistory.map((m) => m.week_start))).sort(),
     [metricsHistory],
   );
-  const teams = useMemo(
-    () => Array.from(new Set(metricsHistory.map((m) => m.team_name))).sort(),
-    [metricsHistory],
-  );
+
+  const teams = useMemo(() => {
+    const uniqueTeamsMap = new Map<string, number>();
+
+    metricsHistory.forEach((item) => {
+      if (item.team_name) {
+        const currentStoredId = uniqueTeamsMap.get(item.team_name);
+        if (currentStoredId === undefined || currentStoredId === 999) {
+          uniqueTeamsMap.set(item.team_name, item.team_id ?? 999);
+        }
+      }
+    });
+
+    return Array.from(uniqueTeamsMap.entries())
+      .sort((a, b) => {
+        if (a[1] !== b[1]) {
+          return a[1] - b[1];
+        }
+        return a[0].localeCompare(b[0]);
+      })
+      .map((entry) => entry[0]);
+  }, [metricsHistory]);
+
   const historyMap = useMemo(() => {
     const map = new Map<string, HeatmapItem>();
     metricsHistory.forEach((item) =>
@@ -110,7 +130,6 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
           className="grid gap-3 min-w-[420px] min-h-full"
           style={{
             gridTemplateColumns: `auto repeat(${dates.length}, minmax(64px, 1fr))`,
-            // ФІКС: 1fr змушує рядки розтягуватися на всю доступну висоту. Якщо команд багато, вони обріжуться по 56px і з'явиться скрол
             gridTemplateRows:
               teams.length > 0
                 ? `repeat(${teams.length}, minmax(56px, 1fr)) auto`

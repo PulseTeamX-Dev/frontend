@@ -46,17 +46,22 @@ export const HRDashboard = () => {
 
       <MetricSummaryList metricsSummary={metrics.metrics_summary} />
 
-      {/* ФІКС СІТКИ: Змінили пропорції з 7/12 та 5/12 на рівні 50% / 50% */}
       <div className="flex flex-col xl:flex-row gap-5 mt-6 w-full items-stretch xl:h-[560px]">
-        {/* ЛІВА КОЛОНКА (Хітмеп) - тепер 1/2 */}
+        {/* ЛІВА КОЛОНКА (Хітмеп) - 1/2 */}
         <div className="w-full xl:w-1/2 flex flex-col min-h-0">
           <MetricsHistoryList metricsHistory={metrics.metrics_history} />
         </div>
 
-        {/* ПРАВА КОЛОНКА (Картки) - тепер теж 1/2 (отримала +8% чистої ширини!) */}
-        <div className="w-full xl:w-1/2 flex flex-col gap-4 min-h-0">
-          <SurveyCompletionTable data={metrics.engagement} />
-          <WorkloadChart data={metrics.workload_current} />
+        {/* ПРАВА КОЛОНКА (Картки) - 1/2 */}
+        <div className="w-full xl:w-1/2 flex flex-col gap-5 min-h-0">
+          {/* ФІКС ВІЗУАЛУ: Картка опитувань займає фіксовано ~40% або контентну висоту */}
+          <div className="flex-none">
+            <SurveyCompletionTable data={metrics.engagement} />
+          </div>
+
+          <div className="flex-1 flex flex-col">
+            <WorkloadChart data={metrics.workload_current} />
+          </div>
         </div>
       </div>
     </>

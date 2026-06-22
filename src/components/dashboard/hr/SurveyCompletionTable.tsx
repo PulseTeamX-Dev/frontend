@@ -1,4 +1,4 @@
-import { useMemo } from "react"; // <-- Додали імпорт
+import { useMemo } from "react";
 import Icon from "../../../shared/Icon";
 import { Title } from "../../../shared/Title";
 import type { EngagementData } from "../../../types/dashboard/types";
@@ -18,7 +18,7 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
   }, [data]);
 
   return (
-    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex-1 flex flex-col min-h-[180px]">
+    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex-1 flex flex-col h-55">
       <Title tag="h2" variant="light" className="mb-3 shrink-0">
         Стан заповнення опитувань
       </Title>
@@ -66,9 +66,9 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
 
                 <div className="flex justify-center">
                   <span
-                    className={`w-13 px-2 py-1 md:py-1.5 rounded-lg text-[11px] text-center md:text-xs font-bold ${getBadgeClass(item.response_rate_pct)}`}
+                    className={`w-14 px-2 py-1 md:py-1.5 rounded-lg text-[11px] text-center md:text-xs font-bold ${getBadgeClass(item.response_rate_pct)}`}
                   >
-                    {item.response_rate_pct}%
+                    {item.response_rate_pct.toFixed(1).replace(".", ",")}%
                   </span>
                 </div>
               </div>
