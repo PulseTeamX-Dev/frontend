@@ -3,7 +3,10 @@ import { Dropdown } from "../components/createPulse/Dropdown";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
 import { fetchQuestions } from "../redux/surveys/operation";
-import { selectQuestions, selectSurveyLoading,} from "../redux/surveys/selectors";
+import {
+  selectQuestions,
+  selectSurveyLoading,
+} from "../redux/surveys/selectors";
 import { toast } from "react-toastify";
 
 interface PulseConfig {
@@ -23,78 +26,167 @@ export const CreatePulsePage = () => {
   const isLoading = useAppSelector(selectSurveyLoading);
   const [title, setTitle] = useState("");
   const [savedPulses, setSavedPulses] = useState<PulseConfig[]>(() => {
-  const stored = localStorage.getItem("pulseConfigs");
+    const stored = localStorage.getItem("pulseConfigs");
 
-  if (!stored) return [];
+    if (!stored) return [];
 
-  try {
-    return JSON.parse(stored);
-  } catch {
-    return [];
-  }
-});
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return [];
+    }
+  });
+
+  const [selectedPulseId, setSelectedPulseId] = useState<string | null>(null);
+
+  const loadPulse = (pulse: PulseConfig) => {
+    setSelectedPulseId(pulse.id);
+    setTitle(pulse.title);
+
+    setFrequency(pulse.frequency);
+
+    setSendDay(pulse.sendDay);
+    setSendTime(pulse.sendTime);
+
+    setDeadlineDay(pulse.deadlineDay);
+    setDeadlineTime(pulse.deadlineTime);
+  };
+
+  const deletePulse = (id: string) => {
+    const updated = savedPulses.filter((pulse) => pulse.id !== id);
+
+    setSavedPulses(updated);
+
+    localStorage.setItem("pulseConfigs", JSON.stringify(updated));
+
+    // Якщо видаляємо відкритий зараз Pulse
+    if (selectedPulseId === id) {
+      resetForm();
+    }
+
+    toast.success("Опитування видалено");
+  };
+
+  const resetForm = () => {
+    setSelectedPulseId(null);
+
+    setTitle("");
+
+    setFrequency("weekly");
+
+    setSendDay("Понеділок");
+    setSendTime("10:00");
+
+    setDeadlineDay("П'ятниця");
+    setDeadlineTime("14:00");
+  };
+
   const handleSubmit = () => {
-     if (!title.trim()) {
-    toast.error("Вкажіть назву опитування");
-    return;
-  }
+    if (!title.trim()) {
+      toast.error("Вкажіть назву опитування");
+      return;
+    }
     const dto: PulseConfig = {
       id: crypto.randomUUID(),
       title,
-            questionIds: questions
-              .filter((q) => q.is_active)
-              .sort((a, b) => a.sort_order - b.sort_order)
-              .map((q) => q.question_id),
+      questionIds: questions
+        .filter((q) => q.is_active)
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .map((q) => q.question_id),
 
-            frequency,
-            sendDay,
-            sendTime,
-            deadlineDay,
-            deadlineTime,
-          };
-          const updated = [...savedPulses, dto];
-          setSavedPulses(updated);
-          localStorage.setItem("pulseConfigs", JSON.stringify(updated));
-          toast.success("Опитування створено");
-        };
-         
+      frequency,
+      sendDay,
+      sendTime,
+      deadlineDay,
+      deadlineTime,
+    };
+
+    if (selectedPulseId) {
+      const updated = savedPulses.map((pulse) =>
+        pulse.id === selectedPulseId
+          ? {
+              ...dto,
+              id: selectedPulseId,
+            }
+          : pulse,
+      );
+
+      setSavedPulses(updated);
+
+      localStorage.setItem("pulseConfigs", JSON.stringify(updated));
+
+      toast.success("Опитування оновлено");
+
+      return;
+    }
+
+    const updated = [...savedPulses, dto];
+    setSavedPulses(updated);
+    localStorage.setItem("pulseConfigs", JSON.stringify(updated));
+    toast.success("Опитування створено");
+  };
 
   useEffect(() => {
-  dispatch(fetchQuestions());
-}, [dispatch]);
+    dispatch(fetchQuestions());
+  }, [dispatch]);
 
-
-
-  const [frequency, setFrequency] = useState<
-    "weekly" | "biweekly" | "monthly"
-  >("weekly");
+  const [frequency, setFrequency] = useState<"weekly" | "biweekly" | "monthly">(
+    "weekly",
+  );
 
   const [sendDay, setSendDay] = useState("Понеділок");
   const [sendTime, setSendTime] = useState("10:00");
   const [deadlineDay, setDeadlineDay] = useState("П'ятниця");
   const [deadlineTime, setDeadlineTime] = useState("14:00");
 
-  const days = [
-  "Понеділок",
-  "Вівторок",
-  "Середа",
-  "Четвер",
-  "П'ятниця",
-];
+  const days = ["Понеділок", "Вівторок", "Середа", "Четвер", "П'ятниця"];
 
-const times = [
-  "09:00",
-  "10:00",
-  "11:00",
-  "12:00",
-  "13:00",
-  "14:00",
-  "15:00",
-];
-
+  const times = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00"];
 
   return (
     <div className="max-w-[708px] mx-auto py-8 flex flex-col gap-4">
+      <button onClick={() => resetForm()} className="...">
+        + Нове опитування
+      </button>
+
+      {savedPulses.length > 0 && (
+        <div className="bg-white rounded-lg shadow-sm p-4">
+          <h2 className="text-lg font-bold mb-3">
+            Мої Pulse ({savedPulses.length})
+          </h2>
+
+          <div className="flex flex-wrap gap-2">
+            {savedPulses.map((pulse) => (
+              <div key={pulse.id} className="flex items-center gap-1">
+                <button
+                  onClick={() => loadPulse(pulse)}
+                  className={`
+                px-4
+                py-2
+                rounded-full
+                border
+              transition
+              ${
+                selectedPulseId === pulse.id
+                  ? "bg-[#F26E3B] text-white border-[#F26E3B]"
+                  : "border-gray-300 hover:bg-gray-100"
+              }
+            `}
+                >
+                  {pulse.title}
+                </button>
+                <button
+                  onClick={() => deletePulse(pulse.id)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  🗑️
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* КАРТКА 1 */}
 
       <div className="bg-white rounded-lg shadow-sm p-4">
@@ -218,9 +310,9 @@ const times = [
           transition
           "
         >
-          Запланувати опитування
+          {selectedPulseId ? "Оновити опитування" : "Створити опитування"}
         </button>
       </div>
     </div>
   );
-}
+};
