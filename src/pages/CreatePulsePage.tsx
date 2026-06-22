@@ -49,10 +49,10 @@ export const CreatePulsePage = () => {
 const existingPulse = savedPulses.find(
   (pulse) => pulse.teamId === selectedTeamId
 );
-  const [selectedPulseId, setSelectedPulseId] = useState<string | null>(null);
+  
 
   const loadPulse = (pulse: PulseConfig) => {
-    setSelectedPulseId(pulse.id);
+    
     setTitle(pulse.teamName);
 
     setFrequency(pulse.frequency);
