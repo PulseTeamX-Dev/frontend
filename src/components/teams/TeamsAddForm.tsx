@@ -57,7 +57,7 @@ export const TeamsAddForm = () => {
         />
 
         {errors.name && (
-          <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+          <p className="mt-1 text-sm text-error">{errors.name.message}</p>
         )}
       </div>
 

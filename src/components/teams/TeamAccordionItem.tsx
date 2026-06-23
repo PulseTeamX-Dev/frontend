@@ -137,16 +137,16 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
 
   return (
     <div
-      className={` rounded-2xl overflow-hidden bg-white shadow-sm mb-4 transition-all ${!team.is_active ? "border-gray-100 opacity-60 bg-gray-50/50" : "border-gray-200"}`}
+      className={`rounded-2xl overflow-hidden bg-white mb-4 transition-all border border-light-txt `}
     >
       {/* Шапка акордеону */}
       <div
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between p-5 cursor-pointer hover:bg-slate-50 transition-colors select-none"
+        className="flex items-center justify-between p-5 cursor-pointer transition-colors select-none"
       >
         <span
-          className={`font-semibold text-base sm:text-lg break-all ${
-            !team.is_active ? "text-gray-400" : "text-gray-800"
+          className={`font-normal text-base sm:text-lg break-all ${
+            !team.is_active ? "text-gray-400" : "text-gray-900"
           }`}
         >
           {team.name}
@@ -154,45 +154,64 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
 
         <div className="flex items-center gap-3">
           <span
-            className={`text-xs font-semibold ${
-              team.is_active ? "text-green-600" : "text-gray-500"
+            className={`text-base font-semibold ${
+              team.is_active ? "text-success" : "text-grayscale-700"
             }`}
           >
             {team.is_active ? "Активна" : "Не активна"}
           </span>
         </div>
       </div>
-      {isOpen && (
-        <div className="p-6 border-gray-100 bg-white space-y-6">
-          {team.is_active && (
-            <div className="space-y-1">
-              <label className="text-xs font-medium text-light-txt">
-                Посилання розсилки
-              </label>
-              <div className="flex items-center gap-2 border border-gray-200 rounded-lg p-3">
-                <Icon
-                  id="link"
-                  className="w-5 h-5 text-gray-500 hover:text-gray-700"
-                />
-                <input
-                  type="text"
-                  readOnly
-                  value={
-                    team.team_token
-                      ? `${window.location.origin}/surveys/${team.team_token}`
-                      : "Токен відсутній"
-                  }
-                  className="bg-transparent flex-1 text-sm text-gray-600 outline-none truncate"
-                />
+      {isOpen &&
+        (team.is_active ? (
+          <div className=" border-gray-100 bg-white p-6 space-y-6">
+            <Input
+              label="Посилання розсилки"
+              leftIcon="link"
+              readOnly
+              value={
+                team.team_token
+                  ? `${window.location.origin}/surveys/${team.team_token}`
+                  : "Токен відсутній"
+              }
+              rightIcon={
                 <button onClick={handleRotateToken} type="button">
-                  <img src={rotateIcon} alt="link" className="w-5 h-5" />
+                  <img
+                    src={rotateIcon}
+                    alt="rotate"
+                    className="w-5 h-5 text-grayscale-600 hover:text-grayscale-900"
+                  />
                 </button>
+              }
+            />
+            {combinedUsers.length > 0 && (
+              <div className="space-y-2">
+                <label className="text-xs font-medium text-light-txt">
+                  Пошти учасників команди
+                </label>
+                <div className="space-y-2">
+                  {combinedUsers.map((user) => (
+                    <Input
+                      key={`${user.user_id}-${user.email}`}
+                      leftIcon="mail"
+                      rightIcon={
+                        <button
+                          onClick={() =>
+                            handleRemoveExistingMember(user.user_id, user.email)
+                          }
+                          type="button"
+                        >
+                          <Icon id="trash" />
+                        </button>
+                      }
+                      value={user.email}
+                      readOnly
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
-
-          {team.is_active && (
-            <div className="flex justify-end gap-3">
+            )}
+            <div className="flex justify-end gap-3 pt-2">
               <Button
                 onClick={handleArchiveTeam}
                 variant="secondary"
@@ -208,30 +227,8 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
                 Додати учасника
               </Button>
             </div>
-          )}
-
-          {combinedUsers.map((user) => (
-            <Input
-              key={`${user.user_id}-${user.email}`}
-              leftIcon="mail"
-              rightIcon={
-                team.is_active ? (
-                  <button
-                    onClick={() =>
-                      handleRemoveExistingMember(user.user_id, user.email)
-                    }
-                    type="button"
-                  >
-                    <Icon id="trash" />
-                  </button>
-                ) : null
-              }
-              value={user.email}
-              readOnly
-            />
-          ))}
-        </div>
-      )}
+          </div>
+        ) : null)}
       <AddTeamMemberModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
