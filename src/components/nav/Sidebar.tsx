@@ -61,7 +61,6 @@ export const Sidebar = () => {
             className={({ isActive }) => `
               relative flex items-center justify-center lg:justify-start gap-3 transition-all duration-200
               h-full md:h-auto 
-              /* Ось тут головний фікс: flex-1 замість w-full */
               flex-1 md:flex-none
               md:p-3 md:rounded-xl lg:px-4 lg:py-3
               ${link.mobileOrder} md:order-none

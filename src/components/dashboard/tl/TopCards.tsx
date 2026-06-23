@@ -20,13 +20,13 @@ export const TopCards = ({
   stress,
   workload,
 }: TopCardsProps) => {
-  const RADIUS = 32;
+  const RADIUS = 42;
   const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
   const strokeDashoffset =
     CIRCUMFERENCE - (engagement.pct / 100) * CIRCUMFERENCE;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 w-full items-stretch h-45">
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4 w-full items-stretch">
       <div className="bg-white rounded-2xl p-4 md:p-5 shadow-sm border border-gray-100 flex flex-col justify-between h-full xl:col-span-1">
         <Title
           tag="h2"
@@ -35,41 +35,48 @@ export const TopCards = ({
         >
           Відсоток відповідей
         </Title>
-        <div className="flex items-center justify-center gap-4 flex-grow my-1">
-          <div className="relative w-[68px] h-[68px] shrink-0">
+        <div className="flex items-center justify-center gap-6 flex-grow my-1">
+          {/* Збільшили контейнер з 68px до 120px (або 100px, залежно від макета) */}
+          <div className="relative w-[100px] h-[100px] shrink-0">
             <svg
               className="w-full h-full transform -rotate-90"
               viewBox="0 0 100 100"
             >
+              {/* Сіра підкладка */}
               <circle
                 cx="50"
                 cy="50"
                 r={RADIUS}
                 className="stroke-gray-100"
-                strokeWidth="8"
+                strokeWidth="6" /* Трохи тонша лінія для витонченості */
                 fill="transparent"
               />
+              {/* Кольоровий прогрес */}
               <circle
                 cx="50"
                 cy="50"
                 r={RADIUS}
                 className="stroke-success transition-all duration-500 ease-out"
-                strokeWidth="8"
+                strokeWidth="6"
                 fill="transparent"
                 strokeDasharray={CIRCUMFERENCE}
                 strokeDashoffset={strokeDashoffset}
                 strokeLinecap="round"
               />
             </svg>
-            <span className="absolute inset-0 flex items-center justify-center text-[14px] font-bold text-success">
+            <span className="absolute inset-0 flex items-center justify-center text-[20px] font-bold font-font-heading text-success tracking-tight">
               {engagement.pct}%
             </span>
           </div>
-          <div className="flex flex-col gap-0">
-            <span className="text-[12px] text-grayscale-900">Відповіло</span>
-            <div className="text-[18px] font-bold text-grayscale-900 leading-none">
+
+          {/* Права частина з текстом теж потребує більших шрифтів відповідно до макета */}
+          <div className="flex flex-col gap-1">
+            <span className="text-[14px] text-grayscale-900 font-medium">
+              Відповіло
+            </span>
+            <div className="text-[24px] font-bold text-grayscale-900 leading-none flex items-baseline">
               {engagement.responded}
-              <span className="text-grayscale-700 text-xs font-medium ml-0.5">
+              <span className="text-grayscale-700 text-[14px] font-semibold ml-1">
                 /{engagement.total_sent}
               </span>
             </div>

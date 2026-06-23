@@ -101,6 +101,8 @@ export const RadarChart = ({ data }: RadarChartProps) => {
 
             {/* Кастомний тултіп для точних значень при наведенні */}
             <Tooltip
+              animationDuration={150}
+              animationEasing="ease-out"
               contentStyle={{
                 borderRadius: "16px",
                 border: "1px solid #f3f4f6",

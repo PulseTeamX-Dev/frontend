@@ -38,7 +38,10 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dates = useMemo(
-    () => Array.from(new Set(metricsHistory.map((m) => m.week_start))).sort(),
+    () =>
+      Array.from(new Set(metricsHistory.map((m) => m.week_start)))
+        .sort()
+        .slice(-6),
     [metricsHistory],
   );
 

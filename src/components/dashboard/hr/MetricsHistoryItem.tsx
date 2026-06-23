@@ -1,4 +1,5 @@
 import Icon from "../../../shared/Icon";
+import { getLevel } from "../../../utils/getLevel";
 
 interface MetricsHistoryItemProps {
   value: number | null | undefined;
@@ -26,10 +27,6 @@ const MetricsHistoryItem = ({
   const isRiskMetric =
     metricKey === "stress_index" || metricKey === "workload_strain_index";
 
-  const getLevel = () => {
-    if (isRiskMetric) {
-      if (value < 4) return "low";
-      if (value < 7) return "medium";
       return "high";
     }
     if (value >= 7) return "low";
@@ -38,6 +35,7 @@ const MetricsHistoryItem = ({
   };
 
   const level = getLevel();
+  const level = getLevel(value, isRiskMetric);
 
   const styles: Record<string, string> = {
     low: "bg-green-100 text-[#10b981]",
