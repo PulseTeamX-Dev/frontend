@@ -15,11 +15,20 @@ export const UserProfileMin = () => {
   const initial = displayName.charAt(0).toUpperCase();
 
   return (
-    // На мобілці ховаємо. На планшеті (md) - центруємо. На десктопі (lg) - вирівнюємо по лівому краю.
-    <div className="hidden md:flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-3 mb-8 w-full px-2">
+    <div
+      className="hidden md:flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-3 pb-4 mb-2 w-full px-2"
+      style={{
+        // Делаем нижний бордер через радиальный градиент, который затухает к краям
+        borderBottom: "1px solid transparent",
+        borderImage:
+          "radial-gradient(50% 50% at 50% 50%, rgba(67, 44, 44, 0.2) 0%, rgba(67, 44, 44, 0) 100%) 1",
+      }}
+    >
       {avatar ? (
-        <div className="w-[54px] h-[54px] rounded-full p-[3px] bg-gradient-to-tr from-primary-active to-primary-hover flex items-center justify-center shrink-0">
-          <div className="w-full h-full rounded-full bg-white p-[2px] flex items-center justify-center">
+        /* Сохраняем твои оригинальные размеры w-[54px] h-[54px] */
+        <div className="w-[54px] h-[54px] rounded-full p-[3px] bg-gradient-to-br from-[#FF8A00] to-[#FFE6D1] flex items-center justify-center shrink-0">
+          {/* Меняем только bg-white на bg-[#fbfbfb], чтобы нижняя персиковая часть градиента гармонично таяла */}
+          <div className="w-full h-full rounded-full bg-[#fbfbfb] p-[2px] flex items-center justify-center">
             <img
               src={avatar}
               className="w-full h-full rounded-full object-cover"
@@ -34,10 +43,10 @@ export const UserProfileMin = () => {
       )}
 
       <div className="hidden lg:block overflow-hidden text-left">
-        <p className="text-[10px] text-grayscale-600 font-semibold tracking-wider">
+        <p className="text-[10px] text-[rgba(36,34,32,0.4)] font-medium tracking-wider">
           {displayRole}
         </p>
-        <p className="text-[12px] font-bold text-grayscale-900 truncate">
+        <p className="text-[12px] font-bold text-[#191219] truncate">
           {displayName}
         </p>
       </div>

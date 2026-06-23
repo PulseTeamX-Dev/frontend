@@ -62,10 +62,13 @@ export const TeamsAddForm = () => {
 
         <Button
           type="submit"
+          variant="primary"
           disabled={isSubmitting}
-          className="h-[46px] w-full sm:w-auto px-6 bg-orange-500 hover:bg-orange-600 text-white rounded-xl font-medium transition-colors disabled:bg-gray-300"
+          className="w-full sm:w-auto px-6 py-3 rounded-xl transition-colors disabled:bg-gray-300"
         >
-          {isSubmitting ? "Створення..." : "Створити команду"}
+          <p className="">
+            {isSubmitting ? "Створення..." : "Створити команду"}
+          </p>
         </Button>
       </div>
     </form>

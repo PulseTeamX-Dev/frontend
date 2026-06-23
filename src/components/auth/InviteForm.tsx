@@ -123,7 +123,7 @@ export const InviteForm = ({ token }: { token: string }) => {
               />
               <Icon
                 id="check"
-                className="absolute w-[9px] h-[7px] text-grayscale-700"
+                className="absolute fill-current w-4 h-4 text-grayscale-700 opacity-0 peer-checked:opacity-100 pointer-events-none transition-opacity"
               />
             </div>
             <label
@@ -147,7 +147,6 @@ export const InviteForm = ({ token }: { token: string }) => {
             </label>
           </div>
 
-          {/* Вивід кастомної помилки для чекбокса */}
           {errors.isAgreed?.message && (
             <div className="flex items-center gap-1.5 mt-2 text-xs text-error font-medium">
               <Icon id="circle-warning-filled" className="w-4 h-4 shrink-0" />

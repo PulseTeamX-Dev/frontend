@@ -127,19 +127,13 @@ function App() {
               }
             />
 
-            <Route
-                  path="/privacy"
-                  element={<PrivacyPolicyPage />}
-                />
+            <Route path="/privacy" element={<PrivacyPolicyPage />} />
 
-            <Route
-                  path="/terms"
-                  element={<TermsOfUsePage />}
-/>
+            <Route path="/terms" element={<TermsOfUsePage />} />
           </Routes>
         </Suspense>
       </BrowserRouter>
-      <ToastContainer position="bottom-right" theme="dark" />
+      <ToastContainer position="bottom-right" />
     </>
   );
 }

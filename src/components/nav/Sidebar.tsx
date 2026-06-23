@@ -45,15 +45,15 @@ export const Sidebar = () => {
   return (
     <aside
       className="
-      z-50 bg-white shrink-0 border-gray-200
-      fixed bottom-0 left-0 w-full h-[70px] border-t shadow-[0_-4px_10px_rgba(0,0,0,0.05)]
-      md:relative md:h-screen md:w-[80px] md:flex md:flex-col md:border-t-0 md:border-r md:p-4 md:shadow-none
-      lg:w-[230px]
-    "
+        z-50 shrink-0 bg-white border-gray-200
+        fixed bottom-0 left-0 w-full h-[65px] border-t shadow-[0_-4px_10px_rgba(0,0,0,0.05)]
+        md:sticky md:h-[calc(100vh-24px)] md:w-[80px] md:flex md:flex-col md:border-none md:p-4 md:rounded-3xl  md:shadow-[0_64px_64px_-32px_rgba(102,37,0,0.56)]
+        lg:w-[250px]
+      "
     >
       <UserProfileMin />
 
-      <nav className="flex-1 flex w-full flex-row md:flex-col justify-between md:justify-start items-center md:items-stretch h-full md:gap-2 px-2 md:px-0">
+      <nav className="flex-1 flex w-full flex-row md:flex-col justify-between md:justify-start items-center md:items-stretch h-full px-2 md:px-0">
         {allowedLinks.map((link) => (
           <NavLink
             key={link.path}
@@ -66,8 +66,8 @@ export const Sidebar = () => {
               ${link.mobileOrder} md:order-none
               ${
                 isActive
-                  ? "text-grayscale-900 md:bg-primary-active md:text-white md:shadow-md"
-                  : "text-grayscale-500 hover:bg-orange-50 md:hover:text-grayscale-900"
+                  ? "text-grayscale-900 md:bg-primary-active md:hover:bg-primary-hover md:text-white md:shadow-md"
+                  : "text-grayscale-600 hover:bg-orange-50 md:hover:text-grayscale-900"
               }
             `}
           >
@@ -89,7 +89,6 @@ export const Sidebar = () => {
         ))}
 
         {role?.toLowerCase() === "hr" && (
-          // Обгортка теж отримала flex-1 для мобілки
           <div className="relative order-3 md:order-none md:mt-auto flex items-center justify-center lg:justify-start flex-1 md:flex-none h-full md:h-auto">
             <NavLink
               to="/create-pulse"
@@ -101,7 +100,7 @@ export const Sidebar = () => {
                     : "text-grayscale-500 md:hover:bg-primary-hover md:hover:text-white"
                 }
                 bg-transparent
-                md:bg-[#F26E3B] md:text-white md:rounded-xl md:shadow-md md:hover:bg--primary-hover 
+                md:bg-primary-active md:text-white md:rounded-xl md:shadow-md md:hover:bg-primary-hover
                 md:!p-3 lg:!px-4 lg:!py-3 md:w-12 md:h-12 lg:w-full lg:h-auto
               `}
             >
