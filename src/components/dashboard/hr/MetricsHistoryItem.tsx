@@ -27,14 +27,6 @@ const MetricsHistoryItem = ({
   const isRiskMetric =
     metricKey === "stress_index" || metricKey === "workload_strain_index";
 
-      return "high";
-    }
-    if (value >= 7) return "low";
-    if (value >= 5) return "medium";
-    return "high";
-  };
-
-  const level = getLevel();
   const level = getLevel(value, isRiskMetric);
 
   const styles: Record<string, string> = {
