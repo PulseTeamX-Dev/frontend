@@ -16,6 +16,13 @@ import AlertCard from "../components/alerts/AlertCard";
 import SignalsAnalytics from "../components/alerts/SignalsAnalytics";
 import { PageLoader } from "../shared/Loader";
 import { PageHeader } from "../shared/PageHeader";
+import { selectAuthRole } from "../redux/auth/selectors";
+
+const roleLabels: Record<string, string> = {
+  hr: "HR",
+  team_lead: "Тімліда",
+  admin: "Адміна",
+};
 
 export const SignalsPage = () => {
   const dispatch = useAppDispatch();
@@ -24,6 +31,7 @@ export const SignalsPage = () => {
   const loading = useAppSelector(selectAlertsLoading);
   const unresolvedCount = useAppSelector(selectUnresolvedAlertsCount);
   const analytics = useAppSelector(selectAlertsAnalytics);
+  const role = useAppSelector(selectAuthRole);
 
   useEffect(() => {
     dispatch(fetchAlerts());
@@ -42,10 +50,14 @@ export const SignalsPage = () => {
     }
   };
 
+  const displayRole = role
+    ? roleLabels[role.toLowerCase()] || role.toUpperCase()
+    : "";
+
   return (
     <div className="max-w-[1440px] mx-auto p-4 md:p-6">
       <PageHeader
-        title="Інсайти HR"
+        title={`Інсайти ${displayRole}`}
         showLogo={true}
         rightContent={
           <div className="px-4 py-2 rounded-full bg-red-500 text-white text-sm font-medium">

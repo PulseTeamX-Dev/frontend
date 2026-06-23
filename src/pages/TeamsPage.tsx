@@ -5,6 +5,7 @@ import { selectTeams, selectTeamLoading } from "../redux/teams/selectors";
 
 import { TeamsAddForm } from "../components/teams/TeamsAddForm";
 import { TeamAccordionItem } from "../components/teams/TeamAccordionItem";
+import { Title } from "../shared/Title";
 
 const TeamsPage = () => {
   const dispatch = useAppDispatch();
@@ -23,9 +24,13 @@ const TeamsPage = () => {
     <div className="w-full bg-white rounded-[24px] shadow-[0_4px_20px_rgba(0,0,0,0.03)] p-6 md:p-8 border border-gray-100/80 space-y-8">
       {/* Заголовок сторінки */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-950 tracking-tight">
+        <Title
+          tag="h2"
+          variant="bold"
+          className="text-2xl font-bold mb-8 text-left text-slate-900"
+        >
           Команди
-        </h1>
+        </Title>
       </div>
       {/* Форма створення команди */}
       <TeamsAddForm />

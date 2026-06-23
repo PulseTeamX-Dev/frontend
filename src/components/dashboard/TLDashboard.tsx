@@ -42,7 +42,6 @@ export const TLDashboard = () => {
       workload_min: tlMetrics.workload?.min ?? 0,
       workload_max: tlMetrics.workload?.max ?? 0,
       workload_status: tlMetrics.workload?.status || "Unknown",
-      // ФІКС ТИПІЗАЦІЇ VERCEL: Додали обов'язкове поле workload_avg
       workload_avg: tlMetrics.workload?.workload_avg || 0,
       overload_count: tlMetrics.workload?.overload_count || 0,
       underload_count: tlMetrics.workload?.underload_count || 0,
@@ -67,8 +66,7 @@ export const TLDashboard = () => {
               <span className="font-bold text-orange-900">
                 {currentCount} з 5
               </span>{" "}
-              необхідних відповідей. Історія опитувань (Хітмеп) залишається
-              доступною.
+              необхідних відповідей. Історія опитувань залишається доступною.
             </p>
           </div>
         </div>

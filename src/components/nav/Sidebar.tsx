@@ -48,7 +48,7 @@ export const Sidebar = () => {
         z-50 shrink-0 bg-white border-gray-200
         fixed bottom-0 left-0 w-full h-[65px] border-t shadow-[0_-4px_10px_rgba(0,0,0,0.05)]
         md:sticky md:h-[calc(100vh-24px)] md:w-[80px] md:flex md:flex-col md:border-none md:p-4 md:rounded-3xl  md:shadow-[0_64px_64px_-32px_rgba(102,37,0,0.56)]
-        lg:w-[250px]
+        lg:w-[220px]
       "
     >
       <UserProfileMin />
