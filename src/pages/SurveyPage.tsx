@@ -237,7 +237,7 @@ export const SurveyPage = () => {
                 variant="primary"
                 disabled={isButtonDisabled}
                 onClick={handleNextPage}
-                className="min-w-45 rounded-xl"
+                className="min-w-45 rounded-xl px-[10px] py-[12px]"
               >
                 Продовжити
               </Button>

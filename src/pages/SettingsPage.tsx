@@ -7,6 +7,7 @@ import { useAppSelector } from "../hooks/useReduxTypes";
 export const SettingsPage = () => {
   const role = useAppSelector((state) => state.auth.role);
   const isHR = role === "hr";
+
   return (
     <div className="w-full min-h-screen bg-[#F8F9FA] p-4 md:p-10 text-slate-800">
       <div className="max-w-[1320px] mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">

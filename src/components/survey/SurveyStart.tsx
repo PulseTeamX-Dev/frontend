@@ -47,7 +47,12 @@ export const SurveyStart = ({ onStart }: SurveyStartProps) => {
       </div>
 
       <div className="mt-2">
-        <Button type="button" variant="primary" onClick={onStart}>
+        <Button
+          type="button"
+          variant="primary"
+          onClick={onStart}
+          className="px-[12px] py-[10px] text-[14px] w-[224px]"
+        >
           Почати опитування
         </Button>
       </div>
