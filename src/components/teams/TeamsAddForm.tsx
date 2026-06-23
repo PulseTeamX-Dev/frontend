@@ -36,39 +36,39 @@ export const TeamsAddForm = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="w-full pb-6 border-b border-gray-100"
+      className="w-full pb-6 border-gray-100"
     >
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-6">
-        <div className="flex-1">
-          <Input
-            id="name"
-            type="text"
-            label="Назва команди"
-            leftIcon="portfolio"
-            placeholder="Наприклад: Розробники"
-            disabled={isSubmitting}
-            {...register("name", {
-              required: "Назва команди обов'язкова",
-              minLength: {
-                value: 2,
-                message: "Мінімальна довжина назви — 2 символи",
-              },
-            })}
-          />
-          {errors.name && (
-            <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
-          )}
-        </div>
+      <div className="w-full">
+        <Input
+          id="name"
+          type="text"
+          label="Назва команди"
+          leftIcon="portfolio"
+          iconClassName="text-grayscale-600"
+          placeholder="Розробники"
+          disabled={isSubmitting}
+          {...register("name", {
+            required: "Назва команди обов'язкова",
+            minLength: {
+              value: 2,
+              message: "Мінімальна довжина назви — 2 символи",
+            },
+          })}
+        />
 
+        {errors.name && (
+          <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+        )}
+      </div>
+
+      <div className="mt-4 flex sm:justify-end justify-start">
         <Button
           type="submit"
           variant="primary"
+          className="w-[166px] h-[48px] py-2.5"
           disabled={isSubmitting}
-          className="w-full sm:w-auto px-6 py-3 rounded-xl transition-colors disabled:bg-gray-300"
         >
-          <p className="">
-            {isSubmitting ? "Створення..." : "Створити команду"}
-          </p>
+          Створити команду
         </Button>
       </div>
     </form>
