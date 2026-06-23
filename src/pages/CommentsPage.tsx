@@ -14,8 +14,8 @@ import { fetchAlerts } from "../redux/alerts/operation";
 import CommentCard from "../components/comments/CommentCard";
 import AlertsModal from "../components/alerts/AlertsModal";
 import Pagination from "../components/comments/Pagination";
-import { Title } from "../shared/Title";
 import Icon from "../shared/Icon";
+import { PageHeader } from "../shared/PageHeader"; // 🔒 Наш шеред-компонент
 
 export const CommentsPage = () => {
   const dispatch = useAppDispatch();
@@ -38,7 +38,6 @@ export const CommentsPage = () => {
     dispatch(fetchAlerts());
   }, [dispatch]);
 
-  // поки що беруться три останні коментарі, в перспективі нові
   const newComments = comments
     .toSorted(
       (a, b) =>
@@ -51,33 +50,23 @@ export const CommentsPage = () => {
 
   return (
     <>
-      <div className="max-w-[1100px] mx-auto p-4 md:p-6">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
-            <Icon id="logo" className="w-8 h-8" />
-
-            <Title
-              tag="h1"
-              variant="bold"
-              className="text-[18px] text-grayscale-900"
+      <div className="mx-auto p-4 md:p-6">
+        <PageHeader
+          title="Коментарі"
+          showLogo={true}
+          rightContent={
+            <button
+              type="button"
+              onClick={() => setIsAlertsOpen(true)}
+              className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
             >
-              Коментарі
-            </Title>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => setIsAlertsOpen(true)}
-            className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
-          >
-            <Icon id="bell" className="w-5 h-5" />
-
-            {unresolvedCount > 0 && (
-              <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-red-500 border border-white" />
-            )}
-          </button>
-        </div>
+              <Icon id="bell" className="w-5 h-5 text-grayscale-700" />
+              {unresolvedCount > 0 && (
+                <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-red-500 border border-white animate-pulse" />
+              )}
+            </button>
+          }
+        />
 
         {/* Main Card */}
         <div className="bg-white rounded-3xl border border-gray-200 p-5 shadow-sm">
@@ -96,10 +85,9 @@ export const CommentsPage = () => {
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value as "all" | "new")}
-              className="h-10 px-3 rounded-xl border border-gray-200 bg-white text-sm"
+              className="h-10 px-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:border-primary-active"
             >
               <option value="new">Нові</option>
-
               <option value="all">Всі</option>
             </select>
           </div>

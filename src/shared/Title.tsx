@@ -16,10 +16,10 @@ export const Title = ({
   children,
   className = "",
 }: TitleProps) => {
-  const baseStyles = "text-grayscale-900 mb-2";
+  const baseStyles = "text-grayscale-900";
 
   const stylesByTag: Record<TitleTag, string> = {
-    h1: "text-2xl md:text-2xl",
+    h1: "text-2xl",
     h2: "text-[20px] md:text-[18px]",
     h3: "text-base",
     h4: "text-sm",
@@ -27,8 +27,8 @@ export const Title = ({
 
   const variantsStyles = {
     h1: {
-      bold: "font-bold leading-6 md:leading-8",
-      light: "font-light leading-6 md:leading-8",
+      bold: "font-bold leading-tight",
+      light: "font-medium leading-tight",
     },
     h2: {
       bold: "font-bold leading-tight",

@@ -6,7 +6,7 @@ import { TopCards } from "./tl/TopCards";
 import { RadarChart } from "./tl/RadarChart";
 import type { TeamLeadMetrics } from "../../redux/dashboard/types";
 import Icon from "../../shared/Icon";
-import { Title } from "../../shared/Title";
+import { PageHeader } from "../../shared/PageHeader";
 
 export const TLDashboard = () => {
   const dispatch = useAppDispatch();
@@ -52,20 +52,7 @@ export const TLDashboard = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex gap-2 items-center">
-        <Icon
-          id="logo"
-          className="w-8 h-8 text-primary-active shrink-0 transform -translate-y-1.25"
-        />
-        <Title
-          tag="h1"
-          variant="light"
-          className="text-[18px] md:text-xl text-grayscale-900 font-heading mb-0 leading-none flex items-center"
-        >
-          Огляд стану команди:{" "}
-          <span className="font-normal ml-1">{teamName}</span>
-        </Title>
-      </div>
+      <PageHeader title={`Огляд стану команди: ${teamName}`} showLogo />
       {isPrivacyLocked && (
         <div className="w-full bg-orange-50 border border-orange-200 rounded-2xl p-4 flex items-center gap-3 text-orange-800 animate-in fade-in duration-300">
           <Icon

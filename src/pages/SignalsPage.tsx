@@ -14,9 +14,8 @@ import {
 } from "../redux/alerts/selectors";
 import AlertCard from "../components/alerts/AlertCard";
 import SignalsAnalytics from "../components/alerts/SignalsAnalytics";
-import Icon from "../shared/Icon";
-import { Title } from "../shared/Title";
 import { PageLoader } from "../shared/Loader";
+import { PageHeader } from "../shared/PageHeader";
 
 export const SignalsPage = () => {
   const dispatch = useAppDispatch();
@@ -45,21 +44,15 @@ export const SignalsPage = () => {
 
   return (
     <div className="max-w-[1440px] mx-auto p-4 md:p-6">
-      <div className="flex items-center gap-4 mb-8">
-        <Icon id="logo" className="w-8 h-8" />
-
-        <Title
-          tag="h1"
-          variant="bold"
-          className="text-[18px] text-grayscale-900"
-        >
-          Інсайти HR
-        </Title>
-
-        <div className="px-4 py-2 rounded-full bg-red-500 text-white text-sm font-medium">
-          {unresolvedCount} сигналів не розглянуто
-        </div>
-      </div>
+      <PageHeader
+        title="Інсайти HR"
+        showLogo={true}
+        rightContent={
+          <div className="px-4 py-2 rounded-full bg-red-500 text-white text-sm font-medium">
+            {unresolvedCount} сигналів не розглянуто
+          </div>
+        }
+      />
 
       {analytics && (
         <>

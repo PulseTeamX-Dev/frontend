@@ -5,8 +5,7 @@ import { MetricSummaryList } from "./hr/MetricSummaryList";
 import MetricsHistoryList from "./hr/MetricsHistoryList";
 import { SurveyCompletionTable } from "./hr/SurveyCompletionTable";
 import { WorkloadChart } from "./hr/WorkloadChart";
-import Icon from "../../shared/Icon";
-import { Title } from "../../shared/Title";
+import { PageHeader } from "../../shared/PageHeader";
 
 export const HRDashboard = () => {
   const dispatch = useAppDispatch();
@@ -30,22 +29,8 @@ export const HRDashboard = () => {
 
   return (
     <>
-      <div className="flex gap-2 items-center">
-        <Icon
-          id="logo"
-          className="w-8 h-8 text-primary-active shrink-0 transform -translate-y-1.25"
-        />
-        <Title
-          tag="h1"
-          variant="light"
-          className="text-[18px] md:text-xl text-grayscale-900 font-heading mb-0 leading-none"
-        >
-          Огляд
-        </Title>
-      </div>
-
+      <PageHeader title="Огляд" showLogo />
       <MetricSummaryList metricsSummary={metrics.metrics_summary} />
-
       <div className="flex flex-col xl:flex-row gap-5 mt-6 w-full items-stretch xl:h-[560px]">
         {/* ЛІВА КОЛОНКА (Хітмеп) - 1/2 */}
         <div className="w-full xl:w-1/2 flex flex-col min-h-0">

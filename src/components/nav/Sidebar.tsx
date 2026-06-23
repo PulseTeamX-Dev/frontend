@@ -67,7 +67,7 @@ export const Sidebar = () => {
               ${
                 isActive
                   ? "text-grayscale-900 md:bg-primary-active md:hover:bg-primary-hover md:text-white md:shadow-md"
-                  : "text-grayscale-600 hover:bg-orange-50 md:hover:text-grayscale-900"
+                  : "text-grayscale-600 md:hover:text-primary-hover"
               }
             `}
           >
