@@ -29,23 +29,19 @@ export const AddTeamMemberModal = ({
         })}
         className="bg-white p-8 rounded-3xl w-full max-w-md shadow-2xl border border-gray-100"
       >
-        <h3 className="text-2xl font-bold mb-6 text-gray-800">
-          Додати учасника
-        </h3>
+        <h3 className="text-2xl font-bold mb-6 text-title">Додати учасника</h3>
 
         <div className="space-y-4">
-          <label className="text-sm font-medium text-gray-500">
-            Email учасника
-          </label>
+          <label className="text-sm font-medium text-light-txt">Email</label>
           <Input
             type="email"
             placeholder="email@gmail.com"
-            className="h-12 text-base mt-2"
+            className="h-12 text-base mt-2 text-grayscale-700"
             {...register("email", { required: true })}
           />
         </div>
 
-        <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 mt-8">
+        <div className="flex  justify-end gap-3 mt-8">
           <Button
             type="button"
             variant="secondary"
