@@ -17,22 +17,25 @@ export const getScaleButtonColors = (
     tone = value <= 3 ? "bad" : value <= 7 ? "neutral" : "good";
   }
 
-  // 2. Тепер мапимо ці сутності на реальні класи CSS
   if (isSelected) {
     const activeClasses = {
-      good: "bg-green-500 text-white border-green-500 shadow-md shadow-green-500/20",
+      good: "border-[3px] border-[#51F184] bg-[#51F184] text-[#444444] shadow-sm",
       neutral:
-        "bg-orange-400 text-white border-orange-400 shadow-md shadow-orange-400/20",
-      bad: "bg-red-500 text-white border-red-500 shadow-md shadow-red-500/20",
+        "border-[3px] border-[#F8CD0E] bg-[#F9D73E] text-[#444444] shadow-sm",
+      bad: "border-[3px] border-[#ED2B26] bg-[#F15551] text-[#444444] shadow-sm",
     };
+
     return activeClasses[tone];
   }
 
   const inactiveClasses = {
-    good: "border-green-200 text-green-500 bg-transparent hover:bg-green-50 hover:border-green-400",
+    good: "border-[3px] border-[#51F184] bg-white text-[#444444] hover:bg-[#A8F8C2] transition-colors",
+
     neutral:
-      "border-orange-200 text-orange-500 bg-transparent hover:bg-orange-50 hover:border-orange-400",
-    bad: "border-red-200 text-red-500 bg-transparent hover:bg-red-50 hover:border-red-400",
+      "border-[3px] border-[#F8CD0E] bg-white text-[#444444] hover:bg-[#FCEB9F] transition-colors",
+
+    bad: "border-[3px] border-[#ED2B26] bg-white text-[#444444] hover:bg-[#F8AAA8] transition-colors",
   };
+
   return inactiveClasses[tone];
 };
