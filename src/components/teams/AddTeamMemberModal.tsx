@@ -16,7 +16,12 @@ export const AddTeamMemberModal = ({
   onAdd,
   isSubmitting,
 }: AddTeamMemberModalProps) => {
-  const { register, handleSubmit, reset } = useForm<{ email: string }>();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<{ email: string }>();
 
   if (!isOpen) return null;
 
@@ -36,8 +41,15 @@ export const AddTeamMemberModal = ({
           <Input
             type="email"
             placeholder="email@gmail.com"
+            error={errors.email?.message}
             className="h-12 text-base mt-2 text-grayscale-700"
-            {...register("email", { required: true })}
+            {...register("email", {
+              required: "Введіть email",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Введіть коректний email",
+              },
+            })}
           />
         </div>
 
