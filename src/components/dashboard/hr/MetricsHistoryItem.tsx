@@ -1,5 +1,5 @@
 import Icon from "../../../shared/Icon";
-import { getLevel } from "../../../utils/getLevel";
+import { getHeatmapClass } from "../../../utils/getLevel";
 
 interface MetricsHistoryItemProps {
   value: number | null | undefined;
@@ -27,17 +27,12 @@ const MetricsHistoryItem = ({
   const isRiskMetric =
     metricKey === "stress_index" || metricKey === "workload_strain_index";
 
-  const level = getLevel(value, isRiskMetric);
-
-  const styles: Record<string, string> = {
-    low: "bg-green-100 text-[#10b981]",
-    medium: "bg-yellow-200 text-[#d97706]",
-    high: "bg-red-600 text-white",
-  };
+  // 🛠️ ЗАМІНИЛИ: викликаємо чистий колір фону
+  const bgColor = getHeatmapClass(value, isRiskMetric);
 
   return (
     <div
-      className={`w-full h-full min-h-[56px] rounded-xl flex items-center justify-center text-[17px] md:text-[18px] font-medium transition-colors duration-300 ${styles[level]}`}
+      className={`w-full h-full min-h-[56px] rounded-xl flex items-center justify-center  text-grayscale-900 text-[14px] md:text-[16px] ${bgColor}`}
     >
       {value.toFixed(1).replace(".", ",")}
     </div>

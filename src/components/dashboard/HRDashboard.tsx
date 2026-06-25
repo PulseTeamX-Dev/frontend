@@ -33,15 +33,12 @@ export const HRDashboard = () => {
       <PageHeader title="Огляд" showLogo />
       <MetricSummaryList metricsSummary={metrics.metrics_summary} />
       <div className="flex flex-col xl:flex-row gap-5 mt-6 w-full items-stretch xl:h-[560px]">
-        {/* ЛІВА КОЛОНКА (Хітмеп) - 1/2 */}
         <div className="w-full xl:w-1/2 flex flex-col min-h-0">
           <MetricsHistoryList metricsHistory={metrics.metrics_history} />
         </div>
 
-        {/* ПРАВА КОЛОНКА (Картки) - 1/2 */}
         <div className="w-full xl:w-1/2 flex flex-col gap-5 min-h-0">
-          {/* ФІКС ВІЗУАЛУ: Картка опитувань займає фіксовано ~40% або контентну висоту */}
-          <div className="flex-none">
+          <div>
             <SurveyCompletionTable data={metrics.engagement} />
           </div>
 

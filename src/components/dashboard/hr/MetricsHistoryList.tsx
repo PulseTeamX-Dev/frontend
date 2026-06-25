@@ -79,7 +79,7 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
   const latestWeek = dates[dates.length - 1];
 
   return (
-    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex-1 flex flex-col min-h-0">
+    <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 w-full flex-1 flex flex-col min-h-0">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-5 shrink-0">
         <Title tag="h2" variant="light" className="mb-0">
           {currentConfig.title}
