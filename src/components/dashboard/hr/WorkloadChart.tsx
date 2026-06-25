@@ -24,7 +24,7 @@ export const WorkloadChart = ({ data }: WorkloadChartProps) => {
       case "Underload":
         return isText ? "text-blue-900" : "bg-blue-900";
       case "Polarized":
-        return isText ? "text-green-500" : "bg-green-500";
+        return isText ? "text-orange-900" : "bg-orange-900";
       case "Optimal":
       default:
         return isText ? "text-success" : "bg-success";
