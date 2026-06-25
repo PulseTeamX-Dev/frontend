@@ -16,6 +16,7 @@ import AlertsModal from "../components/alerts/AlertsModal";
 import Pagination from "../components/comments/Pagination";
 import Icon from "../shared/Icon";
 import { PageHeader } from "../shared/PageHeader"; // 🔒 Наш шеред-компонент
+import { PageLoader } from "../shared/Loader";
 
 export const CommentsPage = () => {
   const dispatch = useAppDispatch();
@@ -94,9 +95,7 @@ export const CommentsPage = () => {
 
           {/* Content */}
           {loading ? (
-            <div className="py-10 text-center text-gray-500">
-              Завантаження...
-            </div>
+            <PageLoader />
           ) : displayedComments.length === 0 ? (
             <div className="py-10 text-center text-gray-500">
               Коментарів поки немає

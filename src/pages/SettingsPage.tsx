@@ -3,10 +3,14 @@ import ProfileForm from "../components/profile/ProfileForm";
 import AvatarUploader from "../components/profile/AvatarUploader";
 import { Title } from "../shared/Title";
 import { useAppSelector } from "../hooks/useReduxTypes";
+import { PageLoader } from "../shared/Loader";
 
 export const SettingsPage = () => {
   const role = useAppSelector((state) => state.auth.role);
+  const isLoading = useAppSelector((state) => state.profile.isLoading);
   const isHR = role === "hr";
+
+  if (isLoading) return <PageLoader />;
 
   return (
     <div className="w-full min-h-screen bg-[#F8F9FA] p-4 md:p-8">

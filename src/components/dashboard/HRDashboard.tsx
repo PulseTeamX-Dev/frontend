@@ -6,6 +6,7 @@ import MetricsHistoryList from "./hr/MetricsHistoryList";
 import { SurveyCompletionTable } from "./hr/SurveyCompletionTable";
 import { WorkloadChart } from "./hr/WorkloadChart";
 import { PageHeader } from "../../shared/PageHeader";
+import { PageLoader } from "../../shared/Loader";
 
 export const HRDashboard = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +18,7 @@ export const HRDashboard = () => {
     dispatch(fetchMetrics());
   }, [dispatch]);
 
-  if (isLoading) return <div>Завантаження...</div>;
+  if (isLoading) return <PageLoader />;
   if (error) return <div>Помилка: {error}</div>;
   if (!metrics) return null;
 

@@ -7,6 +7,7 @@ import { RadarChart } from "./tl/RadarChart";
 import type { TeamLeadMetrics } from "../../redux/dashboard/types";
 import Icon from "../../shared/Icon";
 import { PageHeader } from "../../shared/PageHeader";
+import { PageLoader } from "../../shared/Loader";
 
 export const TLDashboard = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +19,7 @@ export const TLDashboard = () => {
     dispatch(fetchMetrics());
   }, [dispatch]);
 
-  if (isLoading) return <div>Завантаження...</div>;
+  if (isLoading) return <PageLoader/>
   if (error) return <div>Помилка: {error}</div>;
   if (!metrics) return null;
 

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import checkImg from "../../assets/img/check.png";
 import { Title } from "../../shared/Title";
+import { Button } from "../../shared/Button";
 
 const AuthSuccess = () => {
   const navigate = useNavigate();
@@ -27,12 +28,13 @@ const AuthSuccess = () => {
         Ви авторизовані в PulseTeamX.
       </p>
 
-      <button
+      <Button
+        variant="primary"
         onClick={handleGoToDashboard}
-        className="w-full py-3.5 bg-[#F26E3B] hover:bg-[#e05d2c] text-white font-medium rounded-2xl transition-colors shadow-md shadow-orange-100"
+        className="w-full py-3.5 transition-colors"
       >
         Перейти до дашборду
-      </button>
+      </Button>
     </div>
   );
 };

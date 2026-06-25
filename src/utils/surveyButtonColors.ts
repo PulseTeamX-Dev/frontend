@@ -3,17 +3,13 @@ export const getScaleButtonColors = (
   isSelected: boolean,
   colorDirection: "red_to_green" | "green_to_red" | "centered" = "red_to_green",
 ): string => {
-  // 1. Спочатку визначаємо "сутність" оцінки для конкретної кнопки (це добре, нейтрально чи погано)
   let tone: "good" | "neutral" | "bad";
 
   if (colorDirection === "green_to_red") {
-    // 1-3 — добре (зелений), 4-6 — нейтрально (помаранчевий), 7-10 — погано (червоний)
     tone = value <= 3 ? "good" : value <= 7 ? "neutral" : "bad";
   } else if (colorDirection === "centered") {
-    // Краї погані (червоні), середина хороша (зелена)
     tone = value >= 4 && value <= 7 ? "good" : "bad";
   } else {
-    // Дефолтний red_to_green: 1-3 — погано (червоний), 4-6 — нейтрально (помаранчевий), 7-10 — добре (зелений)
     tone = value <= 3 ? "bad" : value <= 7 ? "neutral" : "good";
   }
 

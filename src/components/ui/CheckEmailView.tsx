@@ -2,6 +2,7 @@ import { Title } from "../../shared/Title";
 import { useAppDispatch } from "../../hooks/useReduxTypes";
 import { resetRecoverStatus } from "../../redux/auth/slice";
 import mailImg from "../../assets/img/email.png";
+import { Button } from "../../shared/Button";
 
 interface Props {
   onBack: () => void;
@@ -47,14 +48,15 @@ export const CheckEmailView = ({ onBack }: Props) => {
         <span className="text-[10px] uppercase font-bold text-light-txt tracking-wider text-center">
           Не отримали листа?
         </span>
-        <button
+        <Button
           onClick={() => {
             /* Тут можна прив'язати повторну відправку, якщо треба */
           }}
-          className="w-full py-3.5 bg-[#F26E3B] hover:bg-[#e05d2c] text-white font-medium rounded-2xl transition-colors"
+          variant="primary"
+          className="w-full py-3.5 transition-colors"
         >
           Надіслати повторно
-        </button>
+        </Button>
       </div>
     </div>
   );
