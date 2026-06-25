@@ -85,36 +85,51 @@ const MetricsHistoryList = ({ metricsHistory }: MetricsHistoryListProps) => {
           {currentConfig.title}
         </Title>
 
-        <div className="relative">
+        {/* Контейнер фільтру */}
+        <div className="relative z-30">
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 px-3 py-1.5 bg-primary-active hover:bg-primary-hover text-white rounded-md text-sm font-semibold transition-colors"
+            className={`flex items-center gap-2 px-3 py-2 text-sm font-bold transition-all duration-200 select-none ${
+              isDropdownOpen
+                ? "bg-[#F26522] text-white rounded-t-xl rounded-b-none" // 🛠️ Коли відкритий: помаранчевий фон, нижні кути гострі
+                : "bg-transparent text-grayscale-900 hover:text-[#F26522] rounded-md"
+            }`}
           >
             {currentConfig.label}
+            {/* 🛠️ ФІКС: Змінили іконку caret на тонку chevron для повної відповідності */}
             <Icon
-              id="caret-down-filled"
-              className={`w-3 h-3 text-white transition-transform duration-200 ${isDropdownOpen ? "rotate-180" : ""}`}
+              id={isDropdownOpen ? "chevron-up" : "chevron-down"}
+              className={`w-3.5 h-3.5 transition-colors duration-200 ${
+                isDropdownOpen ? "text-white" : "text-grayscale-600"
+              }`}
             />
           </button>
 
+          {/* Випадаюче меню */}
           {isDropdownOpen && (
-            <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-100 shadow-lg rounded-md py-1 z-20 flex flex-col">
-              {metricOptions.map((opt) => (
-                <button
-                  key={opt.key}
-                  className={`text-left px-4 py-2 text-sm font-semibold transition-colors hover:bg-gray-50 ${
-                    selectedMetric === opt.key
-                      ? "text-grayscale-900 bg-gray-50"
-                      : "text-grayscale-600"
-                  }`}
-                  onClick={() => {
-                    setSelectedMetric(opt.key);
-                    setIsDropdownOpen(false);
-                  }}
-                >
-                  {opt.label}
-                </button>
-              ))}
+            <div
+              // 🛠️ ФІКС: Вирівнюємо меню по лівому краю кнопки (left-0), ставимо фіксовану ширину w-[190px] та округлюємо всі кути крім верхнього лівого за логікою макету
+              className="absolute left-0 top-full w-[140.5px] bg-white border border-gray-200 shadow-lg rounded-xl rounded-tl-none rounded-tr-none overflow-hidden py-0.5 z-40 flex flex-col animate-in fade-in slide-in-from-top-1 duration-150"
+            >
+              {metricOptions.map((opt) => {
+                const isSelected = selectedMetric === opt.key;
+                return (
+                  <button
+                    key={opt.key}
+                    className={`text-left px-4 py-2.5 text-sm transition-colors border-b border-gray-100 last:border-0 hover:bg-gray-50/80 ${
+                      isSelected
+                        ? "text-grayscale-900 font-bold bg-gray-50/50"
+                        : "text-grayscale-700 font-medium"
+                    }`}
+                    onClick={() => {
+                      setSelectedMetric(opt.key);
+                      setIsDropdownOpen(false);
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                );
+              })}
             </div>
           )}
         </div>

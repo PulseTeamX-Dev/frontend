@@ -21,9 +21,8 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
       <Title tag="h2" variant="light" className="mb-4 shrink-0">
         Стан заповнення опитувань
       </Title>
-
-      <div className="w-full overflow-x-auto overflow-y-hidden pb-3 custom-scrollbar h-[130px] flex-1">
-        <div className="flex gap-2 min-w-max">
+      <div className="w-full overflow-x-auto overflow-y-hidden pb-3 custom-scrollbar h-[130px] flex-1 flex">
+        <div className="flex gap-2 justify-start my-auto mx-auto flex-nowrap">
           {sortedData.map((item) => {
             const isCritical = item.low_engagement_signal;
 

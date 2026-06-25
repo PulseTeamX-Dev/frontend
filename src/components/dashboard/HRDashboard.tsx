@@ -32,17 +32,20 @@ export const HRDashboard = () => {
     <>
       <PageHeader title="Огляд" showLogo />
       <MetricSummaryList metricsSummary={metrics.metrics_summary} />
-      <div className="flex flex-col xl:flex-row gap-5 mt-6 w-full items-stretch xl:h-[560px]">
+
+      <div className="flex flex-col xl:flex-row gap-4 mt-4 w-full items-stretch xl:h-[560px]">
         <div className="w-full xl:w-1/2 flex flex-col min-h-0">
-          <MetricsHistoryList metricsHistory={metrics.metrics_history} />
+          <div className="flex-1 w-full max-h-[500px] xl:max-h-none flex flex-col">
+            <MetricsHistoryList metricsHistory={metrics.metrics_history} />
+          </div>
         </div>
 
-        <div className="w-full xl:w-1/2 flex flex-col gap-5 min-h-0">
+        <div className="w-full xl:w-1/2 flex flex-col gap-4 min-h-0">
           <div>
             <SurveyCompletionTable data={metrics.engagement} />
           </div>
 
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col min-h-[300px] xl:min-h-0">
             <WorkloadChart data={metrics.workload_current} />
           </div>
         </div>
