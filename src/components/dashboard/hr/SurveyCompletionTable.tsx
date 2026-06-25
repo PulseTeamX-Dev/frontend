@@ -7,6 +7,16 @@ interface SurveyCompletionTableProps {
   data: EngagementData[];
 }
 
+const getBadgeStyles = (pct: number, isCritical: boolean) => {
+  if (isCritical || pct < 30) {
+    return "bg-red-50 text-red-600 border border-red-100";
+  }
+  if (pct >= 70) {
+    return "bg-green-50 text-green-700 border border-green-100";
+  }
+  return "bg-yellow-50 text-yellow-700 border border-yellow-100";
+};
+
 export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
   const sortedData = useMemo(() => {
     return [...data].sort((a, b) => {
@@ -21,6 +31,7 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
       <Title tag="h2" variant="light" className="mb-4 shrink-0">
         Стан заповнення опитувань
       </Title>
+
       <div className="w-full overflow-x-auto overflow-y-hidden pb-3 custom-scrollbar h-[130px] flex-1 flex">
         <div className="flex gap-2 justify-start my-auto mx-auto flex-nowrap">
           {sortedData.map((item) => {
@@ -38,7 +49,7 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
                   </div>
                 )}
 
-                {/* Твоя середня частина (Дріб + бадж) */}
+                {/* Середня частина (Дріб + бадж) */}
                 <div className="flex justify-between items-baseline w-full mt-auto">
                   <div className="">
                     <span className="text-grayscale-900 text-[24px] font-light">
@@ -50,13 +61,13 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
                   </div>
 
                   <span
-                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${isCritical ? "bg-red-100 text-red-600 border border-red-200" : "bg-yellow-100 text-yellow-700 border border-yellow-200"}`}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${getBadgeStyles(item.response_rate_pct, isCritical)}`}
                   >
                     {Math.round(item.response_rate_pct)}%
                   </span>
                 </div>
 
-                {/* Твоя нижня частина (Назва команди) */}
+                {/* Нижня частина (Назва команди) */}
                 <span
                   className="text-[16px] text-grayscale-900 truncate"
                   title={item.team_name}
