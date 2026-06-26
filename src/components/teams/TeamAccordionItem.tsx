@@ -21,11 +21,14 @@ import { AddTeamMemberModal } from "./AddTeamMemberModal";
 
 export interface TeamAccordionItemProps {
   team: TeamInfo;
+  allTeams: TeamInfo[];
 }
 
-export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
+export const TeamAccordionItem = ({
+  team,
+  allTeams,
+}: TeamAccordionItemProps) => {
   const dispatch = useAppDispatch();
-
   const isProcessingRef = useRef(false);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -54,16 +57,21 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
     const serverUsers: TeamMember[] = (team.users || []).filter(
       (user) => user && user.is_active === true && user.email,
     );
-    // Перевірка дублікатів
+
     const uniqueLocalUsers: TeamMember[] = [];
 
     locallyAddedUsers.forEach((local) => {
       if (!local || !local.email) return;
+
+      const localEmailLower = local.email.trim().toLowerCase();
+
       const isInServer = serverUsers.some(
-        (server) => server.email.toLowerCase() === local.email.toLowerCase(),
+        (server) =>
+          server.email && server.email.trim().toLowerCase() === localEmailLower,
       );
       const isAlreadyInUniqueLocal = uniqueLocalUsers.some(
-        (added) => added.email.toLowerCase() === local.email.toLowerCase(),
+        (added) =>
+          added.email && added.email.trim().toLowerCase() === localEmailLower,
       );
 
       if (!isInServer && !isAlreadyInUniqueLocal) {
@@ -104,6 +112,7 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
       `Ви впевнені, що хочете видалити учасника "${email}"?`,
     );
     if (!isConfirmed) return;
+
     if (userId < 0) {
       setLocallyAddedUsers((prev) => prev.filter((u) => u.user_id !== userId));
       toast.success("Учасника видалено зі списку");
@@ -122,11 +131,26 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
     const email = data.email.trim().toLowerCase();
     if (isProcessingRef.current) return;
 
+    // 1. Перевірка на дублікат всередині поточної команди (серверні + локальні)
     const isDuplicate = combinedUsers.some(
-      (user) => user.email.toLowerCase() === email,
+      (user) => user.email && user.email.trim().toLowerCase() === email,
     );
     if (isDuplicate) {
-      toast.error("Цей учасник вже є в команді");
+      toast.error("Цей учасник вже є в цій команді");
+      return;
+    }
+
+    // 2. Перевірка в інших активних командах
+    const existingTeam = allTeams.find(
+      (t) =>
+        t.team_id !== team.team_id &&
+        t.is_active &&
+        t.users?.some(
+          (u) => u.is_active && u.email?.trim().toLowerCase() === email,
+        ),
+    );
+    if (existingTeam) {
+      toast.error(`Цей учасник вже є в команді "${existingTeam.name}"`);
       return;
     }
 
@@ -135,8 +159,11 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
     try {
       isProcessingRef.current = true;
       setIsSubmitting(true);
+
       setLocallyAddedUsers((prev) => {
-        const alreadyExists = prev.some((u) => u.email.toLowerCase() === email);
+        const alreadyExists = prev.some(
+          (u) => u.email.trim().toLowerCase() === email,
+        );
         if (alreadyExists) return prev;
         return [
           ...prev,
@@ -151,11 +178,18 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
       });
 
       setIsModalOpen(false);
+
+      // Запит на сервер
       await dispatch(
         importTeamEmails({ teamId: team.team_id, emails: [email] }),
       ).unwrap();
 
+      // Оновлюємо глобальний стейт з сервера
       await dispatch(fetchTeams()).unwrap();
+
+      setLocallyAddedUsers((prev) =>
+        prev.filter((u) => u.user_id !== temporaryId),
+      );
 
       toast.success("Учасника додано");
     } catch (err) {
@@ -164,15 +198,13 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
       );
       toast.error((err as string) || "Помилка при додаванні");
     } finally {
+      isProcessingRef.current = false;
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div
-      className={`rounded-2xl overflow-hidden bg-white mb-4 transition-all border border-light-txt `}
-    >
-      {/* Шапка акордеону */}
+    <div className="rounded-2xl overflow-hidden bg-white mb-4 transition-all border border-light-txt">
       <div
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center justify-between p-5 cursor-pointer transition-colors select-none"
@@ -184,7 +216,6 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
         >
           {team.name}
         </span>
-
         <div className="flex items-center gap-3">
           <span
             className={`text-base font-semibold ${
@@ -197,7 +228,7 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
       </div>
       {isOpen &&
         (team.is_active ? (
-          <div className=" border-gray-100 bg-white p-6 space-y-6">
+          <div className="border-gray-100 bg-white p-6 space-y-6">
             <Input
               label="Посилання розсилки"
               leftIcon="link"
@@ -230,7 +261,10 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
                       rightIcon={
                         <button
                           onClick={() =>
-                            handleRemoveExistingMember(user.user_id, user.email)
+                            handleRemoveExistingMember(
+                              user.user_id,
+                              user.email!,
+                            )
                           }
                           type="button"
                         >
