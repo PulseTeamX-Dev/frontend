@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import type {
   TeamInfo,
@@ -25,6 +25,9 @@ export interface TeamAccordionItemProps {
 
 export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
   const dispatch = useAppDispatch();
+
+  const isProcessingRef = useRef(false);
+
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,7 +54,24 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
     const serverUsers: TeamMember[] = (team.users || []).filter(
       (user) => user && user.is_active === true && user.email,
     );
-    return [...serverUsers, ...locallyAddedUsers].sort((a, b) =>
+    // Перевірка дублікатів
+    const uniqueLocalUsers: TeamMember[] = [];
+
+    locallyAddedUsers.forEach((local) => {
+      if (!local || !local.email) return;
+      const isInServer = serverUsers.some(
+        (server) => server.email.toLowerCase() === local.email.toLowerCase(),
+      );
+      const isAlreadyInUniqueLocal = uniqueLocalUsers.some(
+        (added) => added.email.toLowerCase() === local.email.toLowerCase(),
+      );
+
+      if (!isInServer && !isAlreadyInUniqueLocal) {
+        uniqueLocalUsers.push(local);
+      }
+    });
+
+    return [...serverUsers, ...uniqueLocalUsers].sort((a, b) =>
       (a.email || "").localeCompare(b.email || ""),
     );
   }, [team.users, locallyAddedUsers]);
@@ -100,6 +120,7 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
 
   const onAddMember = async (data: { email: string }) => {
     const email = data.email.trim().toLowerCase();
+    if (isProcessingRef.current) return;
 
     const isDuplicate = combinedUsers.some(
       (user) => user.email.toLowerCase() === email,
@@ -109,27 +130,38 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
       return;
     }
 
+    const temporaryId = -Date.now() - Math.random();
+
     try {
+      isProcessingRef.current = true;
       setIsSubmitting(true);
+      setLocallyAddedUsers((prev) => {
+        const alreadyExists = prev.some((u) => u.email.toLowerCase() === email);
+        if (alreadyExists) return prev;
+        return [
+          ...prev,
+          {
+            user_id: temporaryId,
+            team_id: team.team_id,
+            is_active: true,
+            created_at: new Date().toISOString(),
+            email,
+          },
+        ];
+      });
+
+      setIsModalOpen(false);
       await dispatch(
         importTeamEmails({ teamId: team.team_id, emails: [email] }),
       ).unwrap();
+
       await dispatch(fetchTeams()).unwrap();
 
-      setLocallyAddedUsers((prev) => [
-        ...prev,
-        {
-          user_id: -Date.now(),
-          team_id: team.team_id,
-          is_active: true,
-          created_at: new Date().toISOString(),
-          email,
-        },
-      ]);
-
-      setIsModalOpen(false);
       toast.success("Учасника додано");
     } catch (err) {
+      setLocallyAddedUsers((prev) =>
+        prev.filter((u) => u.user_id !== temporaryId),
+      );
       toast.error((err as string) || "Помилка при додаванні");
     } finally {
       setIsSubmitting(false);
