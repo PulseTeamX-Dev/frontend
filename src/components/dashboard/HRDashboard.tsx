@@ -5,8 +5,8 @@ import { MetricSummaryList } from "./hr/MetricSummaryList";
 import MetricsHistoryList from "./hr/MetricsHistoryList";
 import { SurveyCompletionTable } from "./hr/SurveyCompletionTable";
 import { WorkloadChart } from "./hr/WorkloadChart";
-import Icon from "../../shared/Icon";
-import { Title } from "../../shared/Title";
+import { PageHeader } from "../../shared/PageHeader";
+import { PageLoader } from "../../shared/Loader";
 
 export const HRDashboard = () => {
   const dispatch = useAppDispatch();
@@ -18,7 +18,7 @@ export const HRDashboard = () => {
     dispatch(fetchMetrics());
   }, [dispatch]);
 
-  if (isLoading) return <div>Завантаження...</div>;
+  if (isLoading) return <PageLoader />;
   if (error) return <div>Помилка: {error}</div>;
   if (!metrics) return null;
 
@@ -30,36 +30,22 @@ export const HRDashboard = () => {
 
   return (
     <>
-      <div className="flex gap-2 items-center">
-        <Icon
-          id="logo"
-          className="w-8 h-8 text-primary-active shrink-0 transform -translate-y-1.25"
-        />
-        <Title
-          tag="h1"
-          variant="light"
-          className="text-[18px] md:text-xl text-grayscale-900 font-heading mb-0 leading-none"
-        >
-          Огляд
-        </Title>
-      </div>
-
+      <PageHeader title="Огляд" showLogo />
       <MetricSummaryList metricsSummary={metrics.metrics_summary} />
 
-      <div className="flex flex-col xl:flex-row gap-5 mt-6 w-full items-stretch xl:h-[560px]">
-        {/* ЛІВА КОЛОНКА (Хітмеп) - 1/2 */}
+      <div className="flex flex-col xl:flex-row gap-4 mt-4 w-full items-stretch xl:h-[560px]">
         <div className="w-full xl:w-1/2 flex flex-col min-h-0">
-          <MetricsHistoryList metricsHistory={metrics.metrics_history} />
+          <div className="flex-1 w-full max-h-[500px] xl:max-h-none flex flex-col">
+            <MetricsHistoryList metricsHistory={metrics.metrics_history} />
+          </div>
         </div>
 
-        {/* ПРАВА КОЛОНКА (Картки) - 1/2 */}
-        <div className="w-full xl:w-1/2 flex flex-col gap-5 min-h-0">
-          {/* ФІКС ВІЗУАЛУ: Картка опитувань займає фіксовано ~40% або контентну висоту */}
-          <div className="flex-none">
+        <div className="w-full xl:w-1/2 flex flex-col gap-4 min-h-0">
+          <div>
             <SurveyCompletionTable data={metrics.engagement} />
           </div>
 
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col min-h-[300px] xl:min-h-0">
             <WorkloadChart data={metrics.workload_current} />
           </div>
         </div>

@@ -53,7 +53,17 @@ apiClient.interceptors.response.use(
       } catch (refreshError) {
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
-        window.location.href = "/login";
+
+        const currentPath = window.location.pathname;
+        const isPublicRoute =
+          currentPath.startsWith("/surveys/") ||
+          currentPath.startsWith("/invite/") ||
+          currentPath === "/update-password";
+
+        if (!isPublicRoute && currentPath !== "/login") {
+          window.location.href = "/login";
+        }
+
         return Promise.reject(refreshError);
       }
     }

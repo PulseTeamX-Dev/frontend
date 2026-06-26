@@ -3,12 +3,12 @@ import { z } from "zod";
 export const loginSchema = z.object({
   email: z
     .string()
-    .min(1, "Пошта є обов'язковою")
-    .email("Невірний формат пошти"),
+    .min(1, "Пошта обов'язкова")
+    .email("Неправильний формат пошти"),
   password: z
     .string()
     .transform((val) => val.trim())
-    .refine((val) => val.length > 0, { message: "Пароль є обов'язковим" })
+    .refine((val) => val.length > 0, { message: "Пароль обов'язковий!" })
     .refine((val) => val.length >= 6, {
       message: "Мінімум 6 символів (без врахування пробілів)",
     }),
@@ -18,7 +18,7 @@ export const forgotPasswordSchema = z.object({
   email: z
     .string()
     .min(1, "Будь ласка, введіть електронну пошту.")
-    .email("Невірний формат пошти"),
+    .email("Неправильний формат пошти"),
 });
 
 export const inviteSchema = z
@@ -26,7 +26,7 @@ export const inviteSchema = z
     password: z
       .string()
       .transform((val) => val.trim())
-      .refine((val) => val.length > 0, { message: "Пароль є обов'язковим" })
+      .refine((val) => val.length > 0, { message: "Пароль обов'язковий!" })
       .refine((val) => val.length >= 6, {
         message: "Пароль має містити мінімум 6 символів.",
       }),

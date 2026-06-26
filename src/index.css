@@ -54,20 +54,10 @@
   --color-primary-active: #f9793e;
   --color-white: #ffffff;
 
-  --color-yellow-900: #f8cd0e;
-  --color-yellow-800: #f9d226;
-  --color-yellow-700: #f9d73e;
-  --color-yellow-600: #fadc56;
-  --color-yellow-500: #fbe16e;
-  --color-yellow-400: #fbe686;
-  --color-yellow-300: #fceb9f;
-  --color-yellow-200: #fdf0b7;
-  --color-yellow-100: #fef5cf;
-  --color-yellow-50: #fefae7;
-
   --color-grayscale-200: #dddddd;
   --color-grayscale-600: #888888;
   --color-grayscale-700: #666666;
+  --color-grayscale-800: #444;
   --color-grayscale-900: #222222;
 
   --color-error: #ed2b26;
@@ -80,6 +70,28 @@
   --color-red-200: #fabfbe;
   --color-red-100: #fbd5d4;
   --color-red-50: #fdeae9;
+
+  --color-orange-900: #f8580e;
+  --color-orange-800: #f96926;
+  --color-orange-700: #f9793e;
+  --color-orange-600: #fa8a56;
+  --color-orange-500: #fb9b6e;
+  --color-orange-400: #fbac87;
+  --color-orange-300: #fcbc9f;
+  --color-orange-200: #fdcdb7;
+  --color-orange-100: #fedecf;
+  --color-orange-50: #feeee7;
+
+  --color-yellow-900: #f8cd0e;
+  --color-yellow-800: #f9d226;
+  --color-yellow-700: #f9d73e;
+  --color-yellow-600: #fadc56;
+  --color-yellow-500: #fbe16e;
+  --color-yellow-400: #fbe686;
+  --color-yellow-300: #fceb9f;
+  --color-yellow-200: #fdf0b7;
+  --color-yellow-100: #fef5cf;
+  --color-yellow-50: #fefae7;
 
   --color-success: #06a93b;
   --color-green-800: #1fb24f;
@@ -122,4 +134,7 @@ input:-webkit-autofill:focus {
 
 button {
   cursor: pointer;
+}
+.Toastify__toast-container {
+  z-index: 99999 !important;
 }

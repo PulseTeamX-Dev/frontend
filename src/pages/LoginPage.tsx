@@ -35,7 +35,6 @@ export const LoginPage = () => {
     // 2. Якщо відкрили екран "Забули пароль"
     if (view === "forgot") {
       if (isEmailSent) {
-        // Передаємо функцію повернення на логін
         return <CheckEmailView onBack={() => setView("login")} />;
       }
       return <ForgotPasswordForm onBack={() => setView("login")} />;

@@ -8,6 +8,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   success?: boolean;
   leftIcon?: string;
   rightIcon?: ReactNode;
+  iconClassName?: string;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -22,6 +23,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       className = "",
       disabled,
       id,
+      iconClassName,
       ...props
     },
     ref,
@@ -56,7 +58,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                   ? "text-error"
                   : success
                     ? "text-success"
-                    : "text-grayscale-700"
+                    : iconClassName || "text-grayscale-700"
               }`}
             >
               {/* fill-current можна прибрати звідси, бо ми додали його в сам Icon */}

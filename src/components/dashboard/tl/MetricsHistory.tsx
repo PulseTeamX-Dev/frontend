@@ -1,59 +1,26 @@
 import Icon from "../../../shared/Icon";
 import { Title } from "../../../shared/Title";
 import type { HeatmapItem } from "../../../types/dashboard/types";
+import { getHeatmapClass } from "../../../utils/getLevel";
 
 interface TLMetricsHistoryProps {
   heatmapData: HeatmapItem[];
 }
 
 export const MetricsHistory = ({ heatmapData }: TLMetricsHistoryProps) => {
-  // 1. Сортуємо тижні за зростанням (від старіших до новіших)
-  const sortedWeeks = [...heatmapData].sort(
-    (a, b) =>
-      new Date(a.week_start).getTime() - new Date(b.week_start).getTime(),
-  );
+  const sortedWeeks = [...heatmapData]
+    .sort(
+      (a, b) =>
+        new Date(a.week_start).getTime() - new Date(b.week_start).getTime(),
+    )
+    .slice(-6);
 
-  // Helper для форматування дати (наприклад, "01.05")
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
     return date.toLocaleDateString("uk-UA", {
       day: "2-digit",
       month: "2-digit",
     });
-  };
-
-  // ПЕРЕВИКОРИСТАНА ЛОГІКА СТИЛІЗАЦІЇ З HR-ХІТМЕПУ
-  const getCellStyles = (metricKey: string, value: number) => {
-    // Визначаємо, які метрики є "ризиковими" (чим більше - тим гірше)
-    // Додали сюди conflict та burnout, щоб покрити всі серверні інверсні метрики
-    const isRiskMetric =
-      metricKey === "stress_index" ||
-      metricKey === "workload_strain_index" ||
-      metricKey === "conflict_risk" ||
-      metricKey === "burnout_risk_index";
-
-    const getLevel = () => {
-      if (isRiskMetric) {
-        if (value < 4) return "low"; // Зелений
-        if (value < 7) return "medium"; // Жовтий
-        return "high"; // Червоний
-      }
-      // Для позитивних метрик (Довіра, Ясність, Безпека) - все навпаки
-      if (value >= 7) return "low"; // Зелений
-      if (value >= 5) return "medium"; // Жовтий
-      return "high"; // Червоний
-    };
-
-    const level = getLevel();
-
-    // Повернули фірмові пастельні кольори дизайнерів + покраску тексту під кожен рівень
-    const styles: Record<string, string> = {
-      low: "bg-green-100 text-[#10b981]", // Зелений фон + Зелений текст
-      medium: "bg-yellow-200 text-[#d97706]", // Жовтий фон + Жовтий текст
-      high: "bg-red-600 text-white", // Червоний фон + Червоний текст
-    };
-
-    return styles[level];
   };
 
   const metricsRows = [
@@ -71,61 +38,63 @@ export const MetricsHistory = ({ heatmapData }: TLMetricsHistoryProps) => {
         Динамічний тепловий профіль команди
       </Title>
 
-      <div className="overflow-x-auto w-full">
+      <div className="overflow-x-auto w-full custom-scrollbar pb-2">
         <table className="w-full border-collapse">
           <tbody>
-            {metricsRows.map((row) => (
-              <tr key={row.key} className="border-none">
-                {/* Назва метрики зліва */}
-                <td className="text-xs md:text-sm font-normal text-gray-400 text-right pr-4 py-2 w-32 md:w-40 whitespace-nowrap">
-                  {row.label}
-                </td>
+            {metricsRows.map((row) => {
+              const isRiskMetric =
+                row.key === "stress_index" ||
+                row.key === "workload_strain_index" ||
+                row.key === "conflict_risk" ||
+                row.key === "burnout_risk_index";
 
-                {/* Великі, витягнуті картки значень */}
-                {sortedWeeks.map((week, index) => {
-                  const val = week[row.key as keyof HeatmapItem];
-                  const isCurrentWeek = index === sortedWeeks.length - 1;
+              return (
+                <tr key={row.key} className="border-none">
+                  <td className="text-xs md:text-sm font-normal text-gray-400 text-right pr-4 py-2 w-32 md:w-40 whitespace-nowrap">
+                    {row.label}
+                  </td>
 
-                  // Якщо даних немає (null або undefined) — малюємо пустий стан
-                  if (val === null || val === undefined) {
+                  {sortedWeeks.map((week, index) => {
+                    const val = week[row.key as keyof HeatmapItem];
+                    const isCurrentWeek = index === sortedWeeks.length - 1;
+
+                    if (val === null || val === undefined) {
+                      return (
+                        <td
+                          key={`${row.key}_${week.week_start}`}
+                          className="p-1 md:p-1.5"
+                        >
+                          <div className="w-full py-4 md:py-5 rounded-xl bg-gray-100 flex items-center justify-center opacity-60 min-w-[56px]">
+                            <Icon
+                              id={isCurrentWeek ? "lock" : "face-sad"}
+                              className="w-5 h-5 text-gray-400"
+                            />
+                          </div>
+                        </td>
+                      );
+                    }
+
+                    const numericValue = typeof val === "number" ? val : 0;
+                    const bgColor = getHeatmapClass(numericValue, isRiskMetric);
+
                     return (
                       <td
                         key={`${row.key}_${week.week_start}`}
                         className="p-1 md:p-1.5"
                       >
-                        <div className="w-full py-4 md:py-5 rounded-xl bg-gray-100 flex items-center justify-center opacity-60">
-                          <Icon
-                            id={isCurrentWeek ? "lock" : "face-sad"}
-                            className="w-5 h-5 text-gray-400"
-                          />
+                        <div
+                          className={`w-full py-4 md:py-5 rounded-xl text-center text-grayscale-900 text-[14px] md:text-[16px] tracking-tight transition-all min-w-[56px] ${bgColor}`}
+                        >
+                          {numericValue.toFixed(1).replace(".", ",")}
                         </div>
                       </td>
                     );
-                  }
-
-                  // Якщо дані є — малюємо кольорову плитку
-                  const numericValue = typeof val === "number" ? val : 0;
-                  return (
-                    <td
-                      key={`${row.key}_${week.week_start}`}
-                      className="p-1 md:p-1.5"
-                    >
-                      <div
-                        className={`w-full py-4 md:py-5 rounded-xl text-center text-sm md:text-base font-semibold tracking-tight transition-all ${getCellStyles(
-                          row.key,
-                          numericValue,
-                        )}`}
-                      >
-                        {numericValue.toFixed(1).replace(".", ",")}
-                      </div>
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
+                  })}
+                </tr>
+              );
+            })}
           </tbody>
 
-          {/* Надійний підпис дат знизу */}
           <tfoot>
             <tr className="border-none">
               <td className="py-2"></td>

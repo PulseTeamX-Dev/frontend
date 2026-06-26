@@ -6,7 +6,6 @@ import { selectAuthLoading } from "../../redux/auth/selectors";
 import { resetRecoverStatus } from "../../redux/auth/slice";
 import lockImg from "../../assets/img/lock.png";
 
-// Нові імпорти валідації
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {

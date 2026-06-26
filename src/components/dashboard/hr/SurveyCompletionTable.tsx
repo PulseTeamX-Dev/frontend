@@ -2,11 +2,20 @@ import { useMemo } from "react";
 import Icon from "../../../shared/Icon";
 import { Title } from "../../../shared/Title";
 import type { EngagementData } from "../../../types/dashboard/types";
-import { getBadgeClass } from "../../../utils/getBadgeClass";
 
 interface SurveyCompletionTableProps {
   data: EngagementData[];
 }
+
+const getBadgeStyles = (pct: number, isCritical: boolean) => {
+  if (isCritical || pct < 30) {
+    return "bg-red-50 text-red-600 border border-red-100";
+  }
+  if (pct >= 70) {
+    return "bg-green-50 text-green-700 border border-green-100";
+  }
+  return "bg-yellow-50 text-yellow-700 border border-yellow-100";
+};
 
 export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
   const sortedData = useMemo(() => {
@@ -18,67 +27,56 @@ export const SurveyCompletionTable = ({ data }: SurveyCompletionTableProps) => {
   }, [data]);
 
   return (
-    <div className="bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-gray-100 w-full flex-1 flex flex-col h-55">
-      <Title tag="h2" variant="light" className="mb-3 shrink-0">
+    <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 w-full flex flex-col min-h-0 shrink-0">
+      <Title tag="h2" variant="light" className="mb-4 shrink-0">
         Стан заповнення опитувань
       </Title>
 
-      <div className="w-full overflow-x-auto pb-2">
-        <div className="min-w-100">
-          {/* Заголовки */}
-          <div className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-2 mb-3 text-grayscale-700 text-[14px] text-center">
-            <div className="text-left"></div>
-            <div>Надіслано</div>
-            <div>Відповіли</div>
-            <div>Відсоток</div>
-          </div>
+      <div className="w-full overflow-x-auto overflow-y-hidden pb-3 custom-scrollbar h-[130px] flex-1 flex">
+        <div className="flex gap-2 justify-start my-auto mx-auto flex-nowrap">
+          {sortedData.map((item) => {
+            const isCritical = item.low_engagement_signal;
 
-          {/* Рядки */}
-          <div className="flex flex-col gap-4">
-            {sortedData.map((item) => (
+            return (
               <div
                 key={item.team_id}
-                className="grid grid-cols-[2fr_1fr_1fr_1fr] gap-2 items-center border-b border-gray-50 pb-2.5 last:border-0 last:pb-0"
+                className="relative w-[132px] border border-gray-100 rounded-xl p-3 flex flex-col gap-y-1 pt-1 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.02)] h-[112px] shrink-0"
               >
-                {/* 🛠️ ФІКС: Додали min-w-0, щоб грів не розпирало від довгого імені */}
-                <div className="text-left flex flex-col justify-center min-w-0">
-                  {item.low_engagement_signal && (
-                    <div className="flex items-center gap-1 mt-0.5 text-error">
-                      <Icon
-                        id="circle-warning-filled"
-                        className="w-3.5 h-3.5"
-                      />
-                      <span className="text-[11px] font-medium leading-none">
-                        Критично
-                      </span>
-                    </div>
-                  )}
-                  {/* 🛠️ ФІКС: Додали title для підказу при наведенні */}
+                {isCritical && (
+                  <div className="absolute top-2 left-3 flex items-center gap-1 text-error select-none">
+                    <Icon id="circle-warning-filled" className="w-3.5 h-3.5" />
+                    <span className="text-[12px]">Критично</span>
+                  </div>
+                )}
+
+                {/* Середня частина (Дріб + бадж) */}
+                <div className="flex justify-between items-baseline w-full mt-auto">
+                  <div className="">
+                    <span className="text-grayscale-900 text-[24px] font-light">
+                      {item.responses}
+                    </span>
+                    <span className="text-grayscale-700 text-[16px] ml-0.5">
+                      /{item.total_sent}
+                    </span>
+                  </div>
+
                   <span
-                    className="text-[14px] md:text-[15px] text-grayscale-900 font-medium truncate pr-2"
-                    title={item.team_name}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${getBadgeStyles(item.response_rate_pct, isCritical)}`}
                   >
-                    {item.team_name}
+                    {Math.round(item.response_rate_pct)}%
                   </span>
                 </div>
 
-                <div className="text-center text-[14px] md:text-[15px] text-grayscale-900 font-semibold">
-                  {item.total_sent}
-                </div>
-                <div className="text-center text-[14px] md:text-[15px] text-grayscale-900 font-semibold">
-                  {item.responses}
-                </div>
-
-                <div className="flex justify-center">
-                  <span
-                    className={`w-14 px-2 py-1 md:py-1.5 rounded-lg text-[11px] text-center md:text-xs font-bold ${getBadgeClass(item.response_rate_pct)}`}
-                  >
-                    {item.response_rate_pct.toFixed(1).replace(".", ",")}%
-                  </span>
-                </div>
+                {/* Нижня частина (Назва команди) */}
+                <span
+                  className="text-[16px] text-grayscale-900 truncate"
+                  title={item.team_name}
+                >
+                  {item.team_name}
+                </span>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>
