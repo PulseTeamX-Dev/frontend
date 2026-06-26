@@ -48,7 +48,9 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
   }, [locallyAddedUsers, team.team_id]);
 
   const combinedUsers = useMemo<TeamMemberWithOptionalId[]>(() => {
-    const serverUsers: TeamMember[] = team.users || [];
+    const serverUsers: TeamMember[] = (team.users || []).filter(
+      (user) => user && user.is_active === true && user.email,
+    );
     return [...serverUsers, ...locallyAddedUsers].sort((a, b) =>
       (a.email || "").localeCompare(b.email || ""),
     );
@@ -99,7 +101,6 @@ export const TeamAccordionItem = ({ team }: TeamAccordionItemProps) => {
   const onAddMember = async (data: { email: string }) => {
     const email = data.email.trim().toLowerCase();
 
-    // Перевірка на дублікати (як ми робили раніше)
     const isDuplicate = combinedUsers.some(
       (user) => user.email.toLowerCase() === email,
     );
