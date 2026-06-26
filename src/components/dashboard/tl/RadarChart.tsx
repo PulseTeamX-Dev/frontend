@@ -36,7 +36,8 @@ const CustomAxisTick = (props: CustomAxisTickProps) => {
   const dy = y - cy;
   const distance = Math.sqrt(dx * dx + dy * dy) || 1;
 
-  const offset = 14;
+  // Трохи зменшив відступ тексту від графіка (з 14 до 10), щоб виграти ще пару пікселів
+  const offset = 10;
   const nextX = x + (dx / distance) * offset;
   const nextY = y + (dy / distance) * offset;
 
@@ -89,11 +90,13 @@ export const RadarChart = ({ data }: RadarChartProps) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // 🛠️ ФІКС: Більш гнучкі брейкпоінти для радіуса та висоти
   const isMobile = windowWidth < 768;
-  const isDesktop = windowWidth >= 1024;
+  const isLaptop = windowWidth >= 768 && windowWidth < 1440; // Проблемна зона
 
-  const chartHeight = isMobile ? 280 : isDesktop ? 440 : 340;
-  const chartRadius = isMobile ? "50%" : isDesktop ? "75%" : "65%";
+  const chartHeight = isMobile ? 280 : isLaptop ? 360 : 440;
+  // На 1280-1440 даємо менший радіус (55%), щоб довгі слова точно влізли
+  const chartRadius = isMobile ? "50%" : isLaptop ? "55%" : "65%";
 
   if (!data || data.length === 0) return null;
 
@@ -152,9 +155,8 @@ export const RadarChart = ({ data }: RadarChartProps) => {
         </div>
       </div>
 
-      {/* 4. Передаем вычисленную высоту прямо в контейнер */}
       <div
-        className="w-full flex items-center justify-center px-0 sm:px-4 transition-all duration-300"
+        className="w-full flex items-center justify-center px-0 transition-all duration-300"
         style={{ height: chartHeight }}
       >
         <ResponsiveContainer width="100%" height="100%">
@@ -162,7 +164,9 @@ export const RadarChart = ({ data }: RadarChartProps) => {
             className="overflow-visible"
             cx="50%"
             cy="50%"
-            outerRadius={chartRadius} // Передаем вычисленный радиус
+            outerRadius={chartRadius}
+            // 🛠️ ФІКС: Додали margin, що гарантує 40px простору по боках спеціально для тексту!
+            margin={{ top: 10, right: 40, bottom: 10, left: 40 }}
             data={chartData}
           >
             <PolarGrid stroke="#e5e7eb" />
