@@ -32,7 +32,7 @@ export const AddTeamMemberModal = ({
           onAdd(data);
           reset();
         })}
-        className="bg-white p-8 rounded-3xl w-full max-w-md shadow-2xl border border-gray-100"
+        className="bg-white p-8 rounded-3xl w-full max-w-[538px] shadow-2xl border border-gray-100"
       >
         <h3 className="text-2xl font-bold mb-6 text-title">Додати учасника</h3>
 
