@@ -1,95 +1,10 @@
 import type { Alert } from "../../redux/alerts/types";
+import { renderMetric } from "../../utils/renderAlertMetric";
 
 interface Props {
   alert: Alert;
   onResolve: (id: number) => void;
 }
-
-const renderMetric = (alert: Alert) => {
-  if (alert.metric_value === null) return null;
-
-  const value = Number(alert.metric_value).toFixed(1);
-  const badgeClass =
-    "min-w-[80px] text-center px-3 py-1 rounded-xl font-semibold text-sm";
-
-  switch (alert.alert_type) {
-    case "stress_high": //'Високий стрес'
-    case "stress_warning": //'Зростання рівня тривожності'
-      return (
-        <div
-          className={` ${
-            alert.alert_level === "CRITICAL"
-              ? `${badgeClass} bg-red-50 text-red-600`
-              : `${badgeClass} bg-orange-50 text-orange-500`
-          }`}
-        >
-          {value} / 10
-        </div>
-      );
-
-    case "stress_spike": //'Різкий стрибок стресу'
-      return (
-        <div className={`${badgeClass} bg-red-50 text-red-600`}>+{value} ↑</div>
-      );
-
-    case "trust_drop": //'Зниження довіри'
-      return (
-        <div className={`${badgeClass} bg-orange-50 text-orange-500`}>
-          -{value} ↓
-        </div>
-      );
-
-    case "low_engagement": //'Низька залученість команди'
-      return (
-        <div className={`${badgeClass} bg-yellow-50 text-yellow-600`}>
-          {value}%
-        </div>
-      );
-
-    case "workload_overload": //'Перевантаження'
-      return (
-        <div className={`${badgeClass} bg-red-50 text-red-600`}>
-          {value} / 10
-        </div>
-      );
-
-    case "workload_underload": //'Недовантаження'
-      return (
-        <div className={`${badgeClass} bg-sky-50 text-sky-600`}>
-          {value} / 10
-        </div>
-      );
-
-    case "burnout_risk": //'Високий ризик вигорання'
-      return (
-        <div
-          className={` ${
-            alert.alert_level === "CRITICAL"
-              ? `${badgeClass} bg-red-50 text-red-600`
-              : `${badgeClass} bg-orange-50 text-orange-500`
-          }`}
-        >
-          {value} / 10
-        </div>
-      );
-
-    case "conflict_risk": //'Ризик виникнення конфлікту'
-      return (
-        <div
-          className={` ${
-            alert.alert_level === "CRITICAL"
-              ? `${badgeClass} bg-orange-100 text-orange-600`
-              : `${badgeClass} bg-yellow-50 text-yellow-600`
-          }`}
-        >
-          {value} / 10
-        </div>
-      );
-
-    default:
-      return null;
-  }
-};
 
 const AlertCard = ({ alert, onResolve }: Props) => {
   const isResolved = !!alert.resolved_at;
@@ -97,30 +12,63 @@ const AlertCard = ({ alert, onResolve }: Props) => {
   return (
     <div className="relative group">
       <div
-        className={`flex flex-col min-h-[160px] bg-white rounded-3xl border border-gray-200 p-5 transition-all hover:shadow-md ${
+        className={`flex min-h-[160px] flex-col rounded-3xl border p-5 transition-all ${
           isResolved
-            ? "bg-gray-50 border-gray-200 opacity-60 text-gray-400"
-            : "bg-white border-gray-200 hover:shadow-md"
+            ? "border-gray-200 bg-gray-50 opacity-60"
+            : "border-gray-200 bg-white hover:shadow-md"
         }`}
       >
-        <div className="flex justify-between mb-4">
-          <span className="text-gray-500 text-sm">
-            {new Date(alert.created_at).toLocaleDateString("uk-UA")}
-          </span>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            {!isResolved && (
+              <div className="flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full bg-[#ED2B2633] p-[2px]">
+                <div className="h-2 w-2 rounded-full bg-[#ED2B26]" />
+              </div>
+            )}
 
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={isResolved}
-              disabled={isResolved}
-              onChange={() => {
-                if (!isResolved) {
-                  onResolve(alert.alert_id);
-                }
-              }}
-            />
+            <span className="text-gray-500 text-sm">
+              {new Date(alert.created_at).toLocaleDateString("uk-UA")}
+            </span>
+          </div>
 
-            <span className="text-gray-500">Вирішено</span>
+          <label className="flex items-center gap-2 cursor-pointer">
+            <div
+              className={`flex h-8 w-8 items-center justify-center rounded-lg border transition-colors ${
+                isResolved
+                  ? "border-[#D9D9D9] bg-[#F5F5F5]"
+                  : "border-[#CCCCCC] bg-white"
+              }`}
+            >
+              <input
+                type="checkbox"
+                checked={isResolved}
+                disabled={isResolved}
+                onChange={() => {
+                  if (!isResolved) {
+                    onResolve(alert.alert_id);
+                  }
+                }}
+                className="absolute h-8 w-8 cursor-pointer opacity-0"
+              />
+              {isResolved && (
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#8C8C8C"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              )}
+            </div>
+
+            <span className="text-base font-normal leading-6 text-[#666666]">
+              Вирішено
+            </span>
           </label>
         </div>
 

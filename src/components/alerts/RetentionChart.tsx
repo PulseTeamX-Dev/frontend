@@ -72,9 +72,9 @@ const RetentionChart = ({ data, role, setRole }: Props) => {
     Math.max(data.length, 1);
 
   return (
-    <div className="bg-white rounded-3xl border p-5 h-full min-h-[420px]">
+    <div className="bg-white rounded-3xl p-5 h-full min-h-[420px]">
       <div className="flex items-center justify-between mb-5">
-        <h3 className="text-lg font-semibold">
+        <h3 className="text-xl font-light leading-6 text-[#222222]">
           Тривалість використання платформи
         </h3>
 
@@ -103,7 +103,20 @@ const RetentionChart = ({ data, role, setRole }: Props) => {
         </div>
       </div>
 
-      <ResponsiveContainer width="100%" height={260}>
+      <div className="flex items-baseline gap-3">
+        <div className="text-base leading-6 font-normal text-[#666666]">
+          Середня сесія
+        </div>
+        <div className="text-xl font-semibold text-[#222222]">
+          {avgSession.toFixed(0)} хв
+        </div>
+      </div>
+
+      <div className="mt-6 mb-1 ml-[34px]">
+        <span className="text-[#666666]">Сесія, хв.</span>
+      </div>
+
+      <ResponsiveContainer width="100%" height={300}>
         <BarChart
           data={chartData}
           margin={{
@@ -117,7 +130,7 @@ const RetentionChart = ({ data, role, setRole }: Props) => {
           <XAxis dataKey="week" />
           <YAxis
             domain={[0, "dataMax + 5"]}
-            tickFormatter={(value) => `${value} хв`}
+            tickFormatter={(value) => `${value}`}
           />
 
           <Tooltip
@@ -146,7 +159,18 @@ const RetentionChart = ({ data, role, setRole }: Props) => {
             }}
           />
 
-          <ReferenceLine y={15} stroke="#9CA3AF" strokeDasharray="5 5" />
+          <ReferenceLine
+            y={20}
+            stroke="#9CA3AF"
+            strokeDasharray="6 4"
+            label={{
+              value: "Ціль",
+              position: "insideTop",
+              fill: "#666666",
+              fontSize: 12,
+              dy: -6,
+            }}
+          />
 
           <Bar
             dataKey="avg_session_minutes"
@@ -157,12 +181,6 @@ const RetentionChart = ({ data, role, setRole }: Props) => {
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-
-      <div className="mt-5 border-t pt-4">
-        <div className="text-sm text-gray-500">Середня сесія</div>
-
-        <div className="text-xl font-semibold">{avgSession.toFixed(0)} хв</div>
-      </div>
     </div>
   );
 };
