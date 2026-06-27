@@ -36,3 +36,12 @@ export type FormValues = {
 export type TeamMemberWithOptionalId = TeamMember & {
   id?: number;
 };
+
+export interface ConfirmModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  isSubmitting: boolean;
+  title: string;
+  confirmText?: string;
+}
