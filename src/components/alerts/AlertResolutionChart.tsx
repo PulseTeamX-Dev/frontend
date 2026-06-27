@@ -11,6 +11,7 @@ import {
 } from "recharts";
 
 import type { AlertResolution } from "../../redux/alerts/types";
+import clockChart from "../../assets/icons/clockChart.svg";
 
 interface Props {
   data: AlertResolution[];
@@ -53,7 +54,7 @@ const ProgressBar = ({
         width={safeWidth}
         height={safeHeight}
         rx={6}
-        fill={color}
+        fill="#D1D5DB"
         opacity={0.25}
       />
 
@@ -107,20 +108,77 @@ const AlertResolutionChart = ({ data }: Props) => {
   }));
 
   return (
-    <div className="bg-white rounded-3xl border p-6 h-full">
-      <div className="grid grid-cols-1 lg:grid-cols-[70%_30%] gap-6">
+    <div className="bg-white rounded-3xl p-6 h-full">
+      <div className="flex flex-col">
         {/* ГРАФІК */}
         <div>
-          <h3 className="text-2xl font-semibold mb-1">Реагування на сигнали</h3>
+          <h3 className="mb-6 text-xl font-light leading-6 text-grayscale-900">
+            Реагування на сигнали
+          </h3>
 
-          <p className="text-sm text-gray-500 mb-4">
-            Зафарбована частина стовпців — кількість вирішених сигналів
-          </p>
+          {/* KPI */}
+          <div className="mb-6 flex flex-wrap items-start justify-between gap-8">
+            <div className="flex flex-col gap-2 min-w-[180px]">
+              <div className="text-base font-normal leading-6 text-[#666666]">
+                Поточний тиждень
+              </div>
+
+              <div className="h-3 overflow-hidden rounded-full bg-gray-200">
+                <div
+                  className={`h-full rounded-full ${
+                    latest.resolution_rate_pct < 50
+                      ? "bg-red-500"
+                      : latest.resolution_rate_pct < 70
+                        ? "bg-yellow-500"
+                        : "bg-green-500"
+                  }`}
+                  style={{ width: `${latest.resolution_rate_pct}%` }}
+                />
+              </div>
+
+              <div className="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-600">
+                ⚠ {latest.unresolved_count} не закрито
+              </div>
+            </div>
+
+            <div className="text-base font-normal leading-6 text-[#666666]">
+              <div className="text-sm text-gray-500">Вирішено</div>
+
+              <div
+                className={`text-3xl font-bold ${
+                  latest.resolution_rate_pct < 50
+                    ? "text-red-600"
+                    : latest.resolution_rate_pct < 70
+                      ? "text-yellow-600"
+                      : "text-green-600"
+                }`}
+              >
+                {latest.resolution_rate_pct}%
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2 min-w-[170px]">
+              <div className="text-base font-normal leading-6 text-[#666666]">
+                Медіана:{" "}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <img src={clockChart} alt="Clock" className="h-6 w-6" />
+
+                <span className="text-xl font-semibold leading-4 text-grayscale-900">
+                  {Number(latest.median_resolution_hours)
+                    .toFixed(1)
+                    .replace(".", ",")}{" "}
+                  год
+                </span>
+              </div>
+            </div>
+          </div>
 
           <div className="flex justify-between gap-8 text-sm font-medium mb-4">
-            <span className="text-gray-700">Кіл-ть сповіщень</span>
+            <span className="text-gray-700">К-сть сповіщень</span>
 
-            <span className="text-blue-600">Час на розв'язання (год)</span>
+            <span className="text-gray-700">Час на розв'язання (год)</span>
           </div>
 
           <ResponsiveContainer width="100%" height={300}>
@@ -128,7 +186,7 @@ const AlertResolutionChart = ({ data }: Props) => {
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="week" />
               <YAxis yAxisId="left" />
-              <YAxis yAxisId="right" orientation="right" unit=" год" />
+              <YAxis yAxisId="right" orientation="right" />
               <Tooltip />
               <Legend />
 
@@ -139,7 +197,7 @@ const AlertResolutionChart = ({ data }: Props) => {
                 maxBarSize={24}
                 minPointSize={2}
                 name="Critical"
-                fill="#ef4444"
+                fill="#F15551"
                 legendType="rect"
                 shape={(props) => (
                   <ProgressBar
@@ -186,54 +244,6 @@ const AlertResolutionChart = ({ data }: Props) => {
               />
             </ComposedChart>
           </ResponsiveContainer>
-        </div>
-
-        {/* KPI */}
-        <div className="border-l pl-6">
-          <div className="text-sm text-gray-500">ПОТОЧНИЙ ТИЖДЕНЬ</div>
-
-          <div
-            className={`text-5xl font-bold mt-2 ${
-              latest.resolution_rate_pct < 50
-                ? "text-red-600"
-                : latest.resolution_rate_pct < 70
-                  ? "text-yellow-600"
-                  : "text-green-600"
-            }`}
-          >
-            {latest.resolution_rate_pct}%
-          </div>
-
-          <div className="text-lg mt-4">Вирішено:</div>
-
-          <div className="mt-3 h-3 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              className={`h-full rounded-full ${
-                latest.resolution_rate_pct < 50
-                  ? "bg-red-500"
-                  : latest.resolution_rate_pct < 70
-                    ? "bg-yellow-500 "
-                    : "bg-green-500"
-              }`}
-              style={{
-                width: `${latest.resolution_rate_pct}%`,
-              }}
-            />
-          </div>
-
-          <div className="mt-4 inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-600">
-            ⚠ {latest.unresolved_count} не закрито
-          </div>
-
-          <div className="mt-10">
-            <div className="text-sm text-gray-500 uppercase">
-              Медіана відповіді
-            </div>
-
-            <div className="flex items-center gap-2 text-2xl font-semibold mt-2">
-              ⏱{latest.median_resolution_hours} години
-            </div>
-          </div>
         </div>
       </div>
     </div>

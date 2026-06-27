@@ -17,11 +17,31 @@ import SignalsAnalytics from "../components/alerts/SignalsAnalytics";
 import { PageLoader } from "../shared/Loader";
 import { PageHeader } from "../shared/PageHeader";
 import { selectAuthRole } from "../redux/auth/selectors";
+import alertIcon from "../assets/icons/alert.svg";
 
 const roleLabels: Record<string, string> = {
   hr: "HR",
   team_lead: "Тімліда",
   admin: "Адміна",
+};
+
+const getSignalsWord = (count: number) => {
+  const lastTwo = count % 100;
+  const last = count % 10;
+
+  if (lastTwo >= 11 && lastTwo <= 14) {
+    return "сигналів";
+  }
+
+  if (last === 1) {
+    return "сигнал";
+  }
+
+  if (last >= 2 && last <= 4) {
+    return "сигнали";
+  }
+
+  return "сигналів";
 };
 
 export const SignalsPage = () => {
@@ -60,8 +80,16 @@ export const SignalsPage = () => {
         title={`Інсайти ${displayRole}`}
         showLogo={true}
         rightContent={
-          <div className="px-4 py-2 rounded-full bg-red-500 text-white text-sm font-medium">
-            {unresolvedCount} сигналів не розглянуто
+          <div className="mt-1 flex items-center gap-2">
+            <img
+              src={alertIcon}
+              alt="Alert"
+              className="w-5 h-5 flex-shrink-0"
+            />
+
+            <p className="mt-1 text-base leading-6 font-normal text-[#ED2B26]">
+              {unresolvedCount} {getSignalsWord(unresolvedCount)} не розглянуто
+            </p>
           </div>
         }
       />

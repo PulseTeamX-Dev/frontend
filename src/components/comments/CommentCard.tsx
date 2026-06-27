@@ -6,7 +6,7 @@ type Props = {
 
 const CommentCard = ({ comment }: Props) => {
   return (
-    <div className="bg-white border rounded-2xl p-4 hover:shadow-sm transition">
+    <div className="text-grayscale-700 bg-white border border-[#EEEEEE] rounded-2xl p-4 hover:shadow-sm transition">
       <div className="text-xs text-light-txt mb-3">
         {new Date(comment.created_at).toLocaleDateString("uk-UA")}
       </div>

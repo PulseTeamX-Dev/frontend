@@ -15,12 +15,21 @@ import CommentCard from "../components/comments/CommentCard";
 import AlertsModal from "../components/alerts/AlertsModal";
 import Pagination from "../components/comments/Pagination";
 import Icon from "../shared/Icon";
+import { resolveAlert } from "../redux/alerts/operation";
+import { toast } from "react-toastify";
 import { PageHeader } from "../shared/PageHeader"; // 🔒 Наш шеред-компонент
 
 export const CommentsPage = () => {
   const dispatch = useAppDispatch();
   const [page, setPage] = useState(1);
   const [filter, setFilter] = useState<"all" | "new">("all");
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+
+  const filterOptions = [
+    { value: "new", label: "Нові" },
+    { value: "all", label: "Всі" },
+  ] as const;
+
   const [isAlertsOpen, setIsAlertsOpen] = useState(false);
 
   const comments = useAppSelector(selectComments);
@@ -37,6 +46,19 @@ export const CommentsPage = () => {
   useEffect(() => {
     dispatch(fetchAlerts());
   }, [dispatch]);
+
+  const handleResolve = async (alertId: number) => {
+    try {
+      await dispatch(resolveAlert(alertId)).unwrap();
+
+      // оновлюємо список алертів
+      dispatch(fetchAlerts());
+
+      toast.success("Сигнал позначено як вирішений");
+    } catch {
+      toast.error("Не вдалося закрити сигнал");
+    }
+  };
 
   const newComments = comments
     .toSorted(
@@ -69,27 +91,91 @@ export const CommentsPage = () => {
         />
 
         {/* Main Card */}
-        <div className="bg-white rounded-3xl border border-gray-200 p-5 shadow-sm">
+        <div className="rounded-3xl border border-[#EEEEEE] bg-white p-5 shadow-sm">
           {/* Filters */}
           <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
             <div className="flex flex-wrap gap-2">
-              <div className="px-3 py-2 rounded-xl bg-red-50 text-red-500 text-sm font-medium">
-                {newCommentsCount} нових
+              <div className="flex items-center gap-2 rounded-xl bg-white px-3 py-2">
+                <div className="h-1 w-1 rounded-full bg-[#ED2B26]" />
+                <span className="text-xs font-semibold leading-4 text-[#191219]">
+                  {newCommentsCount} нових
+                </span>
               </div>
 
-              <div className="px-3 py-2 rounded-xl bg-gray-100 text-gray-600 text-sm font-medium">
-                {pagination?.total_comments ?? 0} коментарів
+              <div className="rounded-xl border border-[#CCCCCC] bg-white px-3 py-2">
+                <span className="text-xs font-semibold leading-4 text-[#666666]">
+                  {pagination?.total_comments ?? 0} коментарів
+                </span>
               </div>
             </div>
 
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value as "all" | "new")}
-              className="h-10 px-3 rounded-xl border border-gray-200 bg-white text-sm focus:outline-none focus:border-primary-active"
-            >
-              <option value="new">Нові</option>
-              <option value="all">Всі</option>
-            </select>
+            <div className="relative w-[150px]">
+              <button
+                type="button"
+                onClick={() => setIsFilterOpen((prev) => !prev)}
+                className={`group flex h-11 w-full items-center justify-between border border-[#EEEEEE] px-4 transition-colors
+    ${
+      isFilterOpen
+        ? "rounded-t-xl rounded-b-none bg-[#F97316] text-white"
+        : "rounded-xl bg-white text-[#222222]"
+    }`}
+              >
+                <span
+                  className={`text-sm font-semibold transition-colors ${
+                    isFilterOpen
+                      ? "text-white"
+                      : "text-[#222222] group-hover:text-[#F97316]"
+                  }`}
+                >
+                  {filterOptions.find((item) => item.value === filter)?.label}
+                </span>
+
+                <svg
+                  className={`h-4 w-4 transition-all ${
+                    isFilterOpen
+                      ? "rotate-180 text-white"
+                      : "text-[#666666] group-hover:text-[#F97316]"
+                  }`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </button>
+
+              {isFilterOpen && (
+                <div className="absolute left-0 right-0 z-20 overflow-hidden rounded-b-xl border border-t-0 border-[#EEEEEE] bg-white shadow-lg">
+                  {filterOptions.map((option, index) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => {
+                        setFilter(option.value);
+                        setPage(1);
+                        setIsFilterOpen(false);
+                      }}
+                      className={`flex w-full items-center px-4 py-3 text-left transition-colors hover:bg-[#FAFAFA]
+            ${
+              filter === option.value
+                ? "font-semibold text-[#222222]"
+                : "font-normal text-[#666666]"
+            }
+            ${
+              index !== filterOptions.length - 1
+                ? "border-b border-[#EEEEEE]"
+                : ""
+            }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Content */}
@@ -126,6 +212,7 @@ export const CommentsPage = () => {
         isOpen={isAlertsOpen}
         onClose={() => setIsAlertsOpen(false)}
         alerts={alerts}
+        onResolve={handleResolve}
       />
     </>
   );
