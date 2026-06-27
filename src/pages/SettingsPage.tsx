@@ -22,9 +22,14 @@ export const SettingsPage = () => {
           </div>
         )}
 
-        {/* Права колонка: Особистий кабінет (займає 5 колонок з 12) */}
-        {/* Додаємо sticky, щоб він був зафіксований при прокрутці */}
-        <div className="lg:col-span-5 bg-white rounded-[32px] shadow-[0_4px_30px_rgba(0,0,0,0.04)] p-8 md:p-10 border border-gray-100 sticky top-8">
+        {/* 🛠️ ФІКС: Робимо класи динамічними за допомогою шаблонних рядків */}
+        <div
+          className={`bg-white rounded-[32px] shadow-[0_4px_30px_rgba(0,0,0,0.04)] p-8 md:p-10 border border-gray-100 sticky top-8 transition-all duration-300 ${
+            isHR
+              ? "lg:col-span-5" // Ідеальний вигляд для HR (як на скріні 2)
+              : "lg:col-span-12 max-w-3xl mx-auto w-full" // Розтягнутий та відцентрований вигляд для Тімліда
+          }`}
+        >
           <Title
             tag="h2"
             variant="bold"
