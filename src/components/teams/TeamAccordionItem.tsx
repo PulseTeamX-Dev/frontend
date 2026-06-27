@@ -245,7 +245,7 @@ export const TeamAccordionItem = ({
               team.is_active ? "text-success" : "text-grayscale-700"
             }`}
           >
-            {team.is_active ? "Активна" : "Не активна"}
+            {team.is_active ? "Активна" : "Неактивна"}
           </span>
 
           <Icon
