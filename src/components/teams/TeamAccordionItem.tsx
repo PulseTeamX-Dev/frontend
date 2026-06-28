@@ -18,6 +18,7 @@ import { Button } from "../../shared/Button";
 import Icon from "../../shared/Icon";
 import rotateIcon from "../../assets/icons/rotate.svg";
 import { AddTeamMemberModal } from "./AddTeamMemberModal";
+import { ConfirmModal } from "./ConfirmModal";
 
 export interface TeamAccordionItemProps {
   team: TeamInfo;
@@ -34,6 +35,13 @@ export const TeamAccordionItem = ({
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [confirmConfig, setConfirmConfig] = useState<{
+    type: "delete_member" | "archive_team";
+    title: string;
+    confirmText: string;
+    payload?: { userId: number; email: string };
+  } | null>(null);
 
   const [locallyAddedUsers, setLocallyAddedUsers] = useState<TeamMember[]>(
     () => {
@@ -94,36 +102,51 @@ export const TeamAccordionItem = ({
     }
   };
 
-  const handleArchiveTeam = async () => {
-    const confirmed = window.confirm(
-      `Ви впевнені, що хочете архівувати команду "${team.name}"?`,
-    );
-    if (!confirmed) return;
-    try {
-      await dispatch(archiveTeam(team.team_id)).unwrap();
-      toast.success("Команду архівовано");
-    } catch {
-      toast.error("Помилка архівації");
-    }
+  const handleArchiveTeam = () => {
+    setConfirmConfig({
+      type: "archive_team",
+      title: `Ви впевнені, що хочете архівувати команду "${team.name}"?`,
+      confirmText: "Архівувати",
+    });
   };
 
-  const handleRemoveExistingMember = async (userId: number, email: string) => {
-    const isConfirmed = window.confirm(
-      `Ви впевнені, що хочете видалити учасника "${email}"?`,
-    );
-    if (!isConfirmed) return;
+  const handleRemoveExistingMember = (userId: number, email: string) => {
+    setConfirmConfig({
+      type: "delete_member",
+      title: `Ви певні, що хочете вилучити учасника?`,
+      confirmText: "Вилучити",
+      payload: { userId, email },
+    });
+  };
+  const handleConfirmAction = async () => {
+    if (!confirmConfig) return;
 
-    if (userId < 0) {
-      setLocallyAddedUsers((prev) => prev.filter((u) => u.user_id !== userId));
-      toast.success("Учасника видалено зі списку");
-      return;
-    }
     try {
-      await dispatch(archiveMember({ teamId: team.team_id, userId })).unwrap();
-      toast.success("Учасника видалено з команди");
-      await dispatch(fetchTeams()).unwrap();
+      setIsSubmitting(true);
+      if (confirmConfig.type === "delete_member" && confirmConfig.payload) {
+        const { userId } = confirmConfig.payload;
+        if (userId < 0) {
+          setLocallyAddedUsers((prev) =>
+            prev.filter((u) => u.user_id !== userId),
+          );
+          toast.success("Учасника видалено зі списку");
+        } else {
+          await dispatch(
+            archiveMember({ teamId: team.team_id, userId }),
+          ).unwrap();
+          toast.success("Учасника видалено з команди");
+          await dispatch(fetchTeams()).unwrap();
+        }
+      } else if (confirmConfig.type === "archive_team") {
+        await dispatch(archiveTeam(team.team_id)).unwrap();
+        toast.success("Команду архівовано");
+      }
+
+      setConfirmConfig(null);
     } catch (err) {
-      toast.error((err as string) || "Не вдалося видалити учасника");
+      toast.error((err as string) || "Помилка виконання дії");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -222,8 +245,15 @@ export const TeamAccordionItem = ({
               team.is_active ? "text-success" : "text-grayscale-700"
             }`}
           >
-            {team.is_active ? "Активна" : "Не активна"}
+            {team.is_active ? "Активна" : "Неактивна"}
           </span>
+
+          <Icon
+            id="chevron-button"
+            className={`w-4 h-4 text-grayscale-600 transition-transform duration-300 ${
+              isOpen ? "rotate-0" : "rotate-180"
+            }`}
+          />
         </div>
       </div>
       {isOpen &&
@@ -262,7 +292,7 @@ export const TeamAccordionItem = ({
                         <button
                           onClick={() =>
                             handleRemoveExistingMember(
-                              user.user_id,
+                              user.user_id!,
                               user.email!,
                             )
                           }
@@ -296,11 +326,22 @@ export const TeamAccordionItem = ({
             </div>
           </div>
         ) : null)}
+
       <AddTeamMemberModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onAdd={onAddMember}
         isSubmitting={isSubmitting}
+      />
+
+      {/* Модалка*/}
+      <ConfirmModal
+        isOpen={confirmConfig !== null}
+        title={confirmConfig?.title || ""}
+        confirmText={confirmConfig?.confirmText}
+        isSubmitting={isSubmitting}
+        onClose={() => setConfirmConfig(null)}
+        onConfirm={handleConfirmAction}
       />
     </div>
   );
