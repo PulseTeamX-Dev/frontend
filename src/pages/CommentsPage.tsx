@@ -14,7 +14,7 @@ import { fetchAlerts } from "../redux/alerts/operation";
 import CommentCard from "../components/comments/CommentCard";
 import AlertsModal from "../components/alerts/AlertsModal";
 import Pagination from "../components/comments/Pagination";
-import Icon from "../shared/Icon";
+import Icon from "@/shared/ui/Icon";
 import { resolveAlert } from "../redux/alerts/operation";
 import { toast } from "react-toastify";
 import { PageHeader } from "../shared/PageHeader"; // 🔒 Наш шеред-компонент

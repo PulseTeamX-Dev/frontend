@@ -9,8 +9,8 @@ import { selectProfile } from "../../redux/profile/selectors";
 import { updateProfile } from "../../redux/profile/operation";
 import { logoutUser } from "../../redux/auth/operation";
 
-import { Input } from "../../shared/Input";
-import { Button } from "../../shared/Button";
+import { Input } from "@/shared/ui/Input";
+import { Button } from "@/shared/ui/Button";
 
 type FormValues = {
   full_name: string;

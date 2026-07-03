@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Icon from "../../shared/Icon";
-import { Input } from "../../shared/Input";
+import Icon from "@/shared/ui/Icon";
+import { Input } from "@/shared/ui/Input";
 import { Title } from "../../shared/Title";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
 import { acceptInvite, loginUser } from "../../redux/auth/operation";
@@ -14,7 +14,7 @@ import {
   type InviteFormData,
 } from "../../validation/authSchemas";
 import { toast } from "react-toastify";
-import { Button } from "../../shared/Button";
+import { Button } from "@/shared/ui/Button";
 
 export const InviteForm = ({ token }: { token: string }) => {
   const dispatch = useAppDispatch();

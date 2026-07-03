@@ -1,4 +1,4 @@
-import sprite from "../assets/symbol-defs.svg";
+import sprite from "../../assets/symbol-defs.svg";
 
 export interface IconProps {
   id: string;

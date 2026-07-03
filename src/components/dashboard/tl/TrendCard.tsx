@@ -1,4 +1,4 @@
-import Icon from "../../../shared/Icon";
+import Icon from "@/shared/ui/Icon";
 import { Title } from "../../../shared/Title";
 import { formatNumber } from "../../../utils/formatNumber";
 

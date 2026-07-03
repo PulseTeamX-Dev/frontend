@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 import { useForm } from "react-hook-form";
-import { Input } from "../../shared/Input";
-import { Button } from "../../shared/Button";
+import { Input } from "@/shared/ui/Input";
+import { Button } from "@/shared/ui/Button";
 
 interface AddTeamMemberModalProps {
   isOpen: boolean;

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiClient } from "../../api/apiClient";
+import { apiClient } from "../../shared/api/apiClient";
 import type { TeamInfo, TeamMember, ImportEmailsResponse } from "./types";
 
 export const fetchTeams = createAsyncThunk<

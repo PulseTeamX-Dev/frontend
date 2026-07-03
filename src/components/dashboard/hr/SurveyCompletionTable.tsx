@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import Icon from "../../../shared/Icon";
+import Icon from "@/shared/ui/Icon";
 import { Title } from "../../../shared/Title";
 import type { EngagementData } from "../../../types/dashboard/types";
 

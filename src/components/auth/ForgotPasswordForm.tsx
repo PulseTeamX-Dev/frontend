@@ -1,5 +1,5 @@
 import { Title } from "../../shared/Title";
-import { Input } from "../../shared/Input";
+import { Input } from "@/shared/ui/Input";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
 import { recoverPassword } from "../../redux/auth/operation";
 import { selectAuthLoading } from "../../redux/auth/selectors";
@@ -12,7 +12,7 @@ import {
   forgotPasswordSchema,
   type ForgotPasswordFormData,
 } from "../../validation/authSchemas";
-import { Button } from "../../shared/Button";
+import { Button } from "@/shared/ui/Button";
 
 interface Props {
   onBack: () => void;

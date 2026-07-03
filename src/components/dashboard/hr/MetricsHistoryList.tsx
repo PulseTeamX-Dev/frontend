@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import type { HeatmapItem } from "../../../types/dashboard/types";
 import MetricsHistoryItem from "./MetricsHistoryItem";
-import Icon from "../../../shared/Icon";
+import Icon from "@/shared/ui/Icon";
 import { Title } from "../../../shared/Title";
 
 interface MetricsHistoryListProps {

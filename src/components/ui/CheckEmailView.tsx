@@ -2,7 +2,7 @@ import { Title } from "../../shared/Title";
 import { useAppDispatch } from "../../hooks/useReduxTypes";
 import { resetRecoverStatus } from "../../redux/auth/slice";
 import mailImg from "../../assets/img/email.png";
-import { Button } from "../../shared/Button";
+import { Button } from "@/shared/ui/Button";
 
 interface Props {
   onBack: () => void;

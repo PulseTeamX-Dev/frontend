@@ -4,8 +4,8 @@ import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
 import { updatePassword } from "../redux/auth/operation";
 import { selectAuthLoading } from "../redux/auth/selectors";
 import { Title } from "../shared/Title";
-import { Input } from "../shared/Input";
-import Icon from "../shared/Icon";
+import { Input } from "@/shared/ui/Input";
+import Icon from "@/shared/ui/Icon";
 import lockImg from "../assets/img/lock.png";
 import { toast } from "react-toastify";
 

@@ -1,5 +1,5 @@
 import type { Alert } from "../../redux/alerts/types";
-import Icon from "../../shared/Icon";
+import Icon from "@/shared/ui/Icon";
 import { renderMetric } from "../../utils/renderAlertMetric";
 import alertIcon from "../../assets/icons/alert.svg";
 

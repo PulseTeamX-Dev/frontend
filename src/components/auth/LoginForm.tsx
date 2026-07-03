@@ -5,13 +5,13 @@ import { selectAuthLoading } from "../../redux/auth/selectors";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { loginUser } from "../../redux/auth/operation";
 import { toast } from "react-toastify";
-import Icon from "../../shared/Icon";
-import { Input } from "../../shared/Input";
+import Icon from "@/shared/ui/Icon";
+import { Input } from "@/shared/ui/Input";
 
 // Імпортуємо ресолвер та схему
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type LoginFormData } from "../../validation/authSchemas";
-import { Button } from "../../shared/Button";
+import { Button } from "@/shared/ui/Button";
 // (якщо Yup, то імпортуєш yupResolver з @hookform/resolvers/yup)
 
 const LoginForm = ({

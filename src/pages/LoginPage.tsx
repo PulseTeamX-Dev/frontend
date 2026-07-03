@@ -4,7 +4,7 @@ import { selectIsAuthenticated } from "../redux/auth/selectors";
 import { resetRecoverStatus } from "../redux/auth/slice";
 import AuthSuccess from "../components/ui/AuthSuccess";
 import { CheckEmailView } from "../components/ui/CheckEmailView";
-import Icon from "../shared/Icon";
+import Icon from "@/shared/ui/Icon";
 import { Title } from "../shared/Title";
 import { ForgotPasswordForm } from "../components/auth/ForgotPasswordForm";
 import LoginForm from "../components/auth/LoginForm";

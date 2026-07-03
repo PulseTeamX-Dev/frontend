@@ -1,6 +1,6 @@
 import { Title } from "../../shared/Title";
-import { Button } from "../../shared/Button";
-import Icon from "../../shared/Icon";
+import { Button } from "@/shared/ui/Button";
+import Icon from "@/shared/ui/Icon";
 
 interface SurveyStartProps {
   onStart: () => void;

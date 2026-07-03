@@ -13,9 +13,9 @@ import {
   archiveMember,
   fetchTeams,
 } from "../../redux/teams/operation";
-import { Input } from "../../shared/Input";
-import { Button } from "../../shared/Button";
-import Icon from "../../shared/Icon";
+import { Input } from "@/shared/ui/Input";
+import { Button } from "@/shared/ui/Button";
+import Icon from "@/shared/ui/Icon";
 import rotateIcon from "../../assets/icons/rotate.svg";
 import { AddTeamMemberModal } from "./AddTeamMemberModal";
 import { ConfirmModal } from "./ConfirmModal";

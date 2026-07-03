@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "../../hooks/useReduxTypes";
-import Icon from "../../shared/Icon";
+import Icon from "@/shared/ui/Icon";
 import { selectAuthRole } from "../../redux/auth/selectors";
 import { UserProfileMin } from "./UserProfileMin";
 

@@ -5,7 +5,7 @@ import { MetricsHistory } from "./tl/MetricsHistory";
 import { TopCards } from "./tl/TopCards";
 import { RadarChart } from "./tl/RadarChart";
 import type { TeamLeadMetrics } from "../../redux/dashboard/types";
-import Icon from "../../shared/Icon";
+import Icon from "@/shared/ui/Icon";
 import { PageHeader } from "../../shared/PageHeader";
 import { PageLoader } from "../../shared/Loader";
 
@@ -19,7 +19,7 @@ export const TLDashboard = () => {
     dispatch(fetchMetrics());
   }, [dispatch]);
 
-  if (isLoading) return <PageLoader/>
+  if (isLoading) return <PageLoader />;
   if (error) return <div>Помилка: {error}</div>;
   if (!metrics) return null;
 

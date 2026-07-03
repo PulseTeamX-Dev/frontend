@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiClient } from "../../api/apiClient";
+import { apiClient } from "../../shared/api/apiClient";
 import type { Alert } from "./types";
 
 export const fetchAlerts = createAsyncThunk<
