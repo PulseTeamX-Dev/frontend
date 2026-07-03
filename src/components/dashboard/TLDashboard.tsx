@@ -6,7 +6,7 @@ import { TopCards } from "./tl/TopCards";
 import { RadarChart } from "./tl/RadarChart";
 import type { TeamLeadMetrics } from "../../redux/dashboard/types";
 import Icon from "@/shared/ui/Icon";
-import { PageHeader } from "../../shared/PageHeader";
+import { PageHeader } from "@/shared/ui/PageHeader";
 import { PageLoader } from "@/shared/ui/Loader";
 
 export const TLDashboard = () => {

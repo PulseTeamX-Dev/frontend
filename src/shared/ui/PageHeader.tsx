@@ -1,6 +1,6 @@
 import { type ReactNode } from "react";
-import Icon from "../shared/ui/Icon";
-import { Title } from "./Title";
+import Icon from "./Icon";
+import { Title } from "../Title";
 
 interface PageHeaderProps {
   title: string;

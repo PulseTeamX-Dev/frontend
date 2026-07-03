@@ -17,7 +17,7 @@ import Pagination from "../components/comments/Pagination";
 import Icon from "@/shared/ui/Icon";
 import { resolveAlert } from "../redux/alerts/operation";
 import { toast } from "react-toastify";
-import { PageHeader } from "../shared/PageHeader"; // 🔒 Наш шеред-компонент
+import { PageHeader } from "@/shared/ui/PageHeader"; // 🔒 Наш шеред-компонент
 import { PageLoader } from "@/shared/ui/Loader";
 
 export const CommentsPage = () => {
