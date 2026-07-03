@@ -6,7 +6,7 @@ import { selectTeams, selectTeamLoading } from "../redux/teams/selectors";
 import { TeamsAddForm } from "../components/teams/TeamsAddForm";
 import { TeamAccordionItem } from "../components/teams/TeamAccordionItem";
 import { Title } from "../shared/Title";
-import { PageLoader } from "../shared/Loader";
+import { PageLoader } from "@/shared/ui/Loader";
 
 const TeamsPage = () => {
   const dispatch = useAppDispatch();

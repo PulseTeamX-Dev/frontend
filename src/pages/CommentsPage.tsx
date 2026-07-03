@@ -18,7 +18,7 @@ import Icon from "@/shared/ui/Icon";
 import { resolveAlert } from "../redux/alerts/operation";
 import { toast } from "react-toastify";
 import { PageHeader } from "../shared/PageHeader"; // 🔒 Наш шеред-компонент
-import { PageLoader } from "../shared/Loader";
+import { PageLoader } from "@/shared/ui/Loader";
 
 export const CommentsPage = () => {
   const dispatch = useAppDispatch();

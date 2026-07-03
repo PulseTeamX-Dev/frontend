@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAppSelector } from "../hooks/useReduxTypes";
-import { PageLoader } from "../shared/Loader";
+import { PageLoader } from "@/shared/ui/Loader";
 
 interface Props {
   allowedRoles: string[];

@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { PageLoader } from "../shared/Loader";
+import { PageLoader } from "@/shared/ui/Loader";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";

@@ -17,7 +17,7 @@ import {
 import { SurveyStart } from "../components/survey/SurveyStart";
 import { SurveyFinished } from "../components/survey/SurveyFinished";
 import { SurveySuccess } from "../components/survey/SurveySuccess";
-import { PageLoader } from "../shared/Loader";
+import { PageLoader } from "@/shared/ui/Loader";
 const SCALE_VALUES = Array.from({ length: 10 }, (_, i) => i + 1);
 
 export const SurveyPage = () => {

@@ -14,7 +14,7 @@ import {
 } from "../redux/alerts/selectors";
 import AlertCard from "../components/alerts/AlertCard";
 import SignalsAnalytics from "../components/alerts/SignalsAnalytics";
-import { PageLoader } from "../shared/Loader";
+import { PageLoader } from "@/shared/ui/Loader";
 import { PageHeader } from "../shared/PageHeader";
 import { selectAuthRole } from "../redux/auth/selectors";
 import alertIcon from "../assets/icons/alert.svg";

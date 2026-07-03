@@ -7,7 +7,7 @@ import { RadarChart } from "./tl/RadarChart";
 import type { TeamLeadMetrics } from "../../redux/dashboard/types";
 import Icon from "@/shared/ui/Icon";
 import { PageHeader } from "../../shared/PageHeader";
-import { PageLoader } from "../../shared/Loader";
+import { PageLoader } from "@/shared/ui/Loader";
 
 export const TLDashboard = () => {
   const dispatch = useAppDispatch();

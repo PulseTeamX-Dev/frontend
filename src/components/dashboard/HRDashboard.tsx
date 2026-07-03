@@ -6,7 +6,7 @@ import MetricsHistoryList from "./hr/MetricsHistoryList";
 import { SurveyCompletionTable } from "./hr/SurveyCompletionTable";
 import { WorkloadChart } from "./hr/WorkloadChart";
 import { PageHeader } from "../../shared/PageHeader";
-import { PageLoader } from "../../shared/Loader";
+import { PageLoader } from "@/shared/ui/Loader";
 
 export const HRDashboard = () => {
   const dispatch = useAppDispatch();
