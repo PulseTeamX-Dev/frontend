@@ -1,4 +1,4 @@
-import { Title } from "../../shared/Title";
+import { Title } from "@/shared/ui/Title";
 import { useAppDispatch } from "../../hooks/useReduxTypes";
 import { resetRecoverStatus } from "../../redux/auth/slice";
 import mailImg from "../../assets/img/email.png";

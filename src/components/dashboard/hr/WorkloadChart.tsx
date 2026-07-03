@@ -1,4 +1,4 @@
-import { Title } from "../../../shared/Title";
+import { Title } from "@/shared/ui/Title";
 
 export interface EnhancedWorkloadData {
   team_name: string;

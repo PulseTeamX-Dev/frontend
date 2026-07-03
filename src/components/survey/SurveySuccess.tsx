@@ -1,4 +1,4 @@
-import { Title } from "../../shared/Title";
+import { Title } from "@/shared/ui/Title";
 
 interface SurveySuccessProps {
   isAlreadySubmitted?: boolean;

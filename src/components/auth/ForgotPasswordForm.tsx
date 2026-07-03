@@ -1,4 +1,4 @@
-import { Title } from "../../shared/Title";
+import { Title } from "@/shared/ui/Title";
 import { Input } from "@/shared/ui/Input";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
 import { recoverPassword } from "../../redux/auth/operation";

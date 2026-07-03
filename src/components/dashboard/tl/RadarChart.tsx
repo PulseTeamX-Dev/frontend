@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import type { RadarData } from "../../../redux/dashboard/types";
-import { Title } from "../../../shared/Title";
+import { Title } from "@/shared/ui/Title";
 
 interface RadarChartProps {
   data: RadarData[];

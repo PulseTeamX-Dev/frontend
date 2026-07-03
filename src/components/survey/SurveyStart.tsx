@@ -1,4 +1,4 @@
-import { Title } from "../../shared/Title";
+import { Title } from "@/shared/ui/Title";
 import { Button } from "@/shared/ui/Button";
 import Icon from "@/shared/ui/Icon";
 

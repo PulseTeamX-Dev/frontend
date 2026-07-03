@@ -2,7 +2,7 @@ import type {
   EngagementCard,
   TopCardMetric,
 } from "../../../redux/dashboard/types";
-import { Title } from "../../../shared/Title";
+import { Title } from "@/shared/ui/Title";
 import type { HRWorkloadCurrent } from "../../../types/dashboard/types";
 import { WorkloadChart } from "../hr/WorkloadChart";
 import { TrendCard } from "./TrendCard";

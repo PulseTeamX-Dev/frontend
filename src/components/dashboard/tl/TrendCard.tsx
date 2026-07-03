@@ -1,5 +1,5 @@
 import Icon from "@/shared/ui/Icon";
-import { Title } from "../../../shared/Title";
+import { Title } from "@/shared/ui/Title";
 import { formatNumber } from "../../../utils/formatNumber";
 
 interface TrendCardProps {

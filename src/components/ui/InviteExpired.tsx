@@ -1,4 +1,4 @@
-import { Title } from "../../shared/Title";
+import { Title } from "@/shared/ui/Title";
 import timerImg from "../../assets/img/timer.png";
 
 export const InviteExpired = () => {

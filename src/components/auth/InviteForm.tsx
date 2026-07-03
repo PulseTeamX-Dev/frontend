@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "@/shared/ui/Icon";
 import { Input } from "@/shared/ui/Input";
-import { Title } from "../../shared/Title";
+import { Title } from "@/shared/ui/Title";
 import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
 import { acceptInvite, loginUser } from "../../redux/auth/operation";
 import { selectAuthLoading } from "../../redux/auth/selectors";

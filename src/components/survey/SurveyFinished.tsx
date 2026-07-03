@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Title } from "../../shared/Title";
+import { Title } from "@/shared/ui/Title";
 
 import anim1 from "../../assets/animation/animation1.gif";
 import anim2 from "../../assets/animation/animation2.gif";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Title } from "../../shared/Title";
+import { Title } from "@/shared/ui/Title";
 import checkImg from "../../assets/img/check.png";
 import AppLink from "@/shared/ui/AppLink";
 

@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import checkImg from "../../assets/img/check.png";
-import { Title } from "../../shared/Title";
+import { Title } from "@/shared/ui/Title";
 import { Button } from "@/shared/ui/Button";
 
 const AuthSuccess = () => {
