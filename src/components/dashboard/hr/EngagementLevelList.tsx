@@ -1,5 +1,5 @@
 import type { EngagementData } from "../../../types/dashboard/types";
-import { getBadgeClass } from "../../../utils/getBadgeClass";
+import { getBadgeClass } from "@/shared/lib/getBadgeClass";
 
 interface EngagementLevelListProps {
   data: EngagementData[];

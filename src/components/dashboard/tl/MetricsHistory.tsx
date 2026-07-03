@@ -1,7 +1,7 @@
 import Icon from "@/shared/ui/Icon";
 import { Title } from "@/shared/ui/Title";
 import type { HeatmapItem } from "../../../types/dashboard/types";
-import { getHeatmapClass } from "../../../utils/getLevel";
+import { getHeatmapClass } from "@/shared/lib/getLevel";
 
 interface TLMetricsHistoryProps {
   heatmapData: HeatmapItem[];

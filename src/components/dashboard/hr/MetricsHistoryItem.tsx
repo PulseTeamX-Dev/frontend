@@ -1,5 +1,5 @@
 import Icon from "@/shared/ui/Icon";
-import { getHeatmapClass } from "../../../utils/getLevel";
+import { getHeatmapClass } from "@/shared/lib/getLevel";
 
 interface MetricsHistoryItemProps {
   value: number | null | undefined;
