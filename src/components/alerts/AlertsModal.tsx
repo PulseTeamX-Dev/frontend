@@ -1,6 +1,6 @@
 import type { Alert } from "../../redux/alerts/types";
 import Icon from "@/shared/ui/Icon";
-import { renderMetric } from "../../utils/renderAlertMetric";
+import { renderMetric } from "@/shared/lib/renderAlertMetric";
 import alertIcon from "../../assets/icons/alert.svg";
 
 interface AlertsModalProps {

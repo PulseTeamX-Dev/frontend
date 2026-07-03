@@ -1,5 +1,5 @@
 import type { Alert } from "../../redux/alerts/types";
-import { renderMetric } from "../../utils/renderAlertMetric";
+import { renderMetric } from "@/shared/lib/renderAlertMetric";
 
 interface Props {
   alert: Alert;

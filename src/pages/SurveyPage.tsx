@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 
 import { setAnswer, clearSurveyForm } from "../redux/surveys/slice";
 import type { AppDispatch, RootState } from "../redux/store";
-import { getScaleButtonColors } from "../utils/surveyButtonColors";
+import { getScaleButtonColors } from "@/shared/lib/surveyButtonColors";
 import { Button } from "@/shared/ui/Button";
 
 import { fetchSurveyByToken, submitSurvey } from "../redux/surveys/operation";

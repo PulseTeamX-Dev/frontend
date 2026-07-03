@@ -1,4 +1,4 @@
-import type { Alert } from "../redux/alerts/types";
+import type { Alert } from "../../redux/alerts/types";
 
 export const renderMetric = (alert: Alert) => {
   if (alert.metric_value === null) return null;
