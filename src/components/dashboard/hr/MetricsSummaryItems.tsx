@@ -1,5 +1,5 @@
 import Icon from "@/shared/ui/Icon";
-import { formatNumber } from "../../../utils/formatNumber"; // <-- Замінили інлайн логіку на утиліту
+import { formatNumber } from "@/shared/lib/formatNumber"; // <-- Замінили інлайн логіку на утиліту
 
 interface MetricsSummaryItemsProps {
   title: string;
