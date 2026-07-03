@@ -1,6 +1,6 @@
 import { Title } from "../../shared/Title";
 import blockImg from "../../assets/img/block.png";
-import AppLink from "../../shared/AppLink";
+import AppLink from "@/shared/ui/AppLink";
 
 export const InviteUsed = () => {
   return (
