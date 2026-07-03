@@ -1,5 +1,9 @@
 import axios from "axios";
-import { SUPABASE_URL, SUPABASE_ANON_KEY, BASE_URL } from "../../constants";
+import {
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
+  BASE_URL,
+} from "@/shared/lib/constants";
 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
