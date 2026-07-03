@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
 
 import { selectProfileAvatar } from "../../redux/profile/selectors";
 import { updateProfile } from "../../redux/profile/operation";
-import { supabase } from "../../utils/supabase";
+import { supabase } from "@/shared/api/supabase";
 import { SUPABASE_URL } from "../../constants";
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
