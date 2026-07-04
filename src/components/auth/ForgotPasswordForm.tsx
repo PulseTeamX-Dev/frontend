@@ -2,7 +2,7 @@ import { Title } from "@/shared/ui/Title";
 import { Input } from "@/shared/ui/Input";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { recoverPassword } from "@/features/auth/model/operation";
-import { selectAuthLoading } from "../../redux/auth/selectors";
+import { selectAuthLoading } from "@/features/auth/model/selectors";
 import { resetRecoverStatus } from "@/features/auth/model/slice";
 import lockImg from "../../assets/img/lock.png";
 

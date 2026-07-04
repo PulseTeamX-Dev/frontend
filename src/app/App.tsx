@@ -4,7 +4,7 @@ import { PageLoader } from "@/shared/ui/Loader";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
-import { selectIsAuthenticated } from "../redux/auth/selectors";
+import { selectIsAuthenticated } from "@/features/auth/model/selectors";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { MainLayout } from "../components/layout/MainLayout";
 import { fetchCurrentUser } from "@/features/auth/model/operation";

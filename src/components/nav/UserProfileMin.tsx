@@ -1,5 +1,5 @@
 import { useAppSelector } from "@/app/useReduxTypes";
-import { selectAuthRole } from "../../redux/auth/selectors";
+import { selectAuthRole } from "@/features/auth/model/selectors";
 import {
   selectProfileAvatar,
   selectProfileName,

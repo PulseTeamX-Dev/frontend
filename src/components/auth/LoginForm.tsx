@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { useState } from "react";
-import { selectAuthLoading } from "../../redux/auth/selectors";
+import { selectAuthLoading } from "@/features/auth/model/selectors";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { loginUser } from "@/features/auth/model/operation";
 import { toast } from "react-toastify";

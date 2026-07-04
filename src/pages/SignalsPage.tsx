@@ -16,7 +16,7 @@ import AlertCard from "../components/alerts/AlertCard";
 import SignalsAnalytics from "../components/alerts/SignalsAnalytics";
 import { PageLoader } from "@/shared/ui/Loader";
 import { PageHeader } from "@/shared/ui/PageHeader";
-import { selectAuthRole } from "../redux/auth/selectors";
+import { selectAuthRole } from "@/features/auth/model/selectors";
 import alertIcon from "../assets/icons/alert.svg";
 
 const roleLabels: Record<string, string> = {

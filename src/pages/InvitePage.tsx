@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { validateInvite } from "@/features/auth/model/operation";
-import { selectInviteStatus } from "../redux/auth/selectors";
+import { selectInviteStatus } from "@/features/auth/model/selectors";
 import { resetInviteStatus } from "@/features/auth/model/slice";
 import { InviteExpired } from "../components/ui/InviteExpired";
 import { InviteUsed } from "../components/ui/InviteUsed";

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
-import { selectIsAuthenticated } from "../redux/auth/selectors";
+import { selectIsAuthenticated } from "@/features/auth/model/selectors";
 import { resetRecoverStatus } from "@/features/auth/model/slice";
 import AuthSuccess from "../components/ui/AuthSuccess";
 import { CheckEmailView } from "../components/ui/CheckEmailView";

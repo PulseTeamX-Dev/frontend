@@ -4,7 +4,7 @@ import { Input } from "@/shared/ui/Input";
 import { Title } from "@/shared/ui/Title";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { acceptInvite, loginUser } from "@/features/auth/model/operation";
-import { selectAuthLoading } from "../../redux/auth/selectors";
+import { selectAuthLoading } from "@/features/auth/model/selectors";
 import { Link } from "react-router-dom";
 
 import { useForm, type SubmitHandler } from "react-hook-form";

@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { useAppSelector } from "@/app/useReduxTypes";
 import Icon from "@/shared/ui/Icon";
-import { selectAuthRole } from "../../redux/auth/selectors";
+import { selectAuthRole } from "@/features/auth/model/selectors";
 import { UserProfileMin } from "./UserProfileMin";
 
 const NAV_CONFIG = [
