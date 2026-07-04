@@ -1,4 +1,4 @@
-import type { RootState } from "../store";
+import type { RootState } from "@/app/store";
 
 export const selectTeams = (state: RootState) => state.team.teams;
 

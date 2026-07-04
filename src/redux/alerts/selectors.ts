@@ -1,4 +1,4 @@
-import type { RootState } from "../store";
+import type { RootState } from "@/app/store";
 
 export const selectAlerts = (state: RootState) => state.alerts.alerts;
 

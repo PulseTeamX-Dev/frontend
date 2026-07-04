@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { authReducer } from "./auth/slice";
-import { surveysReducer } from "./surveys/slice";
-import { dashboardReducer } from "./dashboard/slice";
-import { teamReducer } from "./teams/slice";
-import { profileReducer } from "./profile/slice";
-import { commentsReducer } from "./comments/slice";
-import { alertsReducer } from "./alerts/slice";
+import { authReducer } from "../redux/auth/slice";
+import { surveysReducer } from "../redux/surveys/slice";
+import { dashboardReducer } from "../redux/dashboard/slice";
+import { teamReducer } from "../redux/teams/slice";
+import { profileReducer } from "../redux/profile/slice";
+import { commentsReducer } from "../redux/comments/slice";
+import { alertsReducer } from "../redux/alerts/slice";
 
 export const store = configureStore({
   reducer: {

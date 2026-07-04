@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
 import { setAnswer, clearSurveyForm } from "../redux/surveys/slice";
-import type { AppDispatch, RootState } from "../redux/store";
+import type { AppDispatch, RootState } from "@/app/store";
 import { getScaleButtonColors } from "@/shared/lib/surveyButtonColors";
 import { Button } from "@/shared/ui/Button";
 
