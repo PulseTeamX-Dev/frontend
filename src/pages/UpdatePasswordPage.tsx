@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
-import { updatePassword } from "../redux/auth/operation";
+import { updatePassword } from "@/features/auth/model/operation";
 import { selectAuthLoading } from "../redux/auth/selectors";
 import { Title } from "@/shared/ui/Title";
 import { Input } from "@/shared/ui/Input";

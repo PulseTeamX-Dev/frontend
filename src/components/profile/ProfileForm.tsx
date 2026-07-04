@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 
 import { selectProfile } from "../../redux/profile/selectors";
 import { updateProfile } from "../../redux/profile/operation";
-import { logoutUser } from "../../redux/auth/operation";
+import { logoutUser } from "@/features/auth/model/operation";
 
 import { Input } from "@/shared/ui/Input";
 import { Button } from "@/shared/ui/Button";

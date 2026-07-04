@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { useState } from "react";
 import { selectAuthLoading } from "../../redux/auth/selectors";
 import { useForm, type SubmitHandler } from "react-hook-form";
-import { loginUser } from "../../redux/auth/operation";
+import { loginUser } from "@/features/auth/model/operation";
 import { toast } from "react-toastify";
 import Icon from "@/shared/ui/Icon";
 import { Input } from "@/shared/ui/Input";

@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { selectIsAuthenticated } from "../redux/auth/selectors";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { MainLayout } from "../components/layout/MainLayout";
-import { fetchCurrentUser } from "../redux/auth/operation";
+import { fetchCurrentUser } from "@/features/auth/model/operation";
 import { fetchProfile } from "../redux/profile/operation";
 import { PrivacyPolicyPage } from "../pages/PrivacyPolicyPage";
 import { TermsOfUsePage } from "../pages/TermsOfUsePage";

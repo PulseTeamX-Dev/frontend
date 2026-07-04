@@ -1,9 +1,9 @@
 import { Title } from "@/shared/ui/Title";
 import { Input } from "@/shared/ui/Input";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
-import { recoverPassword } from "../../redux/auth/operation";
+import { recoverPassword } from "@/features/auth/model/operation";
 import { selectAuthLoading } from "../../redux/auth/selectors";
-import { resetRecoverStatus } from "../../redux/auth/slice";
+import { resetRecoverStatus } from "@/features/auth/model/slice";
 import lockImg from "../../assets/img/lock.png";
 
 import { useForm, type SubmitHandler } from "react-hook-form";

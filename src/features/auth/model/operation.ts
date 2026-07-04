@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { LoginCredentials, User } from "./types";
 import { SUPABASE_ANON_KEY, SUPABASE_URL } from "@/shared/lib/constants";
-import { apiClient } from "../../shared/api/apiClient";
+import { apiClient } from "../../../shared/api/apiClient";
 
 export interface LoginPayload {
   user: User;
