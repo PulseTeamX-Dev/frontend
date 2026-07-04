@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 
 import { selectProfile } from "../../redux/profile/selectors";
 import { updateProfile } from "../../redux/profile/operation";

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import {
   fetchAlerts,
   resolveAlert,

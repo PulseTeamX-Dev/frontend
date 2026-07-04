@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { useState } from "react";
 import { selectAuthLoading } from "../../redux/auth/selectors";
 import { useForm, type SubmitHandler } from "react-hook-form";

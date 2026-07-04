@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { toast } from "react-toastify";
 
-import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 
 import { selectProfileAvatar } from "../../redux/profile/selectors";
 import { updateProfile } from "../../redux/profile/operation";

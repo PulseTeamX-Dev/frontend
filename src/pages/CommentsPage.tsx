@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import {
   selectComments,
   selectCommentsLoading,

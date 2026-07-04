@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAppSelector } from "../hooks/useReduxTypes";
+import { useAppSelector } from "@/app/useReduxTypes";
 import { PageLoader } from "@/shared/ui/Loader";
 
 interface Props {

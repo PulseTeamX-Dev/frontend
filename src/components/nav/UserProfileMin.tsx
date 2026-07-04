@@ -1,4 +1,4 @@
-import { useAppSelector } from "../../hooks/useReduxTypes";
+import { useAppSelector } from "@/app/useReduxTypes";
 import { selectAuthRole } from "../../redux/auth/selectors";
 import {
   selectProfileAvatar,

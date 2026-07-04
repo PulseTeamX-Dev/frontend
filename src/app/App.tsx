@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { PageLoader } from "@/shared/ui/Loader";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { selectIsAuthenticated } from "../redux/auth/selectors";
 import { ProtectedRoute } from "../utils/ProtectedRoute";
 import { MainLayout } from "../components/layout/MainLayout";

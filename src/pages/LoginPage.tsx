@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { selectIsAuthenticated } from "../redux/auth/selectors";
 import { resetRecoverStatus } from "../redux/auth/slice";
 import AuthSuccess from "../components/ui/AuthSuccess";

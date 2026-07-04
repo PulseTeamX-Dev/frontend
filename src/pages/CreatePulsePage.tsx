@@ -1,7 +1,7 @@
 import { FrequencySelector } from "../components/createPulse/FrequencySelector";
 import { Dropdown } from "../components/createPulse/Dropdown";
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { fetchTeams } from "../redux/teams/operation";
 import { selectTeams } from "../redux/teams/selectors";
 import { fetchQuestions } from "../redux/surveys/operation";
@@ -10,7 +10,6 @@ import {
   selectSurveyLoading,
 } from "../redux/surveys/selectors";
 import { toast } from "react-toastify";
-
 
 interface PulseConfig {
   id: string;
@@ -33,8 +32,6 @@ export const CreatePulsePage = () => {
   const teams = useAppSelector(selectTeams);
   const [selectedTeamId, setSelectedTeamId] = useState("");
 
-
-
   const [savedPulses, setSavedPulses] = useState<PulseConfig[]>(() => {
     const stored = localStorage.getItem("pulseConfigs");
 
@@ -46,13 +43,11 @@ export const CreatePulsePage = () => {
       return [];
     }
   });
-const existingPulse = savedPulses.find(
-  (pulse) => pulse.teamId === selectedTeamId
-);
-  
+  const existingPulse = savedPulses.find(
+    (pulse) => pulse.teamId === selectedTeamId,
+  );
 
   const loadPulse = (pulse: PulseConfig) => {
-    
     setTitle(pulse.teamName);
 
     setFrequency(pulse.frequency);
@@ -65,16 +60,14 @@ const existingPulse = savedPulses.find(
   };
 
   const handleTeamChange = (teamId: string) => {
-  setSelectedTeamId(teamId);
+    setSelectedTeamId(teamId);
 
-  const pulse = savedPulses.find(
-    (p) => p.teamId === teamId
-  );
+    const pulse = savedPulses.find((p) => p.teamId === teamId);
 
-  if (pulse) {
-    loadPulse(pulse);
-  } 
-};
+    if (pulse) {
+      loadPulse(pulse);
+    }
+  };
 
   // const deletePulse = (id: string) => {
   //   const updated = savedPulses.filter((pulse) => pulse.id !== id);
@@ -110,15 +103,13 @@ const existingPulse = savedPulses.find(
     //   toast.error("Вкажіть назву опитування");
     //   return;
     // }
-const selectedTeam = teams.find(
-  (team) => String(team.team_id) === selectedTeamId
-);
+    const selectedTeam = teams.find(
+      (team) => String(team.team_id) === selectedTeamId,
+    );
 
-  const existingPulse = savedPulses.find(
-  pulse => pulse.teamId === selectedTeamId
-);
-
-
+    const existingPulse = savedPulses.find(
+      (pulse) => pulse.teamId === selectedTeamId,
+    );
 
     const dto: PulseConfig = {
       id: crypto.randomUUID(),
@@ -142,12 +133,12 @@ const selectedTeam = teams.find(
         pulse.teamId === selectedTeamId
           ? {
               ...dto,
-              id: pulse.id, 
+              id: pulse.id,
             }
           : pulse,
       );
 
-            setSavedPulses(updated);
+      setSavedPulses(updated);
 
       localStorage.setItem("pulseConfigs", JSON.stringify(updated));
 
@@ -186,7 +177,7 @@ const selectedTeam = teams.find(
         + Нове опитування
       </button> */}
 
-   {/* {savedPulses.length > 0 && (
+      {/* {savedPulses.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm p-4">
           <h2 className="text-lg font-bold mb-3">
             Мої Pulse ({savedPulses.length})
@@ -236,14 +227,12 @@ const selectedTeam = teams.find(
         <h2 className="text-xl font-bold mb-6">Створити опитування</h2>
         <div>
           <div>
-            <label className="block text-xs text-gray-400 mb-2">
-            Команда
-            </label>
+            <label className="block text-xs text-gray-400 mb-2">Команда</label>
 
             <select
-            value={selectedTeamId}
-            onChange={(e) => handleTeamChange(e.target.value)}
-            className="
+              value={selectedTeamId}
+              onChange={(e) => handleTeamChange(e.target.value)}
+              className="
               w-full
               h-11
               px-4
@@ -252,22 +241,17 @@ const selectedTeam = teams.find(
               border-gray-300
             "
             >
-            <option value="">
-              Оберіть команду
-            </option>
+              <option value="">Оберіть команду</option>
 
-            {teams
-              .filter((team) => team.is_active)
-              .map((team) => (
-                <option
-                  key={team.team_id}
-                  value={String(team.team_id)}
-                >
-                  {team.name}
-                </option>
-                      ))}
-                    </select>
-            </div>
+              {teams
+                .filter((team) => team.is_active)
+                .map((team) => (
+                  <option key={team.team_id} value={String(team.team_id)}>
+                    {team.name}
+                  </option>
+                ))}
+            </select>
+          </div>
           {/* <label className="block text-xs text-gray-400 mb-2">
             Назва опитування
           </label>
@@ -303,7 +287,7 @@ const selectedTeam = teams.find(
                   </label>
 
                   <div
-  className="
+                    className="
     w-full
     p-4
     rounded-xl
@@ -311,9 +295,9 @@ const selectedTeam = teams.find(
     border-gray-300
     bg-gray-50
   "
->
-  {question.text_ua}
-</div>
+                  >
+                    {question.text_ua}
+                  </div>
                 </div>
               ))
           )}
@@ -327,13 +311,13 @@ const selectedTeam = teams.find(
 
         {/* Частота */}
 
-        <div className="border rounded-xl p-3 flex justify-between items-center  flex-col
-                        md:flex-row gap-3">
+        <div
+          className="border rounded-xl p-3 flex justify-between items-center  flex-col
+                        md:flex-row gap-3"
+        >
           <span className="text-gray-500">Частота опитування</span>
 
-          <FrequencySelector value={frequency} onChange={setFrequency} 
-          
-          />
+          <FrequencySelector value={frequency} onChange={setFrequency} />
         </div>
 
         {/* Надсилання */}

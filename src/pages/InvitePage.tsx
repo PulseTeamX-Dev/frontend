@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { validateInvite } from "../redux/auth/operation";
 import { selectInviteStatus } from "../redux/auth/selectors";
 import { resetInviteStatus } from "../redux/auth/slice";

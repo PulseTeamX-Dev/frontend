@@ -5,7 +5,7 @@ import type {
   TeamMember,
   TeamMemberWithOptionalId,
 } from "../../redux/teams/types";
-import { useAppDispatch } from "../../hooks/useReduxTypes";
+import { useAppDispatch } from "@/app/useReduxTypes";
 import {
   rotateTeamToken,
   archiveTeam,

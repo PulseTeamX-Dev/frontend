@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { fetchTeams } from "../redux/teams/operation";
 import { selectTeams, selectTeamLoading } from "../redux/teams/selectors";
 

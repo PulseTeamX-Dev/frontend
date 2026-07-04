@@ -2,7 +2,7 @@ import TeamsPage from "./TeamsPage";
 import ProfileForm from "../components/profile/ProfileForm";
 import AvatarUploader from "../components/profile/AvatarUploader";
 import { Title } from "@/shared/ui/Title";
-import { useAppSelector } from "../hooks/useReduxTypes";
+import { useAppSelector } from "@/app/useReduxTypes";
 import { PageLoader } from "@/shared/ui/Loader";
 
 export const SettingsPage = () => {

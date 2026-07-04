@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { fetchMetrics } from "../../redux/dashboard/operation";
 import { MetricSummaryList } from "./hr/MetricSummaryList";
 import MetricsHistoryList from "./hr/MetricsHistoryList";

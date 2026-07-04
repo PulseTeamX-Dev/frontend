@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { fetchMetrics } from "../../redux/dashboard/operation";
-import { useAppDispatch, useAppSelector } from "../../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { MetricsHistory } from "./tl/MetricsHistory";
 import { TopCards } from "./tl/TopCards";
 import { RadarChart } from "./tl/RadarChart";
