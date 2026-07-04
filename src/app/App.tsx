@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { selectIsAuthenticated } from "../redux/auth/selectors";
-import { ProtectedRoute } from "../utils/ProtectedRoute";
+import { ProtectedRoute } from "./ProtectedRoute";
 import { MainLayout } from "../components/layout/MainLayout";
 import { fetchCurrentUser } from "../redux/auth/operation";
 import { fetchProfile } from "../redux/profile/operation";
