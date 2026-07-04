@@ -1,4 +1,4 @@
-import type { HeatmapItem, HRMetrics } from "../../types/dashboard/types";
+import type { HeatmapItem, HRMetrics } from "./hrAnalyticsTypes";
 
 export interface DashboardAlert {
   alert_id: number;

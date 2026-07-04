@@ -1,6 +1,6 @@
 import Icon from "@/shared/ui/Icon";
 import { Title } from "@/shared/ui/Title";
-import type { HeatmapItem } from "../../../types/dashboard/types";
+import type { HeatmapItem } from "../../../redux/dashboard/hrAnalyticsTypes";
 import { getHeatmapClass } from "@/shared/lib/getLevel";
 
 interface TLMetricsHistoryProps {

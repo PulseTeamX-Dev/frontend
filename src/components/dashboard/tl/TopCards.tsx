@@ -3,7 +3,7 @@ import type {
   TopCardMetric,
 } from "../../../redux/dashboard/types";
 import { Title } from "@/shared/ui/Title";
-import type { HRWorkloadCurrent } from "../../../types/dashboard/types";
+import type { HRWorkloadCurrent } from "../../../redux/dashboard/hrAnalyticsTypes";
 import { WorkloadChart } from "../hr/WorkloadChart";
 import { TrendCard } from "./TrendCard";
 
