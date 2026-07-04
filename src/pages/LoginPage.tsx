@@ -6,7 +6,7 @@ import AuthSuccess from "../components/ui/AuthSuccess";
 import { CheckEmailView } from "../components/ui/CheckEmailView";
 import Icon from "@/shared/ui/Icon";
 import { Title } from "@/shared/ui/Title";
-import { ForgotPasswordForm } from "../components/auth/ForgotPasswordForm";
+import { ForgotPasswordForm } from "@/features/auth/ui/ForgotPasswordForm";
 import LoginForm from "@/features/auth/ui/LoginForm";
 
 export const LoginPage = () => {

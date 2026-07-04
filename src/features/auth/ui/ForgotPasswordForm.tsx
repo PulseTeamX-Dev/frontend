@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { recoverPassword } from "@/features/auth/model/operation";
 import { selectAuthLoading } from "@/features/auth/model/selectors";
 import { resetRecoverStatus } from "@/features/auth/model/slice";
-import lockImg from "../../assets/img/lock.png";
+import lockImg from "../../../assets/img/lock.png";
 
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
