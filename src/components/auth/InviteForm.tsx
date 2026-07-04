@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   inviteSchema,
   type InviteFormData,
-} from "../../validation/authSchemas";
+} from "@/features/auth/validation/authSchemas";
 import { toast } from "react-toastify";
 import { Button } from "@/shared/ui/Button";
 

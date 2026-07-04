@@ -10,7 +10,10 @@ import { Input } from "@/shared/ui/Input";
 
 // Імпортуємо ресолвер та схему
 import { zodResolver } from "@hookform/resolvers/zod";
-import { loginSchema, type LoginFormData } from "../../validation/authSchemas";
+import {
+  loginSchema,
+  type LoginFormData,
+} from "@/features/auth/validation/authSchemas";
 import { Button } from "@/shared/ui/Button";
 // (якщо Yup, то імпортуєш yupResolver з @hookform/resolvers/yup)
 

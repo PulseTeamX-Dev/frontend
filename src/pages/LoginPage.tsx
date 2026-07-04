@@ -7,7 +7,7 @@ import { CheckEmailView } from "../components/ui/CheckEmailView";
 import Icon from "@/shared/ui/Icon";
 import { Title } from "@/shared/ui/Title";
 import { ForgotPasswordForm } from "../components/auth/ForgotPasswordForm";
-import LoginForm from "../components/auth/LoginForm";
+import LoginForm from "@/features/auth/ui/LoginForm";
 
 export const LoginPage = () => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);

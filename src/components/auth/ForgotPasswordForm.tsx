@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   forgotPasswordSchema,
   type ForgotPasswordFormData,
-} from "../../validation/authSchemas";
+} from "@/features/auth/validation/authSchemas";
 import { Button } from "@/shared/ui/Button";
 
 interface Props {
