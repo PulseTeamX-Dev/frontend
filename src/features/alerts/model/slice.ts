@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchAlerts, fetchAlertsAnalytics, resolveAlert } from "./operation";
-import type { AlertsState } from "../../features/alerts/model/types";
+import type { AlertsState } from "./types";
 
 const initialState: AlertsState = {
   alerts: [],

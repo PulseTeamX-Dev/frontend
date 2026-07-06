@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiClient } from "../../shared/api/apiClient";
-import type { Alert } from "../../features/alerts/model/types";
+import { apiClient } from "../../../shared/api/apiClient";
+import type { Alert } from "../../../features/alerts/model/types";
 
 export const fetchAlerts = createAsyncThunk<
   Alert[],

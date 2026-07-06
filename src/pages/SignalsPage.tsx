@@ -5,7 +5,7 @@ import {
   fetchAlerts,
   resolveAlert,
   fetchAlertsAnalytics,
-} from "../redux/alerts/operation";
+} from "@/features/alerts/model/operation";
 import {
   selectAlerts,
   selectAlertsLoading,

@@ -10,12 +10,12 @@ import {
   selectUnresolvedAlertsCount,
 } from "../redux/alerts/selectors";
 import { fetchComments } from "../redux/comments/operation";
-import { fetchAlerts } from "../redux/alerts/operation";
+import { fetchAlerts } from "@/features/alerts/model/operation";
 import CommentCard from "../components/comments/CommentCard";
 import AlertsModal from "../components/alerts/AlertsModal";
 import Pagination from "../components/comments/Pagination";
 import Icon from "@/shared/ui/Icon";
-import { resolveAlert } from "../redux/alerts/operation";
+import { resolveAlert } from "@/features/alerts/model/operation";
 import { toast } from "react-toastify";
 import { PageHeader } from "@/shared/ui/PageHeader"; // 🔒 Наш шеред-компонент
 import { PageLoader } from "@/shared/ui/Loader";
