@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { fetchTeams } from "../redux/teams/operation";
 import { selectTeams } from "../redux/teams/selectors";
-import { fetchQuestions } from "../redux/surveys/operation";
+import { fetchQuestions } from "@/features/survey/model/operation";
 import {
   selectQuestions,
   selectSurveyLoading,
-} from "../redux/surveys/selectors";
+} from "@/features/survey/model/selectors";
 import { toast } from "react-toastify";
 
 interface PulseConfig {

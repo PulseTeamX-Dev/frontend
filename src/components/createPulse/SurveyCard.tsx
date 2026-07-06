@@ -1,4 +1,4 @@
-import type { SurveyQuestion } from "../../redux/surveys/types";
+import type { SurveyQuestion } from "@/features/survey/model/types";
 
 interface SurveyCardProps {
   questions: SurveyQuestion[];
@@ -7,15 +7,10 @@ interface SurveyCardProps {
 export const SurveyCard = ({ questions }: SurveyCardProps) => {
   return (
     <div className="bg-white rounded-lg shadow-sm p-4 flex flex-col gap-4">
-      <h2 className="text-[20px] font-bold text-[#444]">
-        Створити опитування
-      </h2>
+      <h2 className="text-[20px] font-bold text-[#444]">Створити опитування</h2>
 
       {questions.slice(0, 4).map((question, index) => (
-        <div
-          key={question.question_id}
-          className="flex flex-col gap-1"
-        >
+        <div key={question.question_id} className="flex flex-col gap-1">
           <label className="text-[12px] text-gray-400">
             Питання {index + 1}
           </label>

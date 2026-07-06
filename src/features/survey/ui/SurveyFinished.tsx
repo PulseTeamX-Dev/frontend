@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 import { Title } from "@/shared/ui/Title";
 
-import anim1 from "../../assets/animation/animation1.gif";
-import anim2 from "../../assets/animation/animation2.gif";
-import anim3 from "../../assets/animation/animation3.gif";
-import anim4 from "../../assets/animation/animation4.gif";
-import anim5 from "../../assets/animation/animation5.gif";
+import anim1 from "../../../assets/animation/animation1.gif";
+import anim2 from "../../../assets/animation/animation2.gif";
+import anim3 from "../../../assets/animation/animation3.gif";
+import anim4 from "../../../assets/animation/animation4.gif";
+import anim5 from "../../../assets/animation/animation5.gif";
 
 export const SurveyFinished = () => {
   // Збираємо анімації в стабільний масив. Індекс 0 залишаємо для кастомної галочки.

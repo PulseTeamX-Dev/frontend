@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "../features/auth/model/slice";
-import { surveysReducer } from "../redux/surveys/slice";
+import { surveysReducer } from "../features/survey/model/slice";
 import { dashboardReducer } from "../redux/dashboard/slice";
 import { teamReducer } from "../redux/teams/slice";
 import { profileReducer } from "../features/profile/model/slice";

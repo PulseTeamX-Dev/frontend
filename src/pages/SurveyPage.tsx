@@ -2,21 +2,24 @@ import { useEffect, useMemo, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
-import { setAnswer, clearSurveyForm } from "../redux/surveys/slice";
+import { setAnswer, clearSurveyForm } from "@/features/survey/model/slice";
 import type { AppDispatch, RootState } from "@/app/store";
 import { getScaleButtonColors } from "@/shared/lib/surveyButtonColors";
 import { Button } from "@/shared/ui/Button";
 
-import { fetchSurveyByToken, submitSurvey } from "../redux/surveys/operation";
+import {
+  fetchSurveyByToken,
+  submitSurvey,
+} from "@/features/survey/model/operation";
 import {
   selectCurrentSurvey,
   selectSurveyError,
   selectSurveyLoading,
-} from "../redux/surveys/selectors";
+} from "@/features/survey/model/selectors";
 
-import { SurveyStart } from "../components/survey/SurveyStart";
-import { SurveyFinished } from "../components/survey/SurveyFinished";
-import { SurveySuccess } from "../components/survey/SurveySuccess";
+import { SurveyStart } from "@/features/survey/ui/SurveyStart";
+import { SurveyFinished } from "@/features/survey/ui/SurveyFinished";
+import { SurveySuccess } from "@/features/survey/ui/SurveySuccess";
 import { PageLoader } from "@/shared/ui/Loader";
 const SCALE_VALUES = Array.from({ length: 10 }, (_, i) => i + 1);
 
