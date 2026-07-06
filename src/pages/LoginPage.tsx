@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { selectIsAuthenticated } from "@/features/auth/model/selectors";
 import { resetRecoverStatus } from "@/features/auth/model/slice";
-import AuthSuccess from "../components/ui/AuthSuccess";
+import AuthSuccess from "@/features/auth/ui/AuthSuccess";
 import { CheckEmailView } from "../components/ui/CheckEmailView";
 import Icon from "@/shared/ui/Icon";
 import { Title } from "@/shared/ui/Title";
