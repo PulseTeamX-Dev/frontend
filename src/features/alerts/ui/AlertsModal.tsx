@@ -1,7 +1,7 @@
 import type { Alert } from "@/features/alerts/model/types";
 import Icon from "@/shared/ui/Icon";
 import { renderMetric } from "./renderAlertMetric";
-import alertIcon from "../../assets/icons/alert.svg";
+import alertIcon from "../../../assets/icons/alert.svg";
 
 interface AlertsModalProps {
   isOpen: boolean;

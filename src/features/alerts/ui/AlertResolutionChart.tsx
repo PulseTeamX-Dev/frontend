@@ -11,7 +11,7 @@ import {
 } from "recharts";
 
 import type { AlertResolution } from "@/features/alerts/model/types";
-import clockChart from "../../assets/icons/clockChart.svg";
+import clockChart from "../../../assets/icons/clockChart.svg";
 
 interface Props {
   data: AlertResolution[];
