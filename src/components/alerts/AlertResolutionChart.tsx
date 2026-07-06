@@ -10,7 +10,7 @@ import {
   Bar,
 } from "recharts";
 
-import type { AlertResolution } from "../../redux/alerts/types";
+import type { AlertResolution } from "@/features/alerts/model/types";
 import clockChart from "../../assets/icons/clockChart.svg";
 
 interface Props {

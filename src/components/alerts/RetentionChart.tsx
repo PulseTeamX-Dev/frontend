@@ -10,7 +10,7 @@ import {
   CartesianGrid,
 } from "recharts";
 
-import type { RetentionMetric } from "../../redux/alerts/types";
+import type { RetentionMetric } from "@/features/alerts/model/types";
 
 interface Props {
   data: RetentionMetric[];

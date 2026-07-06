@@ -1,4 +1,4 @@
-import type { Alert } from "../../redux/alerts/types";
+import type { Alert } from "@/features/alerts/model/types";
 import Icon from "@/shared/ui/Icon";
 import { renderMetric } from "@/shared/lib/renderAlertMetric";
 import alertIcon from "../../assets/icons/alert.svg";

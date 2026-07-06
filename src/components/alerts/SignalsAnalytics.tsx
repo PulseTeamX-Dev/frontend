@@ -2,7 +2,7 @@ import { useState } from "react";
 import type {
   AlertResolution,
   RetentionMetric,
-} from "../../redux/alerts/types";
+} from "@/features/alerts/model/types";
 import AlertResolutionChart from "./AlertResolutionChart";
 import RetentionChart from "./RetentionChart";
 
