@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiClient } from "../../shared/api/apiClient";
+import { apiClient } from "../../../shared/api/apiClient";
 
 import type { Profile, UpdateProfilePayload } from "./types";
 

@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 
-import { selectProfile } from "../../redux/profile/selectors";
-import { updateProfile } from "../../redux/profile/operation";
+import { selectProfile } from "@/features/profile/model/selectors";
+import { updateProfile } from "@/features/profile/model/operation";
 import { logoutUser } from "@/features/auth/model/operation";
 
 import { Input } from "@/shared/ui/Input";

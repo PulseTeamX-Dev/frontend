@@ -1,6 +1,6 @@
 import TeamsPage from "./TeamsPage";
-import ProfileForm from "../components/profile/ProfileForm";
-import AvatarUploader from "../components/profile/AvatarUploader";
+import ProfileForm from "@/features/profile/ui/ProfileForm";
+import AvatarUploader from "@/features/profile/ui/AvatarUploader";
 import { Title } from "@/shared/ui/Title";
 import { useAppSelector } from "@/app/useReduxTypes";
 import { PageLoader } from "@/shared/ui/Loader";

@@ -3,7 +3,7 @@ import { selectAuthRole } from "@/features/auth/model/selectors";
 import {
   selectProfileAvatar,
   selectProfileName,
-} from "../../redux/profile/selectors";
+} from "@/features/profile/model/selectors";
 
 // 🛠️ ФІКС: Словник для охайного відображення ролей у верхньому регістрі
 const roleLabels: Record<string, string> = {

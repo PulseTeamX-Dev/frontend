@@ -3,8 +3,8 @@ import { toast } from "react-toastify";
 
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 
-import { selectProfileAvatar } from "../../redux/profile/selectors";
-import { updateProfile } from "../../redux/profile/operation";
+import { selectProfileAvatar } from "@/features/profile/model/selectors";
+import { updateProfile } from "@/features/profile/model/operation";
 import { supabase } from "@/shared/api/supabase";
 import { SUPABASE_URL } from "@/shared/lib/constants";
 

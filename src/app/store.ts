@@ -3,7 +3,7 @@ import { authReducer } from "../features/auth/model/slice";
 import { surveysReducer } from "../redux/surveys/slice";
 import { dashboardReducer } from "../redux/dashboard/slice";
 import { teamReducer } from "../redux/teams/slice";
-import { profileReducer } from "../redux/profile/slice";
+import { profileReducer } from "../features/profile/model/slice";
 import { commentsReducer } from "../features/comments/model/slice";
 import { alertsReducer } from "../features/alerts/model/slice";
 
