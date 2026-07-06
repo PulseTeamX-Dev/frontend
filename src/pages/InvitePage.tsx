@@ -6,7 +6,7 @@ import { selectInviteStatus } from "@/features/auth/model/selectors";
 import { resetInviteStatus } from "@/features/auth/model/slice";
 import { InviteExpired } from "@/features/auth/ui/InviteExpired";
 import { InviteUsed } from "../components/ui/InviteUsed";
-import { InviteSuccess } from "../components/ui/InviteSuccess";
+import { InviteSuccess } from "@/features/auth/ui/InviteSuccess";
 import { InviteForm } from "@/features/auth/ui/InviteForm";
 
 export const InvitePage = () => {
