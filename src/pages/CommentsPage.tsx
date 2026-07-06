@@ -12,7 +12,7 @@ import {
 import { fetchComments } from "../redux/comments/operation";
 import { fetchAlerts } from "@/features/alerts/model/operation";
 import CommentCard from "../components/comments/CommentCard";
-import AlertsModal from "../components/alerts/AlertsModal";
+import AlertsModal from "@/features/alerts/ui/AlertsModal";
 import Pagination from "../components/comments/Pagination";
 import Icon from "@/shared/ui/Icon";
 import { resolveAlert } from "@/features/alerts/model/operation";

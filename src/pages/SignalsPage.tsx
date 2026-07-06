@@ -12,8 +12,8 @@ import {
   selectUnresolvedAlertsCount,
   selectAlertsAnalytics,
 } from "@/features/alerts/model/selectors";
-import AlertCard from "../components/alerts/AlertCard";
-import SignalsAnalytics from "../components/alerts/SignalsAnalytics";
+import AlertCard from "@/features/alerts/ui/AlertCard";
+import SignalsAnalytics from "@/features/alerts/ui/SignalsAnalytics";
 import { PageLoader } from "@/shared/ui/Loader";
 import { PageHeader } from "@/shared/ui/PageHeader";
 import { selectAuthRole } from "@/features/auth/model/selectors";

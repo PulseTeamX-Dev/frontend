@@ -1,5 +1,5 @@
 import type { Alert } from "@/features/alerts/model/types";
-import { renderMetric } from "@/shared/lib/renderAlertMetric";
+import { renderMetric } from "./renderAlertMetric";
 
 interface Props {
   alert: Alert;
