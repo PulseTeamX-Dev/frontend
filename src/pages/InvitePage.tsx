@@ -7,7 +7,7 @@ import { resetInviteStatus } from "@/features/auth/model/slice";
 import { InviteExpired } from "../components/ui/InviteExpired";
 import { InviteUsed } from "../components/ui/InviteUsed";
 import { InviteSuccess } from "../components/ui/InviteSuccess";
-import { InviteForm } from "../components/auth/InviteForm";
+import { InviteForm } from "@/features/auth/ui/InviteForm";
 
 export const InvitePage = () => {
   const { token } = useParams<{ token: string }>();
