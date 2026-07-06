@@ -11,7 +11,7 @@ import {
   selectAlertsLoading,
   selectUnresolvedAlertsCount,
   selectAlertsAnalytics,
-} from "../redux/alerts/selectors";
+} from "@/features/alerts/model/selectors";
 import AlertCard from "../components/alerts/AlertCard";
 import SignalsAnalytics from "../components/alerts/SignalsAnalytics";
 import { PageLoader } from "@/shared/ui/Loader";

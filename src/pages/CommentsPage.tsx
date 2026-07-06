@@ -8,7 +8,7 @@ import {
 import {
   selectAlerts,
   selectUnresolvedAlertsCount,
-} from "../redux/alerts/selectors";
+} from "@/features/alerts/model/selectors";
 import { fetchComments } from "../redux/comments/operation";
 import { fetchAlerts } from "@/features/alerts/model/operation";
 import CommentCard from "../components/comments/CommentCard";
