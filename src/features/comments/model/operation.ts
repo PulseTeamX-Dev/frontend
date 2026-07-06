@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiClient } from "../../shared/api/apiClient";
+import { apiClient } from "../../../shared/api/apiClient";
 
 import type { CommentsResponse } from "./types";
 

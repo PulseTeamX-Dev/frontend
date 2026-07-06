@@ -4,16 +4,16 @@ import {
   selectComments,
   selectCommentsLoading,
   selectCommentsPagination,
-} from "../redux/comments/selectors";
+} from "@/features/comments/model/selectors";
 import {
   selectAlerts,
   selectUnresolvedAlertsCount,
 } from "@/features/alerts/model/selectors";
-import { fetchComments } from "../redux/comments/operation";
+import { fetchComments } from "@/features/comments/model/operation";
 import { fetchAlerts } from "@/features/alerts/model/operation";
-import CommentCard from "../components/comments/CommentCard";
+import CommentCard from "@/features/comments/ui/CommentCard";
 import AlertsModal from "@/features/alerts/ui/AlertsModal";
-import Pagination from "../components/comments/Pagination";
+import Pagination from "@/features/comments/ui/Pagination";
 import Icon from "@/shared/ui/Icon";
 import { resolveAlert } from "@/features/alerts/model/operation";
 import { toast } from "react-toastify";

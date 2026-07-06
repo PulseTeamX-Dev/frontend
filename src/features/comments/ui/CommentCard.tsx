@@ -1,4 +1,4 @@
-import type { Comment } from "../../redux/comments/types";
+import type { Comment } from "../model/types";
 
 type Props = {
   comment: Comment;
