@@ -1,7 +1,7 @@
 import { Title } from "@/shared/ui/Title";
 import { useAppDispatch } from "@/app/useReduxTypes";
 import { resetRecoverStatus } from "@/features/auth/model/slice";
-import mailImg from "../../assets/img/email.png";
+import mailImg from "../../../assets/img/email.png";
 import { Button } from "@/shared/ui/Button";
 
 interface Props {

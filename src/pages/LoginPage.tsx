@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { selectIsAuthenticated } from "@/features/auth/model/selectors";
 import { resetRecoverStatus } from "@/features/auth/model/slice";
 import AuthSuccess from "@/features/auth/ui/AuthSuccess";
-import { CheckEmailView } from "../components/ui/CheckEmailView";
+import { CheckEmailView } from "@/features/auth/ui/CheckEmailView";
 import Icon from "@/shared/ui/Icon";
 import { Title } from "@/shared/ui/Title";
 import { ForgotPasswordForm } from "@/features/auth/ui/ForgotPasswordForm";
