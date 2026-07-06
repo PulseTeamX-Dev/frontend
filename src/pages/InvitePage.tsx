@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { validateInvite } from "@/features/auth/model/operation";
 import { selectInviteStatus } from "@/features/auth/model/selectors";
 import { resetInviteStatus } from "@/features/auth/model/slice";
-import { InviteExpired } from "../components/ui/InviteExpired";
+import { InviteExpired } from "@/features/auth/ui/InviteExpired";
 import { InviteUsed } from "../components/ui/InviteUsed";
 import { InviteSuccess } from "../components/ui/InviteSuccess";
 import { InviteForm } from "@/features/auth/ui/InviteForm";
