@@ -1,6 +1,6 @@
 import { HRDashboard } from "@/features/dashboard/ui/HRDashboard";
 import { TLDashboard } from "@/features/dashboard/ui/TLDashboard";
-import PageLayout from "../components/layout/PageLayout";
+import PageLayout from "@/app/layout/PageLayout";
 import { useAppSelector } from "@/app/useReduxTypes";
 
 export const DashboardPage = () => {

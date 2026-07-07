@@ -6,7 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { selectIsAuthenticated } from "@/features/auth/model/selectors";
 import { ProtectedRoute } from "./ProtectedRoute";
-import { MainLayout } from "../components/layout/MainLayout";
+import { MainLayout } from "@/app/layout/MainLayout";
 import { fetchCurrentUser } from "@/features/auth/model/operation";
 import { fetchProfile } from "../features/profile/model/operation";
 import { PrivacyPolicyPage } from "../pages/PrivacyPolicyPage";
