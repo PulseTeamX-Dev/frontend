@@ -1,4 +1,4 @@
-import type { HRMetricsSummaryContainer } from "../../../redux/dashboard/hrAnalyticsTypes";
+import type { HRMetricsSummaryContainer } from "@/features/dashboard/model/hrAnalyticsTypes";
 import { MetricsSummaryItems } from "./MetricsSummaryItems";
 
 interface MetricSummaryProps {

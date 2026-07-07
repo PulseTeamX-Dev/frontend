@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import Icon from "@/shared/ui/Icon";
 import { Title } from "@/shared/ui/Title";
-import type { EngagementData } from "../../../redux/dashboard/hrAnalyticsTypes";
+import type { EngagementData } from "@/features/dashboard/model/hrAnalyticsTypes";
 
 interface SurveyCompletionTableProps {
   data: EngagementData[];

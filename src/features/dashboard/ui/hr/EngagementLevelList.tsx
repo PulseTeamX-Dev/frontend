@@ -1,4 +1,4 @@
-import type { EngagementData } from "../../../redux/dashboard/hrAnalyticsTypes";
+import type { EngagementData } from "@/features/dashboard/model/hrAnalyticsTypes";
 import { getBadgeClass } from "@/shared/lib/getBadgeClass";
 
 interface EngagementLevelListProps {

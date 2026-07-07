@@ -1,5 +1,5 @@
-import { HRDashboard } from "../components/dashboard/HRDashboard";
-import { TLDashboard } from "../components/dashboard/TLDashboard";
+import { HRDashboard } from "@/features/dashboard/ui/HRDashboard";
+import { TLDashboard } from "@/features/dashboard/ui/TLDashboard";
 import PageLayout from "../components/layout/PageLayout";
 import { useAppSelector } from "@/app/useReduxTypes";
 

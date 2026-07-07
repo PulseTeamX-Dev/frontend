@@ -1,9 +1,9 @@
 import type {
   EngagementCard,
   TopCardMetric,
-} from "../../../redux/dashboard/types";
+} from "@/features/dashboard/model/types";
 import { Title } from "@/shared/ui/Title";
-import type { HRWorkloadCurrent } from "../../../redux/dashboard/hrAnalyticsTypes";
+import type { HRWorkloadCurrent } from "@/features/dashboard/model/hrAnalyticsTypes";
 import { WorkloadChart } from "../hr/WorkloadChart";
 import { TrendCard } from "./TrendCard";
 

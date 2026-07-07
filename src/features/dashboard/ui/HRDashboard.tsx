@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
-import { fetchMetrics } from "../../redux/dashboard/operation";
+import { fetchMetrics } from "@/features/dashboard/model/operation";
 import { MetricSummaryList } from "./hr/MetricSummaryList";
 import MetricsHistoryList from "./hr/MetricsHistoryList";
 import { SurveyCompletionTable } from "./hr/SurveyCompletionTable";

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import type { HeatmapItem } from "../../../redux/dashboard/hrAnalyticsTypes";
+import type { HeatmapItem } from "@/features/dashboard/model/hrAnalyticsTypes";
 import MetricsHistoryItem from "./MetricsHistoryItem";
 import Icon from "@/shared/ui/Icon";
 import { Title } from "@/shared/ui/Title";

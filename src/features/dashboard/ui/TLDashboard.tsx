@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { fetchMetrics } from "../../redux/dashboard/operation";
+import { fetchMetrics } from "@/features/dashboard/model/operation";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { MetricsHistory } from "./tl/MetricsHistory";
 import { TopCards } from "./tl/TopCards";
 import { RadarChart } from "./tl/RadarChart";
-import type { TeamLeadMetrics } from "../../redux/dashboard/types";
+import type { TeamLeadMetrics } from "@/features/dashboard/model/types";
 import Icon from "@/shared/ui/Icon";
 import { PageHeader } from "@/shared/ui/PageHeader";
 import { PageLoader } from "@/shared/ui/Loader";
