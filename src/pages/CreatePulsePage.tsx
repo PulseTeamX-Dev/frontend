@@ -1,5 +1,5 @@
-import { FrequencySelector } from "../components/createPulse/FrequencySelector";
-import { Dropdown } from "../components/createPulse/Dropdown";
+import { FrequencySelector } from "@/features/createPulse/ui/FrequencySelector";
+import { Dropdown } from "@/features/createPulse/ui/Dropdown";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import { fetchTeams } from "@/features/teams/model/operation";
