@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useAppDispatch } from "@/app/useReduxTypes";
-import { createTeam, fetchTeams } from "../../redux/teams/operation";
+import { createTeam, fetchTeams } from "@/features/teams/model/operation";
 import { Input } from "@/shared/ui/Input";
 import { Button } from "@/shared/ui/Button";
 

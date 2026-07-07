@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import ReactDOM from "react-dom";
 import { Button } from "@/shared/ui/Button";
-import type { ConfirmModalProps } from "../../redux/teams/types";
+import type { ConfirmModalProps } from "@/features/teams/model/types";
 
 export const ConfirmModal = ({
   isOpen,

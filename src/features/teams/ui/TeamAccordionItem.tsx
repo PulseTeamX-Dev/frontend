@@ -4,7 +4,7 @@ import type {
   TeamInfo,
   TeamMember,
   TeamMemberWithOptionalId,
-} from "../../redux/teams/types";
+} from "@/features/teams/model/types";
 import { useAppDispatch } from "@/app/useReduxTypes";
 import {
   rotateTeamToken,
@@ -12,11 +12,11 @@ import {
   importTeamEmails,
   archiveMember,
   fetchTeams,
-} from "../../redux/teams/operation";
+} from "@/features/teams/model/operation";
 import { Input } from "@/shared/ui/Input";
 import { Button } from "@/shared/ui/Button";
 import Icon from "@/shared/ui/Icon";
-import rotateIcon from "../../assets/icons/rotate.svg";
+import rotateIcon from "../../../assets/icons/rotate.svg";
 import { AddTeamMemberModal } from "./AddTeamMemberModal";
 import { ConfirmModal } from "./ConfirmModal";
 

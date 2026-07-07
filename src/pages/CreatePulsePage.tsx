@@ -2,8 +2,8 @@ import { FrequencySelector } from "../components/createPulse/FrequencySelector";
 import { Dropdown } from "../components/createPulse/Dropdown";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
-import { fetchTeams } from "../redux/teams/operation";
-import { selectTeams } from "../redux/teams/selectors";
+import { fetchTeams } from "@/features/teams/model/operation";
+import { selectTeams } from "@/features/teams/model/selectors";
 import { fetchQuestions } from "@/features/survey/model/operation";
 import {
   selectQuestions,

@@ -1,10 +1,13 @@
 import { useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
-import { fetchTeams } from "../redux/teams/operation";
-import { selectTeams, selectTeamLoading } from "../redux/teams/selectors";
+import { fetchTeams } from "@/features/teams/model/operation";
+import {
+  selectTeams,
+  selectTeamLoading,
+} from "@/features/teams/model/selectors";
 
-import { TeamsAddForm } from "../components/teams/TeamsAddForm";
-import { TeamAccordionItem } from "../components/teams/TeamAccordionItem";
+import { TeamsAddForm } from "@/features/teams/ui/TeamsAddForm";
+import { TeamAccordionItem } from "@/features/teams/ui/TeamAccordionItem";
 import { Title } from "@/shared/ui/Title";
 import { PageLoader } from "@/shared/ui/Loader";
 
