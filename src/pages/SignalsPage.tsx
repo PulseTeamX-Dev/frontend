@@ -1,22 +1,22 @@
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import {
   fetchAlerts,
   resolveAlert,
   fetchAlertsAnalytics,
-} from "../redux/alerts/operation";
+} from "@/features/alerts/model/operation";
 import {
   selectAlerts,
   selectAlertsLoading,
   selectUnresolvedAlertsCount,
   selectAlertsAnalytics,
-} from "../redux/alerts/selectors";
-import AlertCard from "../components/alerts/AlertCard";
-import SignalsAnalytics from "../components/alerts/SignalsAnalytics";
-import { PageLoader } from "../shared/Loader";
-import { PageHeader } from "../shared/PageHeader";
-import { selectAuthRole } from "../redux/auth/selectors";
+} from "@/features/alerts/model/selectors";
+import AlertCard from "@/features/alerts/ui/AlertCard";
+import SignalsAnalytics from "@/features/alerts/ui/SignalsAnalytics";
+import { PageLoader } from "@/shared/ui/Loader";
+import { PageHeader } from "@/shared/ui/PageHeader";
+import { selectAuthRole } from "@/features/auth/model/selectors";
 import alertIcon from "../assets/icons/alert.svg";
 
 const roleLabels: Record<string, string> = {

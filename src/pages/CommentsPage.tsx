@@ -1,24 +1,24 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
 import {
   selectComments,
   selectCommentsLoading,
   selectCommentsPagination,
-} from "../redux/comments/selectors";
+} from "@/features/comments/model/selectors";
 import {
   selectAlerts,
   selectUnresolvedAlertsCount,
-} from "../redux/alerts/selectors";
-import { fetchComments } from "../redux/comments/operation";
-import { fetchAlerts } from "../redux/alerts/operation";
-import CommentCard from "../components/comments/CommentCard";
-import AlertsModal from "../components/alerts/AlertsModal";
-import Pagination from "../components/comments/Pagination";
-import Icon from "../shared/Icon";
-import { resolveAlert } from "../redux/alerts/operation";
+} from "@/features/alerts/model/selectors";
+import { fetchComments } from "@/features/comments/model/operation";
+import { fetchAlerts } from "@/features/alerts/model/operation";
+import CommentCard from "@/features/comments/ui/CommentCard";
+import AlertsModal from "@/features/alerts/ui/AlertsModal";
+import Pagination from "@/features/comments/ui/Pagination";
+import Icon from "@/shared/ui/Icon";
+import { resolveAlert } from "@/features/alerts/model/operation";
 import { toast } from "react-toastify";
-import { PageHeader } from "../shared/PageHeader"; // 🔒 Наш шеред-компонент
-import { PageLoader } from "../shared/Loader";
+import { PageHeader } from "@/shared/ui/PageHeader"; // 🔒 Наш шеред-компонент
+import { PageLoader } from "@/shared/ui/Loader";
 
 export const CommentsPage = () => {
   const dispatch = useAppDispatch();

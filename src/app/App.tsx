@@ -1,14 +1,14 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { PageLoader } from "../shared/Loader";
+import { PageLoader } from "@/shared/ui/Loader";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
-import { selectIsAuthenticated } from "../redux/auth/selectors";
-import { ProtectedRoute } from "../utils/ProtectedRoute";
-import { MainLayout } from "../components/layout/MainLayout";
-import { fetchCurrentUser } from "../redux/auth/operation";
-import { fetchProfile } from "../redux/profile/operation";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
+import { selectIsAuthenticated } from "@/features/auth/model/selectors";
+import { ProtectedRoute } from "./ProtectedRoute";
+import { MainLayout } from "@/app/layout/MainLayout";
+import { fetchCurrentUser } from "@/features/auth/model/operation";
+import { fetchProfile } from "../features/profile/model/operation";
 import { PrivacyPolicyPage } from "../pages/PrivacyPolicyPage";
 import { TermsOfUsePage } from "../pages/TermsOfUsePage";
 

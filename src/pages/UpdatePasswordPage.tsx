@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
-import { updatePassword } from "../redux/auth/operation";
-import { selectAuthLoading } from "../redux/auth/selectors";
-import { Title } from "../shared/Title";
-import { Input } from "../shared/Input";
-import Icon from "../shared/Icon";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
+import { updatePassword } from "@/features/auth/model/operation";
+import { selectAuthLoading } from "@/features/auth/model/selectors";
+import { Title } from "@/shared/ui/Title";
+import { Input } from "@/shared/ui/Input";
+import Icon from "@/shared/ui/Icon";
 import lockImg from "../assets/img/lock.png";
 import { toast } from "react-toastify";
 
