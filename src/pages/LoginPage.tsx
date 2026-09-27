@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/useReduxTypes";
-import { selectIsAuthenticated } from "../redux/auth/selectors";
-import { resetRecoverStatus } from "../redux/auth/slice";
-import AuthSuccess from "../components/ui/AuthSuccess";
-import { CheckEmailView } from "../components/ui/CheckEmailView";
-import Icon from "../shared/Icon";
-import { Title } from "../shared/Title";
-import { ForgotPasswordForm } from "../components/auth/ForgotPasswordForm";
-import LoginForm from "../components/auth/LoginForm";
+import { useAppDispatch, useAppSelector } from "@/app/useReduxTypes";
+import { selectIsAuthenticated } from "@/features/auth/model/selectors";
+import { resetRecoverStatus } from "@/features/auth/model/slice";
+import AuthSuccess from "@/features/auth/ui/AuthSuccess";
+import { CheckEmailView } from "@/features/auth/ui/CheckEmailView";
+import Icon from "@/shared/ui/Icon";
+import { Title } from "@/shared/ui/Title";
+import { ForgotPasswordForm } from "@/features/auth/ui/ForgotPasswordForm";
+import LoginForm from "@/features/auth/ui/LoginForm";
 
 export const LoginPage = () => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);

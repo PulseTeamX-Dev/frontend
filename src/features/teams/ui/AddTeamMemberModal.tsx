@@ -1,0 +1,78 @@
+import ReactDOM from "react-dom";
+import { useForm } from "react-hook-form";
+import { Input } from "@/shared/ui/Input";
+import { Button } from "@/shared/ui/Button";
+
+interface AddTeamMemberModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAdd: (data: { email: string }) => void;
+  isSubmitting: boolean;
+}
+
+export const AddTeamMemberModal = ({
+  isOpen,
+  onClose,
+  onAdd,
+  isSubmitting,
+}: AddTeamMemberModalProps) => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<{ email: string }>();
+
+  if (!isOpen) return null;
+
+  return ReactDOM.createPortal(
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+      <form
+        onSubmit={handleSubmit((data) => {
+          onAdd(data);
+          reset();
+        })}
+        className="bg-white p-8 rounded-3xl w-full max-w-[538px] shadow-2xl border border-gray-100"
+      >
+        <h3 className="text-2xl font-bold mb-6 text-title">Додати учасника</h3>
+
+        <div className="space-y-4">
+          <label className="text-sm font-medium text-light-txt">Email</label>
+          <Input
+            type="email"
+            placeholder="email@gmail.com"
+            error={errors.email?.message}
+            className="h-12 text-base mt-2 text-grayscale-700"
+            {...register("email", {
+              required: "Введіть email",
+              pattern: {
+                value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: "Введіть коректний email",
+              },
+            })}
+          />
+        </div>
+
+        <div className="flex  justify-end gap-3 mt-8">
+          <Button
+            type="button"
+            variant="secondary"
+            className="h-12 px-6"
+            onClick={onClose}
+          >
+            Відмінити
+          </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            className="h-12 px-6"
+            disabled={isSubmitting}
+          >
+            Додати
+          </Button>
+        </div>
+      </form>
+    </div>,
+    document.body,
+  );
+};
